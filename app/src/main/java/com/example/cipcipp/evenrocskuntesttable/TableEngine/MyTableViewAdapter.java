@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
+import com.example.cipcipp.evenrocskuntesttable.Holder.MyColumnHeaderViewHolder;
 import com.example.cipcipp.evenrocskuntesttable.Model.CellModel;
 import com.example.cipcipp.evenrocskuntesttable.Model.ColumnHeaderModel;
 import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderModel;
@@ -39,16 +40,7 @@ public class MyTableViewAdapter extends AbstractTableAdapter<ColumnHeaderModel, 
     @Override
     public AbstractViewHolder onCreateColumnHeaderViewHolder(ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(mContext).inflate(R.layout.column_header,parent,false);
-        return new MyColumnHeaderViewHolder(layout);
-    }
-    class MyColumnHeaderViewHolder extends AbstractViewHolder {
-        public TextView cell_text_view;
-        public LinearLayout cell_container;
-        public MyColumnHeaderViewHolder(View itemView) {
-            super(itemView);
-            cell_text_view = (TextView) itemView.findViewById(R.id.column_header_textView);
-            cell_container = (LinearLayout) itemView.findViewById(R.id.column_header_container);
-        }
+        return new MyColumnHeaderViewHolder(layout,getTableView());
     }
 
 
@@ -56,9 +48,7 @@ public class MyTableViewAdapter extends AbstractTableAdapter<ColumnHeaderModel, 
     public void onBindColumnHeaderViewHolder(AbstractViewHolder holder, Object columnHeaderItemModel, int columnPosition) {
         ColumnHeaderModel columnHeader = (ColumnHeaderModel) columnHeaderItemModel;
         MyColumnHeaderViewHolder columnHeaderViewHolder = (MyColumnHeaderViewHolder) holder;
-        columnHeaderViewHolder.cell_text_view.setText(columnHeader.getData());
-        columnHeaderViewHolder.cell_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        columnHeaderViewHolder.cell_text_view.requestLayout();
+        columnHeaderViewHolder.setColumnHeaderModel(columnHeader,columnPosition);
 
     }
     @Override
