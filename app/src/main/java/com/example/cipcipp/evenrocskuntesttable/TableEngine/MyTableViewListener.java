@@ -1,14 +1,15 @@
 package com.example.cipcipp.evenrocskuntesttable.TableEngine;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
-import com.example.cipcipp.evenrocskuntesttable.Holder.MyColumnHeaderViewHolder;
+import com.example.cipcipp.evenrocskuntesttable.Helper.OpenApp;
 import com.example.cipcipp.evenrocskuntesttable.MainActivity;
+import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderGenerator;
+import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderModel;
 
 public class MyTableViewListener implements ITableViewListener {
 
@@ -24,11 +25,10 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder columnHeaderView, int column) {
-        if(columnHeaderView != null && columnHeaderView instanceof MyColumnHeaderViewHolder) {
-            Toast.makeText(MainActivity.getAppContext(), "mymessage ", Toast.LENGTH_SHORT).show();
-
-
-        }
+//        if(columnHeaderView != null && columnHeaderView instanceof MyColumnHeaderViewHolder) {
+//            Toast.makeText(MainActivity.getAppContext(), "ini kolom "+column, Toast.LENGTH_SHORT).show();
+//
+//        }
 
     }
 
@@ -39,8 +39,11 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
-
-    }
+        RowHeaderGenerator datagen = new RowHeaderGenerator();
+        datagen.DataGenerator();
+        Toast.makeText(MainActivity.getAppContext(), ""+datagen.getData(row), Toast.LENGTH_LONG).show();
+        OpenApp.openApp(MainActivity.getAppContext(),""+datagen.getData(row));
+        }
 
     @Override
     public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {

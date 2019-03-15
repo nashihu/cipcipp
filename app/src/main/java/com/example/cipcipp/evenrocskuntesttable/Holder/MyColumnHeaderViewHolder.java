@@ -1,23 +1,29 @@
 package com.example.cipcipp.evenrocskuntesttable.Holder;
 
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder;
+import com.evrencoskun.tableview.listener.ITableViewListener;
 import com.evrencoskun.tableview.sort.SortState;
+import com.example.cipcipp.evenrocskuntesttable.MainActivity;
 import com.example.cipcipp.evenrocskuntesttable.Model.ColumnHeaderModel;
 import com.example.cipcipp.evenrocskuntesttable.R;
 
-public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder  {
+public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
     final LinearLayout column_header_container;
     final TextView column_header_textview;
     final ImageButton column_header_sort_button;
     final ITableView tableView;
+
 
     public MyColumnHeaderViewHolder(View itemView, ITableView pTableView) {
         super(itemView);
@@ -27,7 +33,8 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder  {
         column_header_sort_button = itemView.findViewById(R.id.column_header_sort_imageButton);
 
         // Set click listener to the sort button
-        column_header_sort_button.setOnClickListener(mSortButtonClickListener);
+        column_header_textview.setOnClickListener(mSortButtonClickListener);
+        column_header_container.setOnClickListener(mSortButtonClickListener);
     }
 
     public void setColumnHeaderModel(ColumnHeaderModel pColumnHeaderModel, int pColumnPosition) {
@@ -88,28 +95,29 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder  {
 
     private void controlSortState(SortState pSortState) {
         if (pSortState == SortState.ASCENDING) {
-            column_header_sort_button.setVisibility(View.VISIBLE);
-            column_header_sort_button.setImageResource(R.drawable.ic_down);
+//            column_header_sort_button.setVisibility(View.VISIBLE);
+//            column_header_sort_button.setImageResource(R.drawable.ic_down);
 
         } else if (pSortState == SortState.DESCENDING) {
-            column_header_sort_button.setVisibility(View.VISIBLE);
-            column_header_sort_button.setImageResource(R.drawable.ic_up);
+//            column_header_sort_button.setVisibility(View.VISIBLE);
+//            column_header_sort_button.setImageResource(R.drawable.ic_up);
         } else {
-            column_header_sort_button.setVisibility(View.VISIBLE);
-            column_header_sort_button.setImageResource(R.drawable.ic_up);
+//            column_header_sort_button.setVisibility(View.VISIBLE);
+//            column_header_sort_button.setImageResource(R.drawable.ic_up);
         }
     }
 
     private View.OnClickListener mSortButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+//            tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
             if (getSortState() == SortState.ASCENDING) {
                 tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
             } else if (getSortState() == SortState.DESCENDING) {
                 tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
             } else {
                 // Default one
-                tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
+                tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
             }
         }
     };
@@ -145,5 +153,4 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder  {
             Gravity.RIGHT,
             // Fax
             Gravity.RIGHT};
-
 }

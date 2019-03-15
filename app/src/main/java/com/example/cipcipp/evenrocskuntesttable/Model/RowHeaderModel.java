@@ -3,24 +3,22 @@ package com.example.cipcipp.evenrocskuntesttable.Model;
 public class RowHeaderModel {
 
     private String mData;
-    private String data2;
-    public RowHeaderModel() {
-    }
+    private String key;
 
     public RowHeaderModel(String mData) {
         this.mData = mData;
     }
-    public RowHeaderModel(String mData, String data2) {
+    public RowHeaderModel(String mData,String key) {
         this.mData = mData;
-        this.data2 = data2;
+        this.key = key;
     }
 
     public String getData() {
         return mData;
     }
 
-    public void setData(String mData) {
-        this.mData = mData;
+    public String getKey() {
+        return key;
     }
 
 }
