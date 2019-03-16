@@ -7,11 +7,11 @@ public class RowHeaderGenerator {
     String[] row_package_name = {"ovo.id","id.flip","id.dana","com.bukalapak.android","com.tokopedia.tkpd"
     ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app",
     "blibli.mobile.commerce"};
-    public int row_num = row_name.length;
+    public int row_num;
     ArrayList<RowHeaderModel> mRowHeaderList;
 
     public RowHeaderGenerator() {
-        this.row_num = row_num;
+        this.row_num = row_name.length;
         this.mRowHeaderList = new ArrayList<>();
     }
 

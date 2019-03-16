@@ -22,13 +22,13 @@ public class MyTableViewListener implements ITableViewListener {
     public void onCellLongPressed(@NonNull RecyclerView.ViewHolder cellView, int column, int row) {
 
     }
-
+    int i = 0;
     @Override
     public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder columnHeaderView, int column) {
-//        if(columnHeaderView != null && columnHeaderView instanceof MyColumnHeaderViewHolder) {
-//            Toast.makeText(MainActivity.getAppContext(), "ini kolom "+column, Toast.LENGTH_SHORT).show();
-//
-//        }
+        if(i < 2){
+            Toast.makeText(MainActivity.getAppContext(), "klik tahan untuk sort", Toast.LENGTH_SHORT).show();
+        }
+        i = i + 1;
 
     }
 
