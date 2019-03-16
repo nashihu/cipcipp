@@ -1,13 +1,10 @@
-package com.example.cipcipp.evenrocskuntesttable.Helper;
+package com.cipcipp.main.Helper;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.widget.Toast;
-
-import com.example.cipcipp.evenrocskuntesttable.MainActivity;
 
 public class OpenApp {
     private Context context;

@@ -1,4 +1,4 @@
-package com.example.cipcipp.evenrocskuntesttable.Holder;
+package com.cipcipp.main.Holder;
 
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder;
 import com.evrencoskun.tableview.sort.SortState;
-import com.example.cipcipp.evenrocskuntesttable.Model.ColumnHeaderModel;
-import com.example.cipcipp.evenrocskuntesttable.R;
+import com.cipcipp.main.Model.ColumnHeaderModel;
+import com.cipcipp.main.R;
 
 public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
     final LinearLayout column_header_container;

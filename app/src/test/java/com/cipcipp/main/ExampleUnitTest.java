@@ -1,4 +1,4 @@
-package com.example.cipcipp.evenrocskuntesttable;
+package com.cipcipp.main;
 
 import org.junit.Test;
 

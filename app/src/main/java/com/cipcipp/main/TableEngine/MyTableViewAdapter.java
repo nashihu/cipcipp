@@ -1,7 +1,6 @@
-package com.example.cipcipp.evenrocskuntesttable.TableEngine;
+package com.cipcipp.main.TableEngine;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,11 @@ import android.widget.TextView;
 
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
-import com.example.cipcipp.evenrocskuntesttable.Holder.MyColumnHeaderViewHolder;
-import com.example.cipcipp.evenrocskuntesttable.Model.CellModel;
-import com.example.cipcipp.evenrocskuntesttable.Model.ColumnHeaderModel;
-import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderModel;
-import com.example.cipcipp.evenrocskuntesttable.R;
+import com.cipcipp.main.Holder.MyColumnHeaderViewHolder;
+import com.cipcipp.main.Model.CellModel;
+import com.cipcipp.main.Model.ColumnHeaderModel;
+import com.cipcipp.main.Model.RowHeaderModel;
+import com.cipcipp.main.R;
 
 public class MyTableViewAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowHeaderModel, CellModel> {
     public MyTableViewAdapter(Context context) {

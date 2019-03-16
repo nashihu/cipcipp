@@ -1,4 +1,4 @@
-package com.example.cipcipp.evenrocskuntesttable.Model;
+package com.cipcipp.main.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

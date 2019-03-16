@@ -1,17 +1,15 @@
-package com.example.cipcipp.evenrocskuntesttable;
+package com.cipcipp.main;
 
 import android.content.Context;
-import android.inputmethodservice.Keyboard;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.evrencoskun.tableview.TableView;
-import com.example.cipcipp.evenrocskuntesttable.Model.CellModel;
-import com.example.cipcipp.evenrocskuntesttable.Model.ColumnHeaderModel;
-import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderGenerator;
-import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderModel;
-import com.example.cipcipp.evenrocskuntesttable.TableEngine.MyTableViewAdapter;
-import com.example.cipcipp.evenrocskuntesttable.TableEngine.MyTableViewListener;
+import com.cipcipp.main.Model.CellModel;
+import com.cipcipp.main.Model.ColumnHeaderModel;
+import com.cipcipp.main.Model.RowHeaderGenerator;
+import com.cipcipp.main.TableEngine.MyTableViewAdapter;
+import com.cipcipp.main.TableEngine.MyTableViewListener;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

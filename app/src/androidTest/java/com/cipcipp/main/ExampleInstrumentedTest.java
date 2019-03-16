@@ -1,4 +1,4 @@
-package com.example.cipcipp.evenrocskuntesttable;
+package com.cipcipp.main;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.cipcipp.evenrocskuntesttable", appContext.getPackageName());
+        assertEquals("com.cipcipp.main", appContext.getPackageName());
     }
 }

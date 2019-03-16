@@ -1,17 +1,15 @@
-package com.example.cipcipp.evenrocskuntesttable.TableEngine;
+package com.cipcipp.main.TableEngine;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
-import com.example.cipcipp.evenrocskuntesttable.Helper.OpenApp;
-import com.example.cipcipp.evenrocskuntesttable.MainActivity;
-import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderGenerator;
-import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderModel;
-import com.example.cipcipp.evenrocskuntesttable.R;
+import com.cipcipp.main.Helper.OpenApp;
+import com.cipcipp.main.MainActivity;
+import com.cipcipp.main.Model.RowHeaderGenerator;
+import com.cipcipp.main.R;
 
 public class MyTableViewListener implements ITableViewListener {
 
@@ -41,7 +39,8 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
-        Toast.makeText(MainActivity.getAppContext(), "klik tahan untuk buka aplikasi", Toast.LENGTH_LONG).show();
+        String rowz = ((TextView) rowHeaderView.itemView.findViewById(R.id.row_header_textview)).getText().toString();
+        Toast.makeText(MainActivity.getAppContext(), "klik tahan untuk buka aplikasi "+rowz, Toast.LENGTH_LONG).show();
         }
 
     @Override
