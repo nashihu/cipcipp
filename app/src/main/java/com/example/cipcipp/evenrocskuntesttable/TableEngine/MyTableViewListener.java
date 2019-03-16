@@ -2,6 +2,7 @@ package com.example.cipcipp.evenrocskuntesttable.TableEngine;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.evrencoskun.tableview.ITableView;
@@ -10,6 +11,7 @@ import com.example.cipcipp.evenrocskuntesttable.Helper.OpenApp;
 import com.example.cipcipp.evenrocskuntesttable.MainActivity;
 import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderGenerator;
 import com.example.cipcipp.evenrocskuntesttable.Model.RowHeaderModel;
+import com.example.cipcipp.evenrocskuntesttable.R;
 
 public class MyTableViewListener implements ITableViewListener {
 
@@ -39,14 +41,15 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
-        RowHeaderGenerator datagen = new RowHeaderGenerator();
-        datagen.DataGenerator();
-        Toast.makeText(MainActivity.getAppContext(), ""+datagen.getData(row), Toast.LENGTH_LONG).show();
-        OpenApp.openApp(MainActivity.getAppContext(),""+datagen.getData(row));
+        Toast.makeText(MainActivity.getAppContext(), "klik tahan untuk buka aplikasi", Toast.LENGTH_LONG).show();
         }
 
     @Override
     public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
+        RowHeaderGenerator datagen = new RowHeaderGenerator();
+        datagen.DataGeneratorForListener();
+        String rowz = ((TextView) rowHeaderView.itemView.findViewById(R.id.row_header_textview)).getText().toString();
+        OpenApp.openApp(MainActivity.getAppContext(),""+datagen.getData(rowz));
 
     }
 }
