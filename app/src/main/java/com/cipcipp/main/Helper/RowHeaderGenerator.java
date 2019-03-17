@@ -1,4 +1,6 @@
-package com.cipcipp.main.Model;
+package com.cipcipp.main.Helper;
+
+import com.cipcipp.main.Model.RowHeaderModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ public class RowHeaderGenerator {
     HashMap<String,String> rowHeaderData;
 
     public RowHeaderGenerator() {
-        this.row_num = row_name.length;
+        this.row_num = 10;
         this.mRowHeaderList = new ArrayList<>();
         this.rowHeaderData = new HashMap<>();
     }
@@ -28,7 +30,6 @@ public class RowHeaderGenerator {
         for(int i=0;i<row_num;i++) {
             rowHeaderData.put(row_name[i],row_package_name[i]);
         }
-
     }
 
     public ArrayList<RowHeaderModel> DataGeneratorForMain() {

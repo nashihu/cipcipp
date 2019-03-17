@@ -9,7 +9,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:layout_gravity="center"
-    android:text="Harga Pulsa Telkomsel"
+    android:id="@+id/pulsa_title"
+    android:text="Harga Pulsa "
     android:textSize="20dp"
     android:textColor="@color/unselected_background_color"
     />

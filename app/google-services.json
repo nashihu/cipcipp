@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "126723861127",
+    "firebase_url": "https://cipcipp-150996.firebaseio.com",
+    "project_id": "cipcipp-150996",
+    "storage_bucket": "cipcipp-150996.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126723861127:android:2fb8fecacdbff1ce",
+        "android_client_info": {
+          "package_name": "com.cipcipp.main"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126723861127-q16v6e5ummgs8gjask3iob33gg42feem.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cipcipp.main",
+            "certificate_hash": "669ab66099b3f37754e0fa9c2e77681ab0d8e31c"
+          }
+        },
+        {
+          "client_id": "126723861127-8bo8emnfks86nomuq7373uc423o98o45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZIAu-SDa_wiANvhXPkhcrN3s2wngt9SI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126723861127-8bo8emnfks86nomuq7373uc423o98o45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
