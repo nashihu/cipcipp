@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.Random;
 
 public class CellListGenerator {
-    private List<List<CellModel>> mCellList;
+    private ArrayList<List<CellModel>> mCellList;
     ArrayList<CellModel> mCells;
     private int row_num;
     private int col_num;
 
-    public CellListGenerator() {
+    public CellListGenerator(int col_num,int row_num) {
         this.mCellList = new ArrayList<>();
         this.mCells = new ArrayList<>();
         this.mRowHeaderList = new ArrayList<>();
         this.mColumnHeaderList = new ArrayList<>();
         this.rowHeaderData = new HashMap<>();
-        this.row_num = row_name.length;
-        this.col_num = 10;
+        this.row_num = row_num;
+        this.col_num = col_num;
     }
 
     public void DataGenerator() {
@@ -37,7 +37,7 @@ public class CellListGenerator {
         }
     }
 
-    public List<List<CellModel>> getCellsData() {
+    public ArrayList<List<CellModel>> getCellsData() {
         return mCellList;
     }
 
@@ -67,7 +67,7 @@ public class CellListGenerator {
             rowHeaderData.put(row_name[i],row_package_name[i]);
         }
     }
-    public ArrayList<RowHeaderModel> DataGeneratorForMain() {
+    public ArrayList<RowHeaderModel> GetRowData() {
         return  mRowHeaderList;
     }
 

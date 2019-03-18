@@ -9,10 +9,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cipcipp.main.Helper.CellListGenerator;
+import com.cipcipp.main.Helper.PulsaParams;
+import com.cipcipp.main.Model.RowHeaderModel;
 import com.evrencoskun.tableview.TableView;
-import com.cipcipp.main.Model.CellModel;
 import com.cipcipp.main.Model.ColumnHeaderModel;
-import com.cipcipp.main.Helper.RowHeaderGenerator;
 import com.cipcipp.main.TableEngine.MyTableViewAdapter;
 import com.cipcipp.main.TableEngine.MyTableViewListener;
 import com.google.firebase.FirebaseApp;
@@ -22,9 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class PulseActivity extends AppCompatActivity {
     public static Context context;
@@ -36,9 +35,10 @@ public class PulseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String title = getIntent().getStringExtra("title");
         FirebaseApp.initializeApp(this);
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("Pulsa Telkomsel");
+        databaseReference = database.getReference(title);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -52,20 +52,19 @@ public class PulseActivity extends AppCompatActivity {
             }
         });
         textView = findViewById(R.id.pulsa_title);
-        String title = getIntent().getStringExtra("title");
+        int params = getIntent().getIntExtra("params",2);
         textView.setText(textView.getText() + title);
-        ArrayList<ColumnHeaderModel> mColumnHeaderList = getIntent().getParcelableArrayListExtra("columnList");
-//        RowHeaderGenerator mRowHeaderLists = new RowHeaderGenerator();
-//        mRowHeaderLists.DataGenerator();
-        CellListGenerator mRowHeaderLists = new CellListGenerator();
+        CellListGenerator mRowHeaderLists = new CellListGenerator(params,params);
         mRowHeaderLists.RowDataGenerator();
-        CellListGenerator mCellLists = new CellListGenerator();
+        CellListGenerator mColumnHeaderList = new CellListGenerator(params,params);
+        mColumnHeaderList.ColumnDataGenerator();
+        CellListGenerator mCellLists = new CellListGenerator(params,params);
         mCellLists.DataGenerator();
         TableView tableView = findViewById(R.id.content_container);
         MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(this);
         tableView.setAdapter(mTableViewAdapter);
         tableView.setTableViewListener(new MyTableViewListener());
-        mTableViewAdapter.setAllItems(mColumnHeaderList, mRowHeaderLists.DataGeneratorForMain(), mCellLists.getCellsData());
+        mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), mCellLists.getCellsData());
         PulseActivity.context = getApplicationContext();
     }
     public static Context getAppContext() {

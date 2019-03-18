@@ -2,17 +2,11 @@ package com.cipcipp.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.cipcipp.main.Helper.CellListGenerator;
-import com.cipcipp.main.Helper.ColumnHeaderGenerator;
-import com.cipcipp.main.Model.ColumnHeaderModel;
-
-import java.util.ArrayList;
+import com.cipcipp.main.Helper.PulsaParams;
 
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener{
     LinearLayout tsel;
@@ -38,25 +32,27 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         smartfren = findViewById(R.id.imgSmartfren);
         smartfren.setOnClickListener(this);
     }
-    public Bundle bundle = new Bundle();
+    private String title;
+    private Intent moveIntent;
+    private int params;
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imgTelkomsel:
-                String title = "Telkomsel";
-//                ColumnHeaderGenerator mColumnHeaderList = new ColumnHeaderGenerator();
-//                mColumnHeaderList.DataGenerator();
-                CellListGenerator mColumnHeaderList = new CellListGenerator();
-                mColumnHeaderList.ColumnDataGenerator();
-                Intent moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
-                bundle.putParcelableArrayList( "columnList",mColumnHeaderList.GetColumnData());
+                title = "Telkomsel";
+                moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
+                params = PulsaParams.Telkomsel;
                 moveIntent.putExtra("title",title);
-                moveIntent.putExtras(bundle);
+                moveIntent.putExtra("params",params);
                 startActivity(moveIntent);
-
                 break;
             case R.id.imgIndosat:
-                Toast.makeText(ActivityMain.this,"indosat belum ada pak",Toast.LENGTH_SHORT).show();
+                title = "Indosat";
+                moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
+                params = PulsaParams.Indosat;
+                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("params",params);
+                startActivity(moveIntent);
                 break;
             default:
                 Toast.makeText(ActivityMain.this,"yg lainnya jg belum ada nih",Toast.LENGTH_SHORT).show();
