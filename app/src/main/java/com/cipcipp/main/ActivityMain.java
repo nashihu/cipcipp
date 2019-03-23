@@ -54,6 +54,14 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
                 moveIntent.putExtra("params",params);
                 startActivity(moveIntent);
                 break;
+            case R.id.imgXL:
+                title = "XL";
+                moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
+                params = PulsaParams.Indosat;
+                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("params",params);
+                startActivity(moveIntent);
+                break;
             default:
                 Toast.makeText(ActivityMain.this,"yg lainnya jg belum ada nih",Toast.LENGTH_SHORT).show();
         }

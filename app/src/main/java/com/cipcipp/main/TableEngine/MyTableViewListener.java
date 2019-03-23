@@ -2,6 +2,7 @@ package com.cipcipp.main.TableEngine;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,11 +47,15 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
-        CellListGenerator datagen = new CellListGenerator(PulsaParams.Telkomsel,PulsaParams.Telkomsel);
-        Toast.makeText(PulseActivity.getAppContext(),""+row,Toast.LENGTH_SHORT).show();
-        datagen.RowDataGeneratorForListener();
-        String rowz = ((TextView) rowHeaderView.itemView.findViewById(R.id.row_header_textview)).getText().toString();
-        OpenApp.openApp(PulseActivity.getAppContext(),""+datagen.getRowData(rowz));
+//        String title = PulseActivity.getAppContext().getText().toString();
+//        PulseActivity.getAppContext().getText(R.id.pulsa_title);
+////        PulseActivity cobaya = new PulseActivity();
+//        Log.v("TAGGG",title+"");
+//        CellListGenerator datagen = new CellListGenerator(PulsaParams.Telkomsel,PulsaParams.Telkomsel,cobaya.getRowNames()   );
+//        Toast.makeText(PulseActivity.getAppContext(),""+row,Toast.LENGTH_SHORT).show();
+//        datagen.RowDataGeneratorForListener();
+//        String rowz = ((TextView) rowHeaderView.itemView.findViewById(R.id.row_header_textview)).getText().toString();
+//        OpenApp.openApp(PulseActivity.getAppContext(),""+datagen.getRowData(rowz));
 
     }
 }
