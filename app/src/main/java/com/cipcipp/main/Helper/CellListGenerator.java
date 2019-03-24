@@ -15,6 +15,7 @@ public class CellListGenerator {
     private ArrayList<List<CellModel>> mCellList;
     private ArrayList<CellModel> mCells;
     private ArrayList<String> row_names;
+    private ArrayList<String> col_names;
     private int row_num;
     private int col_num;
     String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
@@ -26,7 +27,7 @@ public class CellListGenerator {
     private final HashMap<String,String> prov_id = new HashMap<>();
 
 
-    public CellListGenerator(int col_num,int row_num) {
+    public CellListGenerator(int col_num,int row_num,ArrayList<String> row_names,ArrayList<String> col_names) {
         this.mCellList = new ArrayList<>();
         this.mCells = new ArrayList<>();
         this.mRowHeaderList = new ArrayList<>();
@@ -34,6 +35,8 @@ public class CellListGenerator {
         this.rowHeaderData = new HashMap<>();
         this.row_num = row_num;
         this.col_num = col_num;
+        this.row_names = row_names;
+        this.col_names = col_names;
     }
     public CellListGenerator(int col_num,int row_num,ArrayList<String> row_names) {
         this.mCellList = new ArrayList<>();
@@ -51,6 +54,7 @@ public class CellListGenerator {
         }
         return prov_id;
     }
+
     public void RowDataGenerator() {
         prov_list();
         for(int i=0;i<row_num;i++) {
@@ -100,10 +104,9 @@ public class CellListGenerator {
     ArrayList<ColumnHeaderModel> mColumnHeaderList;
 
     public void ColumnDataGenerator() {
-        int price = 5000;
+
         for(int i = 0 ; i < col_num; i++) {
-            mColumnHeaderList.add(new ColumnHeaderModel("nominal "+price ));
-            price += 5000;
+            mColumnHeaderList.add(new ColumnHeaderModel("nominal "+col_names.get(i) ));
         }
     }
 

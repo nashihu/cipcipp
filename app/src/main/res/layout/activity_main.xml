@@ -10,19 +10,19 @@
     android:layout_margin="5dp"
     android:layout_gravity="center"
     android:id="@+id/pulsa_title"
-    android:text="Loading...."
+    android:text="Harga Pulsa "
     android:textSize="20dp"
     android:textColor="@color/unselected_background_color"
     />
-<View
+    <View
         android:layout_width="match_parent"
         android:layout_height="10dp">
-    </View>
 
+    </View>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     >
 
     <com.evrencoskun.tableview.TableView
@@ -31,35 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         />
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="10dp">
 
-    </View>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/app_open_text"
-        android:visibility="invisible"
-        android:text="Buka aplikasi:"
-        android:layout_margin="10dp"
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvProvider"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/pb_loading_indicator"
-        android:layout_height="42dp"
-        android:layout_width="42dp"
-        android:layout_gravity="center"
-        android:visibility="visible"
-        android:indeterminate="true"
-
-        />
 
 </LinearLayout>

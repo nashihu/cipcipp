@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,15 +36,21 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private TextView textView;
+    private TextView appopen;
     private ArrayList<String> rowNames = new ArrayList<>();
+    private ArrayList<String> colVals = new ArrayList<>();
     private List<List<CellModel>> prices = new ArrayList<>();
     private String title;
     private ProviderAdapter adapterProv;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
         title = getIntent().getStringExtra("title");
+        progressBar = findViewById(R.id.pb_loading_indicator);
+        textView = findViewById(R.id.pulsa_title);
+        appopen = findViewById(R.id.app_open_text);
         FirebaseApp.initializeApp(this);
         database = FirebaseDatabase.getInstance();
         FirebaseDatabase.getInstance().getReference().child(title);
@@ -51,12 +58,8 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(Integer m = 0;m<dataSnapshot.getChildrenCount();m++) {
-////                    Log.v("TAGGG",""+dataSnapshot.child("BL").child("0").getValue());
-//                    for(Integer n =0;n<(dataSnapshot.child(m.toString()).getChildrenCount()-2);n++) {
-//                        Log.v("TAGGG",""+dataSnapshot.child(m.toString()).child(n.toString()));
-//                    }
-//                }
+                rowNames = new ArrayList<>();
+
                 for (DataSnapshot child_i : dataSnapshot.getChildren()) {
                     String rownum = child_i.getKey();
                     rowNames.add(rownum);
@@ -70,9 +73,12 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
 //                        Log.v("TAGGG",""+child_i.child(child_i.getKey()));
 //                        price_.add(new CellModel(i.toString()));
                         price_.add(new CellModel(i.toString(),dataSnapshot.child(rownum).child(i.toString()).getValue()));
+                        if(rownum.equals("nominal")) {
+                            colVals.add(dataSnapshot.child(rownum).child(i.toString()).getValue().toString());
+                        }
                     }
-                    if(!rownum.equals("nominal")) {
-                        if(!rownum.equals("updatedAt")) {
+                    if(!rownum.equals("updatedAt")) {
+                        if(!rownum.equals("nominal")) {
                             prices.add(price_);
                         }
                     }
@@ -84,15 +90,16 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 ArrayList<Integer> provider_id = new ArrayList<>();
                 ArrayList<String> provider_title = new ArrayList<>();
                 for(Integer i = 0; i<rowNames.size()-2;i++) {
+                    if(rowNames.get(i).equals("nominal") | rowNames.get(i).equals("updatedAt")) {
+                        continue;
+                    }
                     provider_id.add(R.mipmap.ic_launcher);
                     provider_title.add(rowNames.get(i));
                 }
                 CellListGenerator mRowHeaderLists = new CellListGenerator(prices.get(0).size(),(prices.size()),rowNames);
                 mRowHeaderLists.RowDataGenerator();
-                CellListGenerator mColumnHeaderList = new CellListGenerator(prices.get(0).size(),(prices.size()));
+                CellListGenerator mColumnHeaderList = new CellListGenerator(prices.get(0).size(),(prices.size()),rowNames,colVals);
                 mColumnHeaderList.ColumnDataGenerator();
-//                CellListGenerator mCellLists = new CellListGenerator(15,4);
-//                mCellLists.DataGenerator();
                 RecyclerView providerRV = findViewById(R.id.rvProvider);
                 LinearLayoutManager horizontalLayoutManager
                         = new LinearLayoutManager(PulseActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -106,9 +113,11 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), prices);
                 providerRV.setAdapter(adapterProv);
                 PulseActivity.context = getApplicationContext();
-                textView = findViewById(R.id.pulsa_title);
-                textView.setText(textView.getText() + title);
+                textView.setText("Harga Pulsa " + title);
                 Log.v("TAGGG",""+rowNames);
+                progressBar.setVisibility(View.INVISIBLE);
+                textView.setVisibility(View.VISIBLE);
+                appopen.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -116,7 +125,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 Log.d("TAGGG","ga nemu coy");
 
             }
-        });
+        }); // end of value event listener
 
 
 //        textView = findViewById(R.id.pulsa_title);
@@ -140,11 +149,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         return PulseActivity.context;
     }
 
-    public PulseActivity() {
-        this.database = FirebaseDatabase.getInstance();
-        this.databaseReference = database.getReference("testing").child("Telkomsel"); //Telkomsel,etc
-
-    }
     @Override
     public void onItemClick(View view, int position) {
         String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
