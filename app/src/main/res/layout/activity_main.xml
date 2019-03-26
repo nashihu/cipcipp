@@ -10,8 +10,8 @@
     android:layout_margin="5dp"
     android:layout_gravity="center"
     android:id="@+id/pulsa_title"
-    android:text="Harga Pulsa "
-    android:textSize="20dp"
+    android:text="@string/harga_pulsa"
+    android:textSize="20sp"
     android:textColor="@color/unselected_background_color"
     />
     <View
@@ -20,7 +20,6 @@
 
     </View>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >

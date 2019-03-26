@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.cipcipp.main.Helper.CellListGenerator;
 import com.cipcipp.main.Helper.OpenApp;
 import com.cipcipp.main.Model.CellModel;
-import com.cipcipp.main.Model.Contact;
+import com.cipcipp.main.Model.RowCells;
 import com.cipcipp.main.TableEngine.DatabaseHandler;
 import com.cipcipp.main.TableEngine.ProviderAdapter;
 import com.evrencoskun.tableview.TableView;
@@ -33,10 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
 public class PulseActivity extends AppCompatActivity implements ProviderAdapter.ItemClickListener {
     public static Context context;
-    private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
     private TextView textView;
     private TextView appopen;
     private ArrayList<String> rowNames = new ArrayList<>();
@@ -49,20 +48,9 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
-
-        DatabaseHandler db = new DatabaseHandler(this);
-        Log.d("Insert: ", "Inserting..");
-        db.addContact(new Contact("maya","87878787"));
-        db.addContact(new Contact("dewi","89898989"));
-        db.addContact(new Contact("doni","90909090"));
-        db.addContact(new Contact("nani","76767676"));
-
-        Log.d("Reading..","Reading all contacts....");
-        List<Contact> contactList = db.getAllContacts();
-        for (Contact c : contactList) {
-            String log = "ID: "+c.getId()+" ,Name: "+c.getName()+" ,Phone, " +c.getPhoneNumber();
-            Log.d("Name: ",log);
-        }
+        PulseActivity.context = getApplicationContext();
+        FirebaseDatabase database;
+        DatabaseReference databaseReference;
         title = getIntent().getStringExtra("title");
         progressBar = findViewById(R.id.pb_loading_indicator);
         textView = findViewById(R.id.pulsa_title);
@@ -75,37 +63,42 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 rowNames = new ArrayList<>();
-
+                DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
+                List<RowCells> rowCellsListz = db.getAllContacts();
+                if(rowCellsListz.size()!=0) {
+                    db.reCreateTable();
+                }
                 for (DataSnapshot child_i : dataSnapshot.getChildren()) {
                     String rownum = child_i.getKey();
                     rowNames.add(rownum);
                     Log.v("TAGGG",""+rownum);
                     ArrayList<CellModel> price_= new ArrayList<>();
                     for(Integer i =0;i<(child_i.getChildrenCount());i++) {
-//                        Log.v("TAGGG",""+dataSnapshot.child(rownum).child(i.toString()).getValue());
-//                        String price = child_i.child(rownum).child(i.toString()).getValue(String.class);
-//                        Log.v("TAGGG",price+"");
-//                        Log.v("TAGGG",""+child_i.child(rownum).child(i.toString()));
-//                        Log.v("TAGGG",""+child_i.child(child_i.getKey()));
-//                        price_.add(new CellModel(i.toString()));
                         price_.add(new CellModel(i.toString(),dataSnapshot.child(rownum).child(i.toString()).getValue()));
                         if(rownum.equals("nominal")) {
                             colVals.add(dataSnapshot.child(rownum).child(i.toString()).getValue().toString());
                         }
                     }
+                    RowCells rowCells = new RowCells();
+                    rowCells.bulkSetter(rowCells,price_);
+
                     if(!rownum.equals("updatedAt")) {
                         if(!rownum.equals("nominal")) {
                             prices.add(price_);
+                            db.addContact(rowCells);
                         }
                     }
                     }
-//                Log.v("TAGGG",""+prices.get(4).get(12).getData());
+                List<RowCells> rowCellsList = db.getAllContacts();
+
+                for (RowCells c : rowCellsList) {
+                    String log = c.logger(c);
+                    Log.d("Name: ",log);
+                }
                 Toast.makeText(PulseActivity.this,"updatedAt: "+dataSnapshot.child("updatedAt").getValue(),Toast.LENGTH_SHORT).show();
-//                Log.v("TAGGG",""+prices.get(0).get(0).getData());
-                int params = getIntent().getIntExtra("params",2);
                 ArrayList<Integer> provider_id = new ArrayList<>();
                 ArrayList<String> provider_title = new ArrayList<>();
-                for(Integer i = 0; i<rowNames.size()-2;i++) {
+                for(int i = 0; i<rowNames.size()-2;i++) {
                     if(rowNames.get(i).equals("nominal") | rowNames.get(i).equals("updatedAt")) {
                         continue;
                     }
@@ -128,8 +121,8 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 tableView.setTableViewListener(new MyTableViewListener());
                 mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), prices);
                 providerRV.setAdapter(adapterProv);
-                PulseActivity.context = getApplicationContext();
-                textView.setText("Harga Pulsa " + title);
+                String titlee = "Harga Pulsa " + title;
+                textView.setText(titlee);
                 Log.v("TAGGG",""+rowNames);
                 progressBar.setVisibility(View.INVISIBLE);
                 textView.setVisibility(View.VISIBLE);
@@ -141,28 +134,8 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 Log.d("TAGGG","ga nemu coy");
 
             }
-        }); // end of value event listener
+        });
 
-
-//        textView = findViewById(R.id.pulsa_title);
-//        int params = getIntent().getIntExtra("params",2);
-//        textView.setText(textView.getText() + title);
-//        CellListGenerator mRowHeaderLists = new CellListGenerator(15,4);
-//        mRowHeaderLists.RowDataGenerator();
-//        CellListGenerator mColumnHeaderList = new CellListGenerator(15,4);
-//        mColumnHeaderList.ColumnDataGenerator();
-//        CellListGenerator mCellLists = new CellListGenerator(15,4);
-//        mCellLists.DataGenerator();
-//        TableView tableView = findViewById(R.id.content_container);
-//        MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(this);
-//        tableView.setAdapter(mTableViewAdapter);
-//        tableView.setTableViewListener(new MyTableViewListener());
-//        mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), prices);
-//        PulseActivity.context = getApplicationContext();
-
-    }
-    public static Context getAppContext() {
-        return PulseActivity.context;
     }
 
     @Override
@@ -175,7 +148,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         for(int i =0; i<row_name.length;i++) {
             packagename.put(row_name[i],row_package_name[i]);
         }
-        OpenApp.openApp(PulseActivity.getAppContext(),packagename.get(adapterProv.getItem(position)));
-//        Toast.makeText(this,"km pencet "+ adapterProv.getItem(position) + "on item pos: " + position, Toast.LENGTH_SHORT).show();
+        OpenApp.openApp(PulseActivity.this,packagename.get(adapterProv.getItem(position)));
     }
 }
