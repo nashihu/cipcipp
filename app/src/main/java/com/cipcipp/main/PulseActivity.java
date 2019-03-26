@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.cipcipp.main.Helper.CellListGenerator;
 import com.cipcipp.main.Helper.OpenApp;
 import com.cipcipp.main.Model.CellModel;
+import com.cipcipp.main.Model.Contact;
+import com.cipcipp.main.TableEngine.DatabaseHandler;
 import com.cipcipp.main.TableEngine.ProviderAdapter;
 import com.evrencoskun.tableview.TableView;
 import com.cipcipp.main.TableEngine.MyTableViewAdapter;
@@ -47,6 +49,20 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
+
+        DatabaseHandler db = new DatabaseHandler(this);
+        Log.d("Insert: ", "Inserting..");
+        db.addContact(new Contact("maya","87878787"));
+        db.addContact(new Contact("dewi","89898989"));
+        db.addContact(new Contact("doni","90909090"));
+        db.addContact(new Contact("nani","76767676"));
+
+        Log.d("Reading..","Reading all contacts....");
+        List<Contact> contactList = db.getAllContacts();
+        for (Contact c : contactList) {
+            String log = "ID: "+c.getId()+" ,Name: "+c.getName()+" ,Phone, " +c.getPhoneNumber();
+            Log.d("Name: ",log);
+        }
         title = getIntent().getStringExtra("title");
         progressBar = findViewById(R.id.pb_loading_indicator);
         textView = findViewById(R.id.pulsa_title);
