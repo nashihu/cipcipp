@@ -39,8 +39,11 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private TextView textView;
     private TextView appopen;
     private ArrayList<String> rowNames = new ArrayList<>();
+    private ArrayList<String> rowNumz = new ArrayList<>();
     private ArrayList<String> colVals = new ArrayList<>();
+    private ArrayList<String> colVallz;
     private List<List<CellModel>> prices = new ArrayList<>();
+    private List<List<CellModel>> price_test = new ArrayList<>();
     private String title;
     private ProviderAdapter adapterProv;
     private ProgressBar progressBar;
@@ -68,32 +71,44 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 if(rowCellsListz.size()!=0) {
                     db.reCreateTable();
                 }
+                RowCells rowCells = new RowCells();
+                ArrayList<CellModel> colValz = new ArrayList<>();
                 for (DataSnapshot child_i : dataSnapshot.getChildren()) {
                     String rownum = child_i.getKey();
                     rowNames.add(rownum);
-                    Log.v("TAGGG",""+rownum);
                     ArrayList<CellModel> price_= new ArrayList<>();
                     for(Integer i =0;i<(child_i.getChildrenCount());i++) {
                         price_.add(new CellModel(i.toString(),dataSnapshot.child(rownum).child(i.toString()).getValue()));
                         if(rownum.equals("nominal")) {
                             colVals.add(dataSnapshot.child(rownum).child(i.toString()).getValue().toString());
+                            colValz.add(new CellModel(i.toString(),dataSnapshot.child(rownum).child(i.toString()).getValue()));
                         }
                     }
-                    RowCells rowCells = new RowCells();
-                    rowCells.bulkSetter(rowCells,price_);
 
                     if(!rownum.equals("updatedAt")) {
-                        if(!rownum.equals("nominal")) {
+                        if(rownum.equals("nominal")){
+                            rowCells = new RowCells();
+                            rowCells.bulkSetter(rowCells,colValz);
+                            db.addColVal(rowCells);
+                        } else {
                             prices.add(price_);
-                            db.addContact(rowCells);
+                            rowCells.bulkSetter(rowCells,price_);
+                            db.addRowCells(rowCells,rownum);
                         }
                     }
                     }
                 List<RowCells> rowCellsList = db.getAllContacts();
-
-                for (RowCells c : rowCellsList) {
-                    String log = c.logger(c);
-                    Log.d("Name: ",log);
+                for(RowCells rowCell : rowCellsList) {
+                    String logger = rowCell.logger(rowCell);
+                    Log.d("price_DB",""+logger);
+                    ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
+                    Log.d("ASDF",logger);
+                    if(!rowCell.getC1().equals("zeroField")) {
+                        rowNumz.add(rowCell.getC1());
+                        price_test.add(pricez);
+                    } else {
+                        colVallz = rowCell.bulkStringGetter(rowCell);
+                    }
                 }
                 Toast.makeText(PulseActivity.this,"updatedAt: "+dataSnapshot.child("updatedAt").getValue(),Toast.LENGTH_SHORT).show();
                 ArrayList<Integer> provider_id = new ArrayList<>();
@@ -105,9 +120,9 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                     provider_id.add(R.mipmap.ic_launcher);
                     provider_title.add(rowNames.get(i));
                 }
-                CellListGenerator mRowHeaderLists = new CellListGenerator(prices.get(0).size(),(prices.size()),rowNames);
+                CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz);
                 mRowHeaderLists.RowDataGenerator();
-                CellListGenerator mColumnHeaderList = new CellListGenerator(prices.get(0).size(),(prices.size()),rowNames,colVals);
+                CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz,colVallz);
                 mColumnHeaderList.ColumnDataGenerator();
                 RecyclerView providerRV = findViewById(R.id.rvProvider);
                 LinearLayoutManager horizontalLayoutManager
@@ -119,7 +134,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(PulseActivity.this);
                 tableView.setAdapter(mTableViewAdapter);
                 tableView.setTableViewListener(new MyTableViewListener());
-                mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), prices);
+                mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
                 providerRV.setAdapter(adapterProv);
                 String titlee = "Harga Pulsa " + title;
                 textView.setText(titlee);

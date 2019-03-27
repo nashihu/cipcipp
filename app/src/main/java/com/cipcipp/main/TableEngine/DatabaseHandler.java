@@ -53,30 +53,57 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addContact(RowCells rowCells) {
+    public void addRowCells(RowCells rowCells,String rowName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues value = new ContentValues();
-        value.put(Util.KEY_C1, rowCells.getC1());
-        value.put(Util.KEY_C2, rowCells.getC2());
-        value.put(Util.KEY_C2, rowCells.getC2());
-        value.put(Util.KEY_C3, rowCells.getC3());
-        value.put(Util.KEY_C4, rowCells.getC4());
-        value.put(Util.KEY_C5, rowCells.getC5());
-        value.put(Util.KEY_C6, rowCells.getC6());
-        value.put(Util.KEY_C7, rowCells.getC7());
-        value.put(Util.KEY_C8, rowCells.getC8());
-        value.put(Util.KEY_C9, rowCells.getC9());
-        value.put(Util.KEY_C10, rowCells.getC10());
-        value.put(Util.KEY_C11, rowCells.getC11());
-        value.put(Util.KEY_C12, rowCells.getC12());
-        value.put(Util.KEY_C13, rowCells.getC13());
-        value.put(Util.KEY_C14, rowCells.getC14());
-        value.put(Util.KEY_C15, rowCells.getC15());
-        value.put(Util.KEY_C16, rowCells.getC16());
-        value.put(Util.KEY_C17, rowCells.getC17());
-        value.put(Util.KEY_C18, rowCells.getC18());
-        value.put(Util.KEY_C19, rowCells.getC19());
-        value.put(Util.KEY_C20, rowCells.getC20());
+        value.put(Util.KEY_C1,rowName);
+        value.put(Util.KEY_C2, rowCells.getC1());
+        value.put(Util.KEY_C3, rowCells.getC2());
+        value.put(Util.KEY_C4, rowCells.getC3());
+        value.put(Util.KEY_C5, rowCells.getC4());
+        value.put(Util.KEY_C6, rowCells.getC5());
+        value.put(Util.KEY_C7, rowCells.getC6());
+        value.put(Util.KEY_C8, rowCells.getC7());
+        value.put(Util.KEY_C9, rowCells.getC8());
+        value.put(Util.KEY_C10, rowCells.getC9());
+        value.put(Util.KEY_C11, rowCells.getC10());
+        value.put(Util.KEY_C12, rowCells.getC11());
+        value.put(Util.KEY_C13, rowCells.getC12());
+        value.put(Util.KEY_C14, rowCells.getC13());
+        value.put(Util.KEY_C15, rowCells.getC14());
+        value.put(Util.KEY_C16, rowCells.getC15());
+        value.put(Util.KEY_C17, rowCells.getC16());
+        value.put(Util.KEY_C18, rowCells.getC17());
+        value.put(Util.KEY_C19, rowCells.getC18());
+        value.put(Util.KEY_C20, rowCells.getC19());
+        db.insert(Util.TABLE_NAME,null,value);
+        db.close();
+    }
+
+    public void addColVal(RowCells rowCells) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        String rowName = "zeroField";
+        value.put(Util.KEY_C1,rowName);
+        value.put(Util.KEY_C2, rowCells.getC1());
+        value.put(Util.KEY_C3, rowCells.getC2());
+        value.put(Util.KEY_C4, rowCells.getC3());
+        value.put(Util.KEY_C5, rowCells.getC4());
+        value.put(Util.KEY_C6, rowCells.getC5());
+        value.put(Util.KEY_C7, rowCells.getC6());
+        value.put(Util.KEY_C8, rowCells.getC7());
+        value.put(Util.KEY_C9, rowCells.getC8());
+        value.put(Util.KEY_C10, rowCells.getC9());
+        value.put(Util.KEY_C11, rowCells.getC10());
+        value.put(Util.KEY_C12, rowCells.getC11());
+        value.put(Util.KEY_C13, rowCells.getC12());
+        value.put(Util.KEY_C14, rowCells.getC13());
+        value.put(Util.KEY_C15, rowCells.getC14());
+        value.put(Util.KEY_C16, rowCells.getC15());
+        value.put(Util.KEY_C17, rowCells.getC16());
+        value.put(Util.KEY_C18, rowCells.getC17());
+        value.put(Util.KEY_C19, rowCells.getC18());
+        value.put(Util.KEY_C20, rowCells.getC19());
         db.insert(Util.TABLE_NAME,null,value);
         db.close();
     }
