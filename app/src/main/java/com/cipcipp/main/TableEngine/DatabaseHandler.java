@@ -141,12 +141,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
         }
         cursor.close();
+        db.close();
         return rowCellsList;
     }
 
-    public void reCreateTable() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + Util.TABLE_NAME);
-        onCreate(db);
-    }
 }

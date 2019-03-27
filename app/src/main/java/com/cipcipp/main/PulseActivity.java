@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,21 +31,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-
 public class PulseActivity extends AppCompatActivity implements ProviderAdapter.ItemClickListener {
     public static Context context;
     private TextView textView;
     private TextView appopen;
-    private ArrayList<String> rowNames = new ArrayList<>();
+    private TextView updatedAt;
     private ArrayList<String> rowNumz = new ArrayList<>();
-    private ArrayList<String> colVals = new ArrayList<>();
     private ArrayList<String> colVallz;
-    private List<List<CellModel>> prices = new ArrayList<>();
+    private ArrayList<String> provider_title = new ArrayList<>();
+    private ArrayList<Integer> provider_id = new ArrayList<>();
     private List<List<CellModel>> price_test = new ArrayList<>();
     private String title;
     private ProviderAdapter adapterProv;
-    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,102 +51,62 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         FirebaseDatabase database;
         DatabaseReference databaseReference;
         title = getIntent().getStringExtra("title");
-        progressBar = findViewById(R.id.pb_loading_indicator);
         textView = findViewById(R.id.pulsa_title);
         appopen = findViewById(R.id.app_open_text);
-        FirebaseApp.initializeApp(this);
-        database = FirebaseDatabase.getInstance();
-        FirebaseDatabase.getInstance().getReference().child(title);
-        databaseReference = database.getReference("testing").child(title); //Telkomsel,etc
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                rowNames = new ArrayList<>();
-                DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
-                List<RowCells> rowCellsListz = db.getAllContacts();
-                if(rowCellsListz.size()!=0) {
-                    db.reCreateTable();
-                }
-                RowCells rowCells = new RowCells();
-                ArrayList<CellModel> colValz = new ArrayList<>();
-                for (DataSnapshot child_i : dataSnapshot.getChildren()) {
-                    String rownum = child_i.getKey();
-                    rowNames.add(rownum);
-                    ArrayList<CellModel> price_= new ArrayList<>();
-                    for(Integer i =0;i<(child_i.getChildrenCount());i++) {
-                        price_.add(new CellModel(i.toString(),dataSnapshot.child(rownum).child(i.toString()).getValue()));
-                        if(rownum.equals("nominal")) {
-                            colVals.add(dataSnapshot.child(rownum).child(i.toString()).getValue().toString());
-                            colValz.add(new CellModel(i.toString(),dataSnapshot.child(rownum).child(i.toString()).getValue()));
+        updatedAt = findViewById(R.id.last_update);
+        DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
+        if(db.getAllContacts().size()!=0) {
+            setupData(db);
+            renderData();
+        } else {
+            FirebaseApp.initializeApp(this);
+            database = FirebaseDatabase.getInstance();
+            FirebaseDatabase.getInstance().getReference().child(title);
+            databaseReference = database.getReference("testing").child(title); //Telkomsel,etc
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
+                    RowCells rowCells = new RowCells();
+                    ArrayList<CellModel> colValz = new ArrayList<>();
+                    for (DataSnapshot child_i : dataSnapshot.getChildren()) {
+                        String rownum = child_i.getKey();
+                        ArrayList<CellModel> price_= new ArrayList<>();
+                        for(int i =0;i<(child_i.getChildrenCount());i++) {
+                            if(rownum!=null) {
+                                price_.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                                if(rownum.equals("nominal")) {
+                                    colValz.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                                }
+                            }
                         }
-                    }
-
-                    if(!rownum.equals("updatedAt")) {
-                        if(rownum.equals("nominal")){
-                            rowCells = new RowCells();
-                            rowCells.bulkSetter(rowCells,colValz);
-                            db.addColVal(rowCells);
+                        if(rownum!=null && !rownum.equals("updatedAt")) {
+                            if(rownum.equals("nominal")){
+                                rowCells.bulkSetter(rowCells,colValz);
+                                db.addColVal(rowCells);
+                            } else {
+                                rowCells.bulkSetter(rowCells,price_);
+                                db.addRowCells(rowCells,rownum);
+                            }
                         } else {
-                            prices.add(price_);
-                            rowCells.bulkSetter(rowCells,price_);
-                            db.addRowCells(rowCells,rownum);
+                            if(rownum!=null) {
+                                ArrayList<CellModel> rownumm = new ArrayList<>();
+                                rownumm.add(new CellModel("0",dataSnapshot.child(rownum).getValue()));
+                                rowCells.bulkSetter(rowCells,rownumm);
+                                db.addRowCells(rowCells,"updatedAt");
+                            }
                         }
                     }
-                    }
-                List<RowCells> rowCellsList = db.getAllContacts();
-                for(RowCells rowCell : rowCellsList) {
-                    String logger = rowCell.logger(rowCell);
-                    Log.d("price_DB",""+logger);
-                    ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
-                    Log.d("ASDF",logger);
-                    if(!rowCell.getC1().equals("zeroField")) {
-                        rowNumz.add(rowCell.getC1());
-                        price_test.add(pricez);
-                    } else {
-                        colVallz = rowCell.bulkStringGetter(rowCell);
-                    }
+                    setupData(db);
+                    renderData();
+                    Toast.makeText(PulseActivity.this,"berhasil load data dari server",Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(PulseActivity.this,"updatedAt: "+dataSnapshot.child("updatedAt").getValue(),Toast.LENGTH_SHORT).show();
-                ArrayList<Integer> provider_id = new ArrayList<>();
-                ArrayList<String> provider_title = new ArrayList<>();
-                for(int i = 0; i<rowNames.size()-2;i++) {
-                    if(rowNames.get(i).equals("nominal") | rowNames.get(i).equals("updatedAt")) {
-                        continue;
-                    }
-                    provider_id.add(R.mipmap.ic_launcher);
-                    provider_title.add(rowNames.get(i));
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d("TAGGG","ga nemu coy");
                 }
-                CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz);
-                mRowHeaderLists.RowDataGenerator();
-                CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz,colVallz);
-                mColumnHeaderList.ColumnDataGenerator();
-                RecyclerView providerRV = findViewById(R.id.rvProvider);
-                LinearLayoutManager horizontalLayoutManager
-                        = new LinearLayoutManager(PulseActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                providerRV.setLayoutManager(horizontalLayoutManager);
-                adapterProv = new ProviderAdapter(PulseActivity.this,provider_title,provider_id);
-                adapterProv.setClickListener(PulseActivity.this);
-                TableView tableView = findViewById(R.id.content_container);
-                MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(PulseActivity.this);
-                tableView.setAdapter(mTableViewAdapter);
-                tableView.setTableViewListener(new MyTableViewListener());
-                mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
-                providerRV.setAdapter(adapterProv);
-                String titlee = "Harga Pulsa " + title;
-                textView.setText(titlee);
-                Log.v("TAGGG",""+rowNames);
-                progressBar.setVisibility(View.INVISIBLE);
-                textView.setVisibility(View.VISIBLE);
-                appopen.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("TAGGG","ga nemu coy");
-
-            }
-        });
-
+            });
+        }
     }
 
     @Override
@@ -164,5 +120,55 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             packagename.put(row_name[i],row_package_name[i]);
         }
         OpenApp.openApp(PulseActivity.this,packagename.get(adapterProv.getItem(position)));
+    }
+
+    private void renderData() {
+        CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz);
+        mRowHeaderLists.RowDataGenerator();
+        CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz,colVallz);
+        mColumnHeaderList.ColumnDataGenerator();
+        TableView tableView = findViewById(R.id.content_container);
+        MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(PulseActivity.this);
+        tableView.setAdapter(mTableViewAdapter);
+        tableView.setTableViewListener(new MyTableViewListener());
+        mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
+
+        RecyclerView providerRV = findViewById(R.id.rvProvider);
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(PulseActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        providerRV.setLayoutManager(horizontalLayoutManager);
+        adapterProv = new ProviderAdapter(PulseActivity.this,provider_title,provider_id);
+        adapterProv.setClickListener(PulseActivity.this);
+        providerRV.setAdapter(adapterProv);
+        String titlee = "Harga Pulsa " + title;
+        textView.setText(titlee);
+        textView.setVisibility(View.VISIBLE);
+        appopen.setVisibility(View.VISIBLE);
+        updatedAt.setVisibility(View.VISIBLE);
+    }
+
+    private void setupData(DatabaseHandler db) {
+        List<RowCells> rowCellsList = db.getAllContacts();
+        for(RowCells rowCell : rowCellsList) {
+            String logger = rowCell.logger(rowCell);
+            Log.d("price_DB",""+logger);
+            ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
+            Log.d("ASDF",logger);
+            if(!rowCell.getC1().equals("updatedAt")) {
+                if(!rowCell.getC1().equals("zeroField")) {
+                    rowNumz.add(rowCell.getC1());
+                    price_test.add(pricez);
+                } else {
+                    colVallz = rowCell.bulkStringGetter(rowCell);
+                }
+            } else {
+                String updateText = updatedAt.getText().toString() + rowCell.getC2();
+                updatedAt.setText(updateText);
+            }
+        }
+        for(int i = 0; i<rowNumz.size();i++) {
+            provider_id.add(R.mipmap.ic_launcher);
+            provider_title.add(rowNumz.get(i));
+        }
     }
 }
