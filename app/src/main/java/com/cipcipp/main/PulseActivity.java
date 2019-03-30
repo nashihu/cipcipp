@@ -55,6 +55,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
         DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
+        db.reCreateTable();
         if(db.getAllContacts().size()!=0) {
             setupData(db);
             renderData();
@@ -99,7 +100,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                     }
                     setupData(db);
                     renderData();
-                    Toast.makeText(PulseActivity.this,"berhasil load data dari server",Toast.LENGTH_LONG).show();
+//                    Toast.makeText(PulseActivity.this,"berhasil load data dari server",Toast.LENGTH_LONG).show();
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {

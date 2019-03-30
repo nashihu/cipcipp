@@ -22,28 +22,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACT_TABLE = "CREATE TABLE " + Util.TABLE_NAME + " ( "
-                + Util.KEY_ID + " INTEGER PRIMARY KEY, "
-                + Util.KEY_C1 + " TEXT, "
-                + Util.KEY_C2 + " TEXT, "
-                + Util.KEY_C3 + " TEXT, "
-                + Util.KEY_C4 + " TEXT, "
-                + Util.KEY_C5 + " TEXT, "
-                + Util.KEY_C6 + " TEXT, "
-                + Util.KEY_C7 + " TEXT, "
-                + Util.KEY_C8 + " TEXT, "
-                + Util.KEY_C9 + " TEXT, "
-                + Util.KEY_C10 + " TEXT, "
-                + Util.KEY_C11 + " TEXT, "
-                + Util.KEY_C12 + " TEXT, "
-                + Util.KEY_C13 + " TEXT, "
-                + Util.KEY_C14 + " TEXT, "
-                + Util.KEY_C15 + " TEXT, "
-                + Util.KEY_C16 + " TEXT, "
-                + Util.KEY_C17 + " TEXT, "
-                + Util.KEY_C18 + " TEXT, "
-                + Util.KEY_C19 + " TEXT, "
-                + Util.KEY_C20 + " TEXT " + " )";
         db.execSQL(CREATE_CONTACT_TABLE);
     }
 
@@ -144,5 +122,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return rowCellsList;
     }
+
+    public void reCreateTable() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + Util.TABLE_NAME);
+        db.execSQL(CREATE_CONTACT_TABLE);
+
+    }
+
+    private
+    String CREATE_CONTACT_TABLE = "CREATE TABLE " + Util.TABLE_NAME + " ( "
+            + Util.KEY_ID + " INTEGER PRIMARY KEY, "
+            + Util.KEY_C1 + " TEXT, "
+            + Util.KEY_C2 + " TEXT, "
+            + Util.KEY_C3 + " TEXT, "
+            + Util.KEY_C4 + " TEXT, "
+            + Util.KEY_C5 + " TEXT, "
+            + Util.KEY_C6 + " TEXT, "
+            + Util.KEY_C7 + " TEXT, "
+            + Util.KEY_C8 + " TEXT, "
+            + Util.KEY_C9 + " TEXT, "
+            + Util.KEY_C10 + " TEXT, "
+            + Util.KEY_C11 + " TEXT, "
+            + Util.KEY_C12 + " TEXT, "
+            + Util.KEY_C13 + " TEXT, "
+            + Util.KEY_C14 + " TEXT, "
+            + Util.KEY_C15 + " TEXT, "
+            + Util.KEY_C16 + " TEXT, "
+            + Util.KEY_C17 + " TEXT, "
+            + Util.KEY_C18 + " TEXT, "
+            + Util.KEY_C19 + " TEXT, "
+            + Util.KEY_C20 + " TEXT " + " )";
 
 }
