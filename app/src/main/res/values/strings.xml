@@ -6,4 +6,6 @@
     <string name="open_app_text">Buka aplikasi:</string>
     <string name="report"> Laporkan beda data </string>
     <string name="report_check"> cek laporan beda data </string>
+    <string name="facebook_app_id">1066367710221280</string>
+    <string name="fb_login_protocol_scheme">fb1066367710221280</string>
 </resources>
