@@ -1,6 +1,5 @@
 package com.cipcipp.main;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cipcipp.main.Helper.CellListGenerator;
 import com.cipcipp.main.Helper.OpenApp;
@@ -32,28 +31,31 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PulseActivity extends AppCompatActivity implements ProviderAdapter.ItemClickListener {
-    public static Context context;
+    private Button report;
+    private Button check_report;
+    private String title;
     private TextView textView;
     private TextView appopen;
     private TextView updatedAt;
+    private ProviderAdapter adapterProv;
     private ArrayList<String> rowNumz = new ArrayList<>();
     private ArrayList<String> colVallz;
     private ArrayList<String> provider_title = new ArrayList<>();
     private ArrayList<Integer> provider_id = new ArrayList<>();
     private List<List<CellModel>> price_test = new ArrayList<>();
-    private String title;
-    private ProviderAdapter adapterProv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
-        PulseActivity.context = getApplicationContext();
-        FirebaseDatabase database;
-        DatabaseReference databaseReference;
-        title = getIntent().getStringExtra("title");
         textView = findViewById(R.id.pulsa_title);
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
+        report = findViewById(R.id.report);
+        check_report = findViewById(R.id.report_check);
+        title = getIntent().getStringExtra("title");
+        FirebaseDatabase database;
+        DatabaseReference databaseReference;
         DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
         db.reCreateTable();
         if(db.getAllContacts().size()!=0) {
@@ -64,7 +66,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             database = FirebaseDatabase.getInstance();
             FirebaseDatabase.getInstance().getReference().child(title);
             databaseReference = database.getReference("testing").child(title); //Telkomsel,etc
-            databaseReference.addValueEventListener(new ValueEventListener() {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
@@ -146,6 +148,9 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         textView.setVisibility(View.VISIBLE);
         appopen.setVisibility(View.VISIBLE);
         updatedAt.setVisibility(View.VISIBLE);
+        report.setVisibility(View.VISIBLE);
+        check_report.setVisibility(View.VISIBLE);
+
     }
 
     private void setupData(DatabaseHandler db) {

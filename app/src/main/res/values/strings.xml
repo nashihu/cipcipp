@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Cipcipp</string>
     <string name="harga_pulsa">Harga Pulsa</string>
+    <string name="loading_title">Loading....</string>
+    <string name="last_update">update terakhir:</string>
+    <string name="open_app_text">Buka aplikasi:</string>
+    <string name="report"> Laporkan beda data </string>
+    <string name="report_check"> cek laporan beda data </string>
 </resources>

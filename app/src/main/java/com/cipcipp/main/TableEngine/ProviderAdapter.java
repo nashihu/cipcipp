@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.cipcipp.main.R;
 import java.util.List;
 
-import static com.cipcipp.main.PulseActivity.context;
-
 public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.ViewHolder> {
     private ItemClickListener mClickListener;
     private LayoutInflater mInflater;
@@ -46,7 +44,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView prov_image;
         TextView prov_text;
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             prov_image = itemView.findViewById(R.id.provider_ic);
             prov_text = itemView.findViewById(R.id.provider_title);
