@@ -11,38 +11,37 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="vertical">
-<TextView
+
+<TextView android:id="@+id/pulsa_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:layout_gravity="center"
-    android:id="@+id/pulsa_title"
     android:text="@string/loading_title"
     android:textSize="20sp"
     android:textColor="@color/unselected_background_color"
     />
-<View
-        android:layout_width="match_parent"
-        android:layout_height="10dp">
+<View android:id="@+id/separator"
+    android:layout_width="match_parent"
+    android:layout_height="10dp">
     </View>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/contentGroup"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
-    <com.evrencoskun.tableview.TableView
-        android:id="@+id/content_container"
+    <com.evrencoskun.tableview.TableView android:id="@+id/content_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         />
-    <TextView
+    <TextView android:text="@string/last_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/last_update"
-        android:text="@string/last_update"
         android:visibility="invisible"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
@@ -54,16 +53,14 @@
         >
 
     </View>
-    <TextView
+    <TextView android:id="@+id/app_open_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/app_open_text"
         android:visibility="invisible"
         android:text="@string/open_app_text"
         android:layout_margin="10dp"
         />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvProvider"
+    <android.support.v7.widget.RecyclerView android:id="@+id/rvProvider"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -75,24 +72,64 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/reportGroup"
+        android:visibility="invisible">
         <Button
             style="?android:attr/button"
             android:id="@+id/report"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:text="@string/report"/>
 
         <Button
             style="?android:attr/button"
             android:id="@+id/report_check"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:text="@string/report_check"/>
 
     </LinearLayout>
 </LinearLayout>
+<LinearLayout android:id="@+id/authGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:id="@+id/email"
+            android:hint="email"
+            android:visibility="gone"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pass"
+            android:inputType="textPassword"
+            android:hint="password"
+            android:visibility="gone"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sign_in"
+            android:text="sign in"
+            android:visibility="gone"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sign_out"
+            android:text="sign out"
+            android:visibility="gone"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sign_up"
+            android:text="sign up"
+            android:visibility="gone"/>
+    </LinearLayout>
 </LinearLayout>
 </ScrollView>
