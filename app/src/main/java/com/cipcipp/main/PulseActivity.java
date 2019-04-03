@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.cipcipp.main.Helper.CellListGenerator;
 import com.cipcipp.main.Helper.OpenApp;
+import com.cipcipp.main.Model.AggModel;
 import com.cipcipp.main.Model.CellModel;
 import com.cipcipp.main.Model.RowCells;
 import com.cipcipp.main.TableEngine.DatabaseHandler;
@@ -55,7 +56,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText email;
     private EditText password;
-    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,13 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
         report = findViewById(R.id.report);
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent moveIntent = new Intent(PulseActivity.this, AggActivity.class);
+                startActivity(moveIntent);
+            }
+        });
         check_report = findViewById(R.id.report_check);
         title = getIntent().getStringExtra("title");
         mAuth = FirebaseAuth.getInstance();
@@ -78,6 +85,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             setupData(db);
             renderData();
         } else {
+            FirebaseUser firebaseUser;
             firebaseUser = mAuth.getCurrentUser();
             if(firebaseUser!=null) {
                 fetchData();
@@ -102,7 +110,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     protected void onStop() {
         super.onStop();
         DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
-        db.reCreateTable();
         if(mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
@@ -154,20 +161,33 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         List<RowCells> rowCellsList = db.getAllContacts();
         for(RowCells rowCell : rowCellsList) {
             String logger = rowCell.logger(rowCell);
-            Log.d("price_DB",""+logger);
+            Log.v("price_DB",""+logger);
             ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
-            Log.d("ASDF",logger);
             if(!rowCell.getC1().equals("updatedAt")) {
                 if(!rowCell.getC1().equals("zeroField")) {
                     rowNumz.add(rowCell.getC1());
                     price_test.add(pricez);
                 } else {
                     colVallz = rowCell.bulkStringGetter(rowCell);
+                    Log.v("cols",""+colVallz);
                 }
             } else {
                 String updateText = updatedAt.getText().toString() + rowCell.getC2();
                 updatedAt.setText(updateText);
             }
+        }
+
+        List<AggModel> cheapList = db.getAllCheapestValue();
+        Log.v("cheapcheap",cheapList+" "+cheapList.size()+" "+cheapList.get(0));
+        if(cheapList.size()==colVallz.size()){
+            for(int i =0; i<colVallz.size(); i++) {
+                cheapList.get(i).setNominal(colVallz.get(i));
+            }
+        } else {
+            cheapList = new ArrayList<>();
+        }
+        for (AggModel agg : cheapList) {
+            Log.v("aggmodel",agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
         }
         for(int i = 0; i<rowNumz.size();i++) {
             provider_id.add(R.mipmap.ic_launcher);

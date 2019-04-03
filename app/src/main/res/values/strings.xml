@@ -8,4 +8,8 @@
     <string name="report_check"> cek laporan beda data </string>
     <string name="facebook_app_id">1066367710221280</string>
     <string name="fb_login_protocol_scheme">fb1066367710221280</string>
+    <string name="nominal">Nominal</string>
+    <string name="harga">Harga</string>
+    <string name="provider">Provider</string>
+    <string name="provider_icon">provider_icon</string>
 </resources>
