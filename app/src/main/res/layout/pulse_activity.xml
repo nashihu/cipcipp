@@ -5,27 +5,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:verticalScrollbarPosition="right"
+    android:id="@+id/pulse_activity"
     >
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-<TextView android:id="@+id/pulsa_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:layout_gravity="center"
-    android:text="@string/loading_title"
-    android:textSize="20sp"
-    android:textColor="@color/unselected_background_color"
-    />
-<View android:id="@+id/separator"
+<LinearLayout android:id="@+id/pulse_header"
     android:layout_width="match_parent"
-    android:layout_height="10dp">
-    </View>
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <TextView android:id="@+id/pulsa_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/loading_title"
+        android:textSize="20sp"
+        android:textColor="@color/unselected_background_color"
+        />
+    <View android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="10dp">
+        </View>
+</LinearLayout>
 <LinearLayout android:id="@+id/contentGroup"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -103,32 +109,32 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:id="@+id/email"
-            android:hint="email"
+            android:hint="@string/email_filed"
             android:visibility="gone"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/pass"
             android:inputType="textPassword"
-            android:hint="password"
+            android:hint="@string/password_field"
             android:visibility="gone"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sign_in"
-            android:text="sign in"
+            android:text="@string/sign_in_field"
             android:visibility="gone"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sign_out"
-            android:text="sign out"
+            android:text="@string/sign_out_field"
             android:visibility="gone"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sign_up"
-            android:text="sign up"
+            android:text="@string/sign_up_field"
             android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

@@ -78,9 +78,9 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
     }
 
 
-    public String getItem(int id) {
+    public Integer getItem(int id) {
         // convenience method for getting data at click position
-        return provider_name.get(id);
+        return provider_image_id.get(id);
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

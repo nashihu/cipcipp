@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.cipcipp.main.Helper.PulsaParams;
 import com.cipcipp.main.TableEngine.DatabaseHandler;
 
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener{
@@ -44,30 +44,23 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         String title;
         Intent moveIntent;
-        int params;
         switch (view.getId()) {
             case R.id.imgTelkomsel:
                 title = "Telkomsel";
-                moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
-                params = PulsaParams.Telkomsel;
+                moveIntent = new Intent(ActivityMain.this, AggActivity.class);
                 moveIntent.putExtra("title",title);
-                moveIntent.putExtra("params",params);
                 startActivity(moveIntent);
                 break;
             case R.id.imgIndosat:
                 title = "Indosat";
-                moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
-                params = PulsaParams.Indosat;
+                moveIntent = new Intent(ActivityMain.this, AggActivity.class);
                 moveIntent.putExtra("title",title);
-                moveIntent.putExtra("params",params);
                 startActivity(moveIntent);
                 break;
             case R.id.imgXL:
                 title = "XL";
-                moveIntent = new Intent(ActivityMain.this, PulseActivity.class);
-                params = PulsaParams.Indosat;
+                moveIntent = new Intent(ActivityMain.this, AggActivity.class);
                 moveIntent.putExtra("title",title);
-                moveIntent.putExtra("params",params);
                 startActivity(moveIntent);
                 break;
             case R.id.cipcipphow:
@@ -76,7 +69,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             default:
-//                Toast.makeText(ActivityMain.this,"yg lainnya jg belum ada nih",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityMain.this,"Not Available Yet",Toast.LENGTH_SHORT).show();
         }
     }
 }

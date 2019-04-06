@@ -9,19 +9,48 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/agg_title"
         android:text="@string/harga_pulsa"
         android:gravity="center"
-        android:layout_margin="10dp"
+        android:textColor="@color/unselected_background_color"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="35dp"
         android:textSize="20sp"/>
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginBottom="35dp"
-        android:id="@+id/agg_recycler_view"/>
+        android:orientation="vertical">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginBottom="35dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:id="@+id/agg_recycler_view"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
-
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/to_pulse_activity"
+                android:text="@string/lebih_lengkap"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/icon_lebih_lengkap"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -43,7 +43,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private Button report;
     private Button check_report;
     private String title;
-    private TextView textView;
+    private TextView pulsaTitle;
     private TextView appopen;
     private TextView updatedAt;
     private ProviderAdapter adapterProv;
@@ -61,7 +61,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
-        textView = findViewById(R.id.pulsa_title);
+        pulsaTitle = findViewById(R.id.pulsa_title);
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
         report = findViewById(R.id.report);
@@ -90,9 +90,9 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             if(firebaseUser!=null) {
                 fetchData();
             } else {
-                String noUser = "please sign in first";
-                textView.setText(noUser);
-                textView.setVisibility(View.VISIBLE);
+                String noUser = "silakan sign in dulu";
+                pulsaTitle.setText(noUser);
+                pulsaTitle.setVisibility(View.VISIBLE);
                 findViewById(R.id.reportGroup).setVisibility(View.GONE);
                 AuthField(View.VISIBLE);
             }
@@ -148,8 +148,8 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         adapterProv.setClickListener(PulseActivity.this);
         providerRV.setAdapter(adapterProv);
         String titlee = "Harga Pulsa " + title;
-        textView.setText(titlee);
-        textView.setVisibility(View.VISIBLE);
+        pulsaTitle.setText(titlee);
+        pulsaTitle.setVisibility(View.VISIBLE);
         appopen.setVisibility(View.VISIBLE);
         updatedAt.setVisibility(View.VISIBLE);
         report.setVisibility(View.VISIBLE);
@@ -215,7 +215,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                                     } else {
                                         Toast.makeText(PulseActivity.this, "sign in Success!",Toast.LENGTH_SHORT).show();
                                         String successLogin = "Loading...";
-                                        textView.setText(successLogin);
+                                        pulsaTitle.setText(successLogin);
                                         fetchData();
                                         findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                         AuthField(View.GONE);
@@ -263,7 +263,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                                                 } else {
                                                     Toast.makeText(PulseActivity.this, "sign up Success!",Toast.LENGTH_SHORT).show();
                                                     String successLogin = "Loading...";
-                                                    textView.setText(successLogin);
+                                                    pulsaTitle.setText(successLogin);
                                                     fetchData();
                                                     findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                                     AuthField(View.GONE);

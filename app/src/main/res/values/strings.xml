@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Cipcipp</string>
-    <string name="harga_pulsa">Harga Pulsa</string>
+    <string name="harga_pulsa">Harga Termurah</string>
     <string name="loading_title">Loading....</string>
     <string name="last_update">update terakhir:</string>
     <string name="open_app_text">Buka aplikasi:</string>
@@ -12,4 +12,11 @@
     <string name="harga">Harga</string>
     <string name="provider">Provider</string>
     <string name="provider_icon">provider_icon</string>
+    <string name="lebih_lengkap">Lebih Lengkap</string>
+    <string name="icon_lebih_lengkap">icon_lebih_lengkap</string>
+    <string name="email_filed">email</string>
+    <string name="password_field">password</string>
+    <string name="sign_in_field">sign in</string>
+    <string name="sign_out_field">sign out</string>
+    <string name="sign_up_field">sign up</string>
 </resources>
