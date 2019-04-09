@@ -1,15 +1,14 @@
-package com.cipcipp.main.Helper;
+package com.cipcipp.main.helper;
 import android.util.Log;
 
-import com.cipcipp.main.Model.CellModel;
-import com.cipcipp.main.Model.ColumnHeaderModel;
-import com.cipcipp.main.Model.RowHeaderModel;
+import com.cipcipp.main.model.CellModel;
+import com.cipcipp.main.model.ColumnHeaderModel;
+import com.cipcipp.main.model.RowHeaderModel;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class CellListGenerator {
     private ArrayList<List<CellModel>> mCellList;
@@ -18,12 +17,12 @@ public class CellListGenerator {
     private ArrayList<String> col_names;
     private int row_num;
     private int col_num;
-    String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
-    String[] row_package_name = {"ovo.id",
+    private String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
+    private String[] row_package_name = {"ovo.id",
             "blibli.mobile.commerce","id.flip","id.dana","com.bukalapak.android","com.tokopedia.tkpd"
             ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app"};
-    ArrayList<RowHeaderModel> mRowHeaderList;
-    HashMap<String,String> rowHeaderData;
+    private ArrayList<RowHeaderModel> mRowHeaderList;
+    private HashMap<String,String> rowHeaderData;
     private final HashMap<String,String> prov_id = new HashMap<>();
 
 
@@ -77,8 +76,8 @@ public class CellListGenerator {
         for(int i = 0; i<row_num;i++) {
             int k = 5000;
             ArrayList<CellModel> mCells = new ArrayList<>();
-            for(Integer j = 0; j<col_num;j++) {
-                mCells.add(new CellModel(j.toString(),  decimalDigits(2,k+(1000*Math.random()))));
+            for(int j = 0; j<col_num;j++) {
+                mCells.add(new CellModel(String.valueOf(j),  decimalDigits(2,k+(1000*Math.random()))));
                 k = k + 5000;
             }
         mCellList.add(mCells);
@@ -89,11 +88,10 @@ public class CellListGenerator {
         return mCellList;
     }
 
-    public String decimalDigits(int decimaldigits, double x){
+    private String decimalDigits(int decimaldigits, double x){
         final NumberFormat numFormat = NumberFormat.getNumberInstance();
         numFormat.setMaximumFractionDigits(decimaldigits);
-        final String resultS = numFormat.format(x);
-        return resultS;
+        return numFormat.format(x);
     }
 
 
@@ -101,7 +99,7 @@ public class CellListGenerator {
         return rowHeaderData.get(key);
     }
 
-    ArrayList<ColumnHeaderModel> mColumnHeaderList;
+    private ArrayList<ColumnHeaderModel> mColumnHeaderList;
 
     public void ColumnDataGenerator() {
 

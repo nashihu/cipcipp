@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<LinearLayout
+    android:orientation="vertical"
+    android:id="@+id/report_form"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    >
+    <TextView android:id="@+id/report_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report"
+        android:textSize="20sp"
+        android:textColor="@color/unselected_background_color"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        />
+<LinearLayout android:id="@+id/report_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginBottom="10dp"
+    android:layout_height="match_parent">
+    <Spinner android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        >
+    </Spinner>
+
+    <Spinner android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        >
+    </Spinner>
+
+    <EditText android:id="@+id/true_price"
+        android:hint="@string/harga_tercantum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        android:inputType="numberDecimal"
+        />
+    <RelativeLayout android:id="@+id/ss_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <ImageView android:id="@+id/input_image"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textColor="@color/selected_text_color"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:background="@color/com_facebook_likeboxcountview_text_color"
+        android:contentDescription="@string/masukkan_screenshot" />
+    <TextView android:id="@+id/textImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_screenshot_di_sini"
+        android:gravity="center"
+        android:layout_alignStart="@+id/input_image"
+        android:layout_alignEnd="@+id/input_image"
+        android:layout_alignTop="@+id/input_image"
+        android:layout_alignBottom="@+id/input_image"
+        />
+    </RelativeLayout>
+    <Button android:id="@+id/report_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/report"
+        android:layout_margin="10dp"/>
+</LinearLayout>
+
+
+</LinearLayout>
+</ScrollView>

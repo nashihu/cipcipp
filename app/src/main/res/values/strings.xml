@@ -19,4 +19,15 @@
     <string name="sign_in_field">sign in</string>
     <string name="sign_out_field">sign out</string>
     <string name="sign_up_field">sign up</string>
+    <string name="harga_tercantum">harga sebenarnya</string>
+    <string name="upload_screenshot_di_sini">bukti screenshot</string>
+    <string name="masukkan_screenshot">masukkan screenshot</string>
+    <string name="bagaimana_cipcipp_mengambil_data">Bagaimana Cipcipp mengambil data?</string>
+    <string name="carrier_smartfren">Smartfren</string>
+    <string name="carrier_tri">3</string>
+    <string name="carrier_axis">AXIS</string>
+    <string name="carrier_xl">XL</string>
+    <string name="carrier_indosat">Indosat</string>
+    <string name="carrier_tsel">Telkomsel</string>
+    <string name="sort_image_button">sort image button</string>
 </resources>

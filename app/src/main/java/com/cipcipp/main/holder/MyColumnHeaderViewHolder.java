@@ -1,6 +1,7 @@
-package com.cipcipp.main.Holder;
+package com.cipcipp.main.holder;
 
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -9,14 +10,14 @@ import android.widget.TextView;
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder;
 import com.evrencoskun.tableview.sort.SortState;
-import com.cipcipp.main.Model.ColumnHeaderModel;
+import com.cipcipp.main.model.ColumnHeaderModel;
 import com.cipcipp.main.R;
 
 public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
-    final LinearLayout column_header_container;
-    final TextView column_header_textview;
-    final ImageButton column_header_sort_button;
-    final ITableView tableView;
+    private final LinearLayout column_header_container;
+    private final TextView column_header_textview;
+    private final ImageButton column_header_sort_button;
+    private final ITableView tableView;
 
 
     public MyColumnHeaderViewHolder(View itemView, ITableView pTableView) {
@@ -90,13 +91,16 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
 
     private void controlSortState(SortState pSortState) {
         if (pSortState == SortState.ASCENDING) {
+            Log.v("formalitas","asc");
 //            column_header_sort_button.setVisibility(View.VISIBLE);
 //            column_header_sort_button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
 
         } else if (pSortState == SortState.DESCENDING) {
+            Log.v("formalitas","desc");
 //            column_header_sort_button.setVisibility(View.VISIBLE);
 //            column_header_sort_button.setImageResource(R.drawable.ic_arrow_up);
         } else {
+            Log.v("formalitas","null");
 //            column_header_sort_button.setVisibility(View.GONE);
 //            column_header_sort_button.setImageResource(R.drawable.ic_sort);
         }
@@ -118,15 +122,15 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
         }
     };
 
-    public static final int[] COLUMN_TEXT_ALIGNS = {
+    private static final int[] COLUMN_TEXT_ALIGNS = {
             // Id
             Gravity.CENTER,
             // Name
-            Gravity.LEFT,
+            Gravity.START,
             // Nickname
-            Gravity.LEFT,
+            Gravity.START,
             // Email
-            Gravity.LEFT,
+            Gravity.START,
             // BirthDay
             Gravity.CENTER,
             // Gender (Sex)
@@ -134,7 +138,7 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
             // Age
             Gravity.CENTER,
             // Job
-            Gravity.LEFT,
+            Gravity.START,
             // Salary
             Gravity.CENTER,
             // CreatedAt
@@ -142,11 +146,11 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
             // UpdatedAt
             Gravity.CENTER,
             // Address
-            Gravity.LEFT,
+            Gravity.START,
             // Zip Code
-            Gravity.RIGHT,
+            Gravity.END,
             // Phone
-            Gravity.RIGHT,
+            Gravity.END,
             // Fax
-            Gravity.RIGHT};
+            Gravity.END};
 }

@@ -1,4 +1,4 @@
-package com.cipcipp.main.Utils;
+package com.cipcipp.main.utils;
 
 public class Util {
     public static final int DATABASE_VERSION = 1;

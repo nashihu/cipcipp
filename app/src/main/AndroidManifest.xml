@@ -14,15 +14,17 @@
         android:fullBackupContent="@layout/main_activity"
         >
         <activity
-            android:name="com.cipcipp.main.ActivityMain">
+            android:name="com.cipcipp.main.ui.ActivityMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PulseActivity"/>
-        <activity android:name=".AggActivity"/>
+        <activity android:name=".ui.aggactivity.AggActivity"/>
+        <activity android:name=".ui.pulseactivity.PulseActivity"/>
+        <activity android:name=".ui.reportform.reportForm"/>
+        <activity android:name=".ui.showresult.ShowResult"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 

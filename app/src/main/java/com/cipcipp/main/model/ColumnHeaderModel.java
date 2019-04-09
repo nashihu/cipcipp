@@ -1,4 +1,4 @@
-package com.cipcipp.main.Model;
+package com.cipcipp.main.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,7 +15,7 @@ public class ColumnHeaderModel implements Parcelable {
         return mData;
     }
 
-    public ColumnHeaderModel(Parcel in) {
+    private ColumnHeaderModel(Parcel in) {
         String[] data = new String[1];
         in.readStringArray(data);
         this.mData = data[0];

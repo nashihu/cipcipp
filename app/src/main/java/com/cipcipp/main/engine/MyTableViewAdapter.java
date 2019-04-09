@@ -1,4 +1,4 @@
-package com.cipcipp.main.TableEngine;
+package com.cipcipp.main.engine;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
-import com.cipcipp.main.Holder.MyColumnHeaderViewHolder;
-import com.cipcipp.main.Model.CellModel;
-import com.cipcipp.main.Model.ColumnHeaderModel;
-import com.cipcipp.main.Model.RowHeaderModel;
+import com.cipcipp.main.holder.MyColumnHeaderViewHolder;
+import com.cipcipp.main.model.CellModel;
+import com.cipcipp.main.model.ColumnHeaderModel;
+import com.cipcipp.main.model.RowHeaderModel;
 import com.cipcipp.main.R;
 
 public class MyTableViewAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowHeaderModel, CellModel> {
@@ -25,13 +25,13 @@ public class MyTableViewAdapter extends AbstractTableAdapter<ColumnHeaderModel, 
         View layout = LayoutInflater.from(mContext).inflate(R.layout.cell,parent,false);
         return new MyCellViewHolder(layout);
     }
-    class MyCellViewHolder extends AbstractViewHolder {
+    private class MyCellViewHolder extends AbstractViewHolder {
 
-        public final TextView cell_textview;
+        private final TextView cell_textview;
 
-        public MyCellViewHolder(View itemView) {
+        private MyCellViewHolder(View itemView) {
             super(itemView);
-            cell_textview = (TextView) itemView.findViewById(R.id.cell_data);
+            cell_textview =  itemView.findViewById(R.id.cell_data);
         }
     }
 
@@ -55,13 +55,13 @@ public class MyTableViewAdapter extends AbstractTableAdapter<ColumnHeaderModel, 
         View layout = LayoutInflater.from(mContext).inflate(R.layout.row_header,parent,false);
         return new MyRowHeaderViewHolder(layout);
     }
-    class MyRowHeaderViewHolder extends AbstractViewHolder {
+    private class MyRowHeaderViewHolder extends AbstractViewHolder {
 
-        public final TextView cell_textview;
+        private final TextView cell_textview;
 
-        public MyRowHeaderViewHolder(View itemView) {
+        private MyRowHeaderViewHolder(View itemView) {
             super(itemView);
-            cell_textview = (TextView) itemView.findViewById(R.id.row_header_textview);
+            cell_textview = itemView.findViewById(R.id.row_header_textview);
         }
     }
 

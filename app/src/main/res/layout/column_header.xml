@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/column_header_container"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:column_header_height="28dp"
-    android:layout_width="wrap_content"
-    android:layout_height="@dimen/default_column_header_height"
-    android:background="@color/table_view_default_unselected_background_color"
-    android:orientation="vertical">
-
-    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/column_header_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -25,12 +17,12 @@
 
             <TextView
                 android:id="@+id/column_header_textView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="4"
                 android:gravity="center"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 tools:text="Header Data"/>
 
             <ImageButton
@@ -38,11 +30,13 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="end|center"
-                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:background="@android:color/transparent"
-                android:paddingRight="-5dp"
+                android:paddingEnd="-5dp"
+                android:paddingStart="-5dp"
                 android:scaleType="fitXY"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:contentDescription="@string/sort_image_button" />
         </LinearLayout>
 
         <View
@@ -50,5 +44,5 @@
             android:layout_height="1px"
             android:layout_gravity="bottom"
             android:background="@color/colorPrimaryDark"/>
-    </FrameLayout>
-</LinearLayout>
+    </LinearLayout>
+

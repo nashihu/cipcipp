@@ -1,4 +1,4 @@
-package com.cipcipp.main.Model;
+package com.cipcipp.main.model;
 
 public class AggModel {
     private String nominal;

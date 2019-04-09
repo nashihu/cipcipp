@@ -1,4 +1,4 @@
-package com.cipcipp.main.Model;
+package com.cipcipp.main.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +169,7 @@ public class RowCells {
         this.c19 = c19;
     }
 
-    public String getC20() {
+    private String getC20() {
         return c20;
     }
 

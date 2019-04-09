@@ -1,4 +1,4 @@
-package com.cipcipp.main;
+package com.cipcipp.main.ui.pulseactivity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -13,16 +13,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cipcipp.main.Helper.CellListGenerator;
-import com.cipcipp.main.Helper.OpenApp;
-import com.cipcipp.main.Model.AggModel;
-import com.cipcipp.main.Model.CellModel;
-import com.cipcipp.main.Model.RowCells;
-import com.cipcipp.main.TableEngine.DatabaseHandler;
-import com.cipcipp.main.TableEngine.ProviderAdapter;
+import com.cipcipp.main.helper.CellListGenerator;
+import com.cipcipp.main.helper.OpenApp;
+import com.cipcipp.main.model.AggModel;
+import com.cipcipp.main.model.CellModel;
+import com.cipcipp.main.model.RowCells;
+import com.cipcipp.main.R;
+import com.cipcipp.main.engine.DatabaseHandler;
+import com.cipcipp.main.engine.ProviderAdapter;
+import com.cipcipp.main.ui.ActivityMain;
+import com.cipcipp.main.ui.reportform.reportForm;
 import com.evrencoskun.tableview.TableView;
-import com.cipcipp.main.TableEngine.MyTableViewAdapter;
-import com.cipcipp.main.TableEngine.MyTableViewListener;
+import com.cipcipp.main.engine.MyTableViewAdapter;
+import com.cipcipp.main.engine.MyTableViewListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -65,15 +68,16 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
         report = findViewById(R.id.report);
+        check_report = findViewById(R.id.report_check);
+        title = getIntent().getStringExtra("title");
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent moveIntent = new Intent(PulseActivity.this, AggActivity.class);
+                Intent moveIntent = new Intent(PulseActivity.this, reportForm.class);
+                moveIntent.putExtra("title",title);
                 startActivity(moveIntent);
             }
         });
-        check_report = findViewById(R.id.report_check);
-        title = getIntent().getStringExtra("title");
         mAuth = FirebaseAuth.getInstance();
         signInListener();
         signOutListener();
@@ -109,7 +113,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     @Override
     protected void onStop() {
         super.onStop();
-        DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
         if(mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
@@ -232,7 +235,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent backToHome = new Intent(PulseActivity.this,ActivityMain.class);
+                Intent backToHome = new Intent(PulseActivity.this, ActivityMain.class);
                 startActivity(backToHome);
                 Toast.makeText(PulseActivity.this, "sign out success", Toast.LENGTH_SHORT).show();
             }

@@ -28,14 +28,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:contentDescription="Telkomsel"
+                android:contentDescription="@string/carrier_tsel"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Telkomsel" />
+                android:text="@string/carrier_tsel" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,13 +50,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/carrier_indosat" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Indosat" />
+                android:text="@string/carrier_indosat" />
         </LinearLayout>
 
     </LinearLayout>
@@ -80,13 +81,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/carrier_xl" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="XL" />
+                android:text="@string/carrier_xl" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,13 +103,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/carrier_axis" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="AXIS" />
+                android:text="@string/carrier_axis" />
         </LinearLayout>
 
     </LinearLayout>
@@ -131,13 +134,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/carrier_tri" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="3" />
+                android:text="@string/carrier_tri" />
         </LinearLayout>
 
         <LinearLayout
@@ -152,13 +156,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/carrier_smartfren" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Smartfren" />
+                android:text="@string/carrier_smartfren" />
 
         </LinearLayout>
 
@@ -179,7 +184,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="center"
         android:id="@+id/cipcipphow"
-        android:text="Bagaimana Cipcipp mengambil data?"
+        android:text="@string/bagaimana_cipcipp_mengambil_data"
         />
 </LinearLayout>
 

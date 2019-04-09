@@ -1,4 +1,4 @@
-package com.cipcipp.main.Helper;
+package com.cipcipp.main.helper;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;

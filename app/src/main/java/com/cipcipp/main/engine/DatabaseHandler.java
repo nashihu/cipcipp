@@ -1,4 +1,4 @@
-package com.cipcipp.main.TableEngine;
+package com.cipcipp.main.engine;
 
 
 import android.content.ContentValues;
@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
-import com.cipcipp.main.Model.AggModel;
-import com.cipcipp.main.Model.RowCells;
+import com.cipcipp.main.model.AggModel;
+import com.cipcipp.main.model.RowCells;
 import com.cipcipp.main.R;
-import com.cipcipp.main.Utils.Util;
+import com.cipcipp.main.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;

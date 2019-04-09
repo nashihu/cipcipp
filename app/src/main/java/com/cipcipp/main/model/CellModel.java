@@ -1,7 +1,4 @@
-package com.cipcipp.main.Model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.cipcipp.main.model;
 
 import com.evrencoskun.tableview.sort.ISortableModel;
 

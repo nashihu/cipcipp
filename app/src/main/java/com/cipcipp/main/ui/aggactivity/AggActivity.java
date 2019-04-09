@@ -1,7 +1,8 @@
-package com.cipcipp.main;
+package com.cipcipp.main.ui.aggactivity;
 
-
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,15 +13,18 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cipcipp.main.Helper.FirebaseDatabase;
-import com.cipcipp.main.Model.AggModel;
-import com.cipcipp.main.TableEngine.AggAdapter;
+
+import com.cipcipp.main.helper.FirebaseHelper;
+import com.cipcipp.main.model.AggModel;
+import com.cipcipp.main.ui.pulseactivity.PulseActivity;
+import com.cipcipp.main.R;
+import com.cipcipp.main.engine.AggAdapter;
+import com.cipcipp.main.ui.ActivityMain;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -35,10 +39,8 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private ArrayList<String> provider_nominal = new ArrayList<>();
     private ArrayList<String> provider_price = new ArrayList<>();
     private ArrayList<Integer> provider_img_id = new ArrayList<>();
-    private AggAdapter adapterProv;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
-    private FirebaseUser firebaseUser;
     private EditText email;
     private EditText password;
     private TextView pulsaTitle;
@@ -49,7 +51,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         setContentView(R.layout.agg_activity);
         mAuth = FirebaseAuth.getInstance();
         authStateListener();
-        firebaseUser = mAuth.getCurrentUser();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
         final String title = getIntent().getStringExtra("title");
         titleparam = getIntent().getStringExtra("title");
         TextView agg_title = findViewById(R.id.agg_title);
@@ -57,28 +59,61 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         agg_title.setText(title_);
         LinearLayout item = findViewById(R.id.aggGroup);
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        item.addView(layoutInflater.inflate(R.layout.pulse_activity, item,false),1);
-        signInListener(item);
-        signOutListener();
-        signUpListener();
-        pulsaTitle = findViewById(R.id.pulsa_title);
-        if(firebaseUser!=null) {
-            item.removeView(findViewById(R.id.pulse_activity));
-            fetchData(title);
+        try {
+            item.addView(layoutInflater.inflate(R.layout.pulse_activity, item,false),1);
+            signInListener(item);
+            signOutListener();
+            signUpListener();
+            pulsaTitle = findViewById(R.id.pulsa_title);
+            if(firebaseUser!=null) {
+                item.removeView(findViewById(R.id.pulse_activity));
+                fetchData(title);
 
-        } else {
-            String noUser = "silakan sign in dulu";
-            ((TextView) (findViewById(R.id.agg_title))).setText(noUser);
-            ((findViewById(R.id.pulsa_title))).setVisibility(View.GONE);
-            AuthField(View.VISIBLE);
+            } else {
+                String noUser = "silakan sign in dulu";
+                ((TextView) (findViewById(R.id.agg_title))).setText(noUser);
+                ((findViewById(R.id.pulsa_title))).setVisibility(View.GONE);
+                AuthField(View.VISIBLE);
 
+            }
+        } catch (NullPointerException e) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AggActivity.this);
+            alertDialogBuilder.setTitle("Error ditemukan :(");
+            alertDialogBuilder.setMessage("Harap hubungi cipcipp help center untuk mengatasi ini.\n" +
+                    " code: AggJava inflation\n");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton("Skip ke tabel data", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent inten = new Intent(AggActivity.this,PulseActivity.class);
+                    inten.putExtra("title",title);
+                    startActivity(inten);
+                    finish();
+                }
+            });
+            alertDialogBuilder.setNegativeButton("Kembali ke menu utama", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(AggActivity.this,ActivityMain.class));
+                    finish();
+                }
+            });
+            alertDialogBuilder.setNeutralButton("coba di sini dulu", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
         moveActivity(title);
+
     }
 
     private void fetchData(final String title) {
-        FirebaseDatabase helper = new FirebaseDatabase(AggActivity.this,title);
-        helper.readData(new MyCallback() {
+        FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+        helper.readData(new AggCallback() {
             @Override
             public void onCallback(List<AggModel> aggModels) {
                 attachData(title,aggModels);
@@ -129,7 +164,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                     = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);
             RecyclerView aggView = findViewById(R.id.agg_recycler_view);
             aggView.setLayoutManager(verticalLayout);
-            adapterProv = new AggAdapter(AggActivity.this,provider_nominal,provider_price,provider_name,provider_img_id);
+            AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal,provider_price,provider_name,provider_img_id);
             adapterProv.setClickListener(AggActivity.this);
             aggView.setAdapter(adapterProv);
         }
@@ -221,7 +256,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent backToHome = new Intent(AggActivity.this,ActivityMain.class);
+                Intent backToHome = new Intent(AggActivity.this, ActivityMain.class);
                 startActivity(backToHome);
                 Toast.makeText(AggActivity.this, "sign out success", Toast.LENGTH_SHORT).show();
             }

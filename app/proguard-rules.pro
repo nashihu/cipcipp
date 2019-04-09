@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file c1.
 #-renamesourcefileattribute SourceFile
+-keepattributes Signature
+-keepclassmembers class com.cipcipp.main.model.** {
+      *;
+    }
