@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 
 import com.cipcipp.main.helper.FirebaseHelper;
+import com.cipcipp.main.helper.OpenApp;
 import com.cipcipp.main.model.AggModel;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.R;
@@ -32,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AggActivity extends AppCompatActivity implements AggAdapter.ItemClickListener {
@@ -45,6 +47,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private EditText password;
     private TextView pulsaTitle;
     private String titleparam;
+    private HashMap<String,String> iconPair = new HashMap<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             item.addView(layoutInflater.inflate(R.layout.pulse_activity, item,false),1);
             signInListener(item);
             signOutListener();
-            signUpListener();
+            signUpListener(item);
             pulsaTitle = findViewById(R.id.pulsa_title);
             if(firebaseUser!=null) {
                 item.removeView(findViewById(R.id.pulse_activity));
@@ -113,7 +116,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
     private void fetchData(final String title) {
         FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
-        helper.readData(new AggCallback() {
+        helper.readAggs(new AggCallback() {
             @Override
             public void onCallback(List<AggModel> aggModels) {
                 attachData(title,aggModels);
@@ -155,11 +158,13 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         String title_ = "Harga Termurah " + title ;
         ((TextView) findViewById(R.id.agg_title)).setText(title_);
         destroyData();
-        for(AggModel agg : aggModels) {
-            provider_img_id.add(agg.getProvider_id());
-            provider_name.add("Rp."+agg.getPrice()+", by: ");
-            provider_nominal.add("Nominal " + agg.getNominal());
+
+        for(int i = 0; i< aggModels.size(); i++) {
+            provider_img_id.add(aggModels.get(i).getProvider_id());
+            provider_name.add("Rp."+aggModels.get(i).getPrice()+", by: ");
+            provider_nominal.add("Nominal " + aggModels.get(i).getNominal());
             provider_price.add("");
+            iconPair.put(String.valueOf(i),aggModels.get(i).getProvider_name());
             LinearLayoutManager verticalLayout
                     = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);
             RecyclerView aggView = findViewById(R.id.agg_recycler_view);
@@ -192,7 +197,21 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     @Override
     public void onItemClick(View view, int position) {
 
-        Toast.makeText(AggActivity.this, "you click Bukalapak", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AggActivity.this, "you click " + iconPair.get(String.valueOf(position)), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLongClick(View view, int position) {
+        String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
+        String[] row_package_name = {"ovo.id",
+                "blibli.mobile.commerce","id.flip","id.dana","com.bukalapak.android","com.tokopedia.tkpd"
+                ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app"};
+        HashMap<String,String> packagename = new HashMap<>();
+        for(int i =0; i<row_name.length;i++) {
+            packagename.put(row_name[i],row_package_name[i]);
+        }
+        OpenApp.openApp(AggActivity.this,packagename.get(iconPair.get(String.valueOf(position))));
+        Toast.makeText(this, "you long click "+position, Toast.LENGTH_SHORT).show();
     }
 
     private void AuthField(int state) {
@@ -245,25 +264,15 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                     }
                                 }
                             });
+                } else {
+                    Toast.makeText(AggActivity.this, "email / pass tidak boleh null", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
 
-    private void signOutListener() {
-        findViewById(R.id.sign_out).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                Intent backToHome = new Intent(AggActivity.this, ActivityMain.class);
-                startActivity(backToHome);
-                Toast.makeText(AggActivity.this, "sign out success", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void signUpListener() {
+    private void signUpListener(final LinearLayout item) {
         findViewById(R.id.sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,7 +292,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (!task.isSuccessful()) {
-                                                    Toast.makeText(AggActivity.this, "Failed sign in..",Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AggActivity.this, "Failed sign up..",Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(AggActivity.this, "sign up Success!",Toast.LENGTH_SHORT).show();
                                                     String successLogin = "Loading...";
@@ -291,16 +300,33 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                                     fetchData(titleparam);
                                                     findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                                     AuthField(View.GONE);
+                                                    item.removeView(findViewById(R.id.pulse_activity));
                                                 }
                                             }
                                         });
                             }
                         }
                     });
+                } else {
+                    Toast.makeText(AggActivity.this, "email / pass tidak boleh null", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
     }
+
+    private void signOutListener() {
+        findViewById(R.id.sign_out).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                Intent backToHome = new Intent(AggActivity.this, ActivityMain.class);
+                startActivity(backToHome);
+                Toast.makeText(AggActivity.this, "sign out success", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }
 

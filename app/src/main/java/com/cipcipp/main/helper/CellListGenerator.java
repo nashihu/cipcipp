@@ -101,10 +101,15 @@ public class CellListGenerator {
 
     private ArrayList<ColumnHeaderModel> mColumnHeaderList;
 
-    public void ColumnDataGenerator() {
+    public void ColumnDataGenerator(boolean kasi_nominal) {
 
         for(int i = 0 ; i < col_num; i++) {
-            mColumnHeaderList.add(new ColumnHeaderModel("nominal "+col_names.get(i) ));
+            if(kasi_nominal) {
+                mColumnHeaderList.add(new ColumnHeaderModel("nominal "+col_names.get(i) ));
+            } else {
+                mColumnHeaderList.add(new ColumnHeaderModel(col_names.get(i)));
+            }
+
         }
     }
 

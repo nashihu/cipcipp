@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView android:id="@+id/result_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/data_laporan_harga"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/unselected_background_color"
+        android:layout_margin="10dp"
+        android:paddingBottom="30dp"/>
+
+    <Spinner android:id="@+id/result_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="10dp">
+
+    </View>
+
+    <com.evrencoskun.tableview.TableView android:id="@+id/result_table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        />
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import com.cipcipp.main.ui.aggactivity.AggCallback;
 import com.cipcipp.main.R;
 import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.ui.reportform.reportFormInt;
+import com.cipcipp.main.ui.showresult.showresultint;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,9 +20,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FirebaseHelper {
     private String title;
@@ -31,26 +37,41 @@ public class FirebaseHelper {
         FirebaseApp.initializeApp(context);
         this.title = title;
     }
-    public void readReports(final reportFormInt reportFormInt) {
+
+    public void readReports(final showresultint showresultint) {
         FirebaseDatabase database;
         DatabaseReference databaseReference;
         database = FirebaseDatabase.getInstance();
         database.getReference().child(title);
-        databaseReference = database.getReference("report").child(title); //Telkomsel,etc
-        Log.v("Result","before this");
+        databaseReference = database.getReference("report").child(title);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Report> reports = new ArrayList<>();
+                ArrayList<String> nominal = new ArrayList<>();
+                ArrayList<String> rowNum = new ArrayList<>();
+                List<List<CellModel>> reportz = new ArrayList<>();
+                nominal.add("semua harga");
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Report report = child.getValue(Report.class);
+                    List<CellModel> reports = new ArrayList<>();
                     if(report!=null) {
-                        Log.v("Result",child.getValue(Report.class).getPrice());
-                    } else {
-                        Log.v("Result","null coy...");
-                    }
-
+                        nominal.add(report.getNominal());
+                        rowNum.add(report.getProvider());
+                        DateFormat sdf = SimpleDateFormat.getDateInstance();
+                        reports.add(new CellModel("0",report.getNominal()));
+                        reports.add(new CellModel("1",report.getPrice()));
+                        reports.add(new CellModel("2",sdf.format(new Date(Long.parseLong(report.getTimestamp())))));
+                        reports.add(new CellModel("3",report.getImageUri()));
+                        reports.add(new CellModel("4",report.getUser_email().replaceAll("(^[^@]{4}|(?!^)\\G)[^@]","$1*")));
+                        reportz.add(reports);
+                        }
                 }
+                Set<String> set = new LinkedHashSet<>(nominal);
+                nominal.clear();
+                nominal.addAll(set);
+                nominal.clear();
+                nominal.add("semua harga");
+                showresultint.onCallBack(nominal,reportz,rowNum);
             }
 
             @Override
@@ -58,10 +79,10 @@ public class FirebaseHelper {
 
             }
         });
-        Log.v("Result","after this");
 
     }
-    public void readData(final AggCallback aggCallback) {
+
+    public void readAggs(final AggCallback aggCallback) {
         FirebaseDatabase database;
         DatabaseReference databaseReference;
         database = FirebaseDatabase.getInstance();
@@ -151,7 +172,6 @@ public class FirebaseHelper {
         }
 
         List<AggModel> cheapList = db.getAllCheapestValue();
-        Log.v("cheapcheap",cheapList+" "+cheapList.size()+" "+cheapList.get(0));
         if(cheapList.size()==colVallz.size()){
             for(int i =0; i<colVallz.size(); i++) {
                 cheapList.get(i).setNominal(colVallz.get(i));

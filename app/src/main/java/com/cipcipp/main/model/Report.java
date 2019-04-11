@@ -1,18 +1,20 @@
 package com.cipcipp.main.model;
 
 public class Report  {
-    private String provider;
-    private String nominal;
-    private String price;
-    private String imageUri;
-    private String timestamp;
+    private String provider = "null";
+    private String nominal = "null";
+    private String price = "null";
+    private String imageUri = "null";
+    private String timestamp = "null";
+    private String user_email = "null";
 
-    public Report(String provider, String nominal, String price, String imageUri, String timestamp) {
+    public Report(String provider, String nominal, String price, String imageUri, String timestamp, String user_email) {
         this.provider = provider;
         this.nominal = nominal;
         this.price = price;
         this.imageUri = imageUri;
         this.timestamp = timestamp;
+        this.user_email = user_email;
     }
 
     public Report() {
@@ -23,39 +25,35 @@ public class Report  {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+
 
     public String getProvider() {
         return provider;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
+
 
     public String getNominal() {
         return nominal;
     }
 
-    public void setNominal(String nominal) {
-        this.nominal = nominal;
-    }
+
 
     public String getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
+
 
     public String getImageUri() {
         return imageUri;
     }
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
+
+
+    public String getUser_email() {
+        return user_email;
     }
+
+
 }

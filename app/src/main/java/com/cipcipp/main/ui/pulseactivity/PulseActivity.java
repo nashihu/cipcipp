@@ -23,6 +23,7 @@ import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.engine.ProviderAdapter;
 import com.cipcipp.main.ui.ActivityMain;
 import com.cipcipp.main.ui.reportform.reportForm;
+import com.cipcipp.main.ui.showresult.ShowResult;
 import com.evrencoskun.tableview.TableView;
 import com.cipcipp.main.engine.MyTableViewAdapter;
 import com.cipcipp.main.engine.MyTableViewListener;
@@ -74,6 +75,14 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             @Override
             public void onClick(View view) {
                 Intent moveIntent = new Intent(PulseActivity.this, reportForm.class);
+                moveIntent.putExtra("title",title);
+                startActivity(moveIntent);
+            }
+        });
+        (findViewById(R.id.report_check)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent moveIntent = new Intent(PulseActivity.this, ShowResult.class);
                 moveIntent.putExtra("title",title);
                 startActivity(moveIntent);
             }
@@ -132,15 +141,16 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         OpenApp.openApp(PulseActivity.this,packagename.get(adapterProv.getItem(position)));
     }
 
+
     private void renderData() {
         CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz);
         mRowHeaderLists.RowDataGenerator();
         CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz,colVallz);
-        mColumnHeaderList.ColumnDataGenerator();
+        mColumnHeaderList.ColumnDataGenerator(true);
         TableView tableView = findViewById(R.id.content_container);
         MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(PulseActivity.this);
         tableView.setAdapter(mTableViewAdapter);
-        tableView.setTableViewListener(new MyTableViewListener());
+        tableView.setTableViewListener(new MyTableViewListener(PulseActivity.this,false));
         mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
 
         RecyclerView providerRV = findViewById(R.id.rvProvider);
@@ -166,6 +176,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             String logger = rowCell.logger(rowCell);
             Log.v("price_DB",""+logger);
             ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
+            Log.v("WADIDII",pricez.get(0).getData().toString());
             if(!rowCell.getC1().equals("updatedAt")) {
                 if(!rowCell.getC1().equals("zeroField")) {
                     rowNumz.add(rowCell.getC1());
@@ -178,6 +189,10 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 String updateText = updatedAt.getText().toString() + rowCell.getC2();
                 updatedAt.setText(updateText);
             }
+        }
+        Log.v("WADIDII","============ separator ======================");
+        for(List<CellModel> pricez : price_test) {
+            Log.v("WADIDII",pricez.get(0).getData().toString() + " " + pricez.get(1).getData().toString());
         }
 
         List<AggModel> cheapList = db.getAllCheapestValue();

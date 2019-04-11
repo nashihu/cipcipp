@@ -52,7 +52,7 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
         return provider_image_id.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         ImageView provider_image;
         TextView nominal;
         TextView price;
@@ -63,18 +63,26 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
             nominal = itemView.findViewById(R.id.agg_nominal);
             price = itemView.findViewById(R.id.agg_price);
             provider_name = itemView.findViewById(R.id.agg_provider_name);
-//            itemView.setOnClickListener(this);
             itemView.findViewById(R.id.agg_provider_img).setOnClickListener(this);
+            itemView.findViewById(R.id.agg_provider_img).setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if(mClickListener != null) mClickListener.onItemClick(view,getAdapterPosition());
         }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if(mClickListener != null) mClickListener.onLongClick(view,getAdapterPosition());
+            return true;
+        }
     }
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
+        void onLongClick(View view, int position);
     }
 
 

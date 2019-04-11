@@ -3,6 +3,7 @@ package com.cipcipp.main.ui.reportform;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,7 +21,10 @@ import android.widget.Toast;
 import com.cipcipp.main.helper.FirebaseHelper;
 import com.cipcipp.main.model.Report;
 import com.cipcipp.main.R;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +47,9 @@ public class reportForm extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private String title;
-
+    private String title_;
+    final FirebaseAuth firebaseAuthz = FirebaseAuth.getInstance();
+    final FirebaseUser firebaseUserz = firebaseAuthz.getCurrentUser();
     private EditText true_price;
 
     @Override
@@ -61,7 +67,7 @@ public class reportForm extends AppCompatActivity {
 
         setContentView(R.layout.report_form);
         TextView report_header = findViewById(R.id.report_header);
-        String title_ = report_header.getText().toString() +" "+ title;
+        title_ = report_header.getText().toString() +" "+ title;
         ((TextView) findViewById(R.id.report_header)).setText(title_);
         providerSpinListener(preSelectedImage);
         nominalSpinListener(preSelectedImage2);
@@ -103,12 +109,6 @@ public class reportForm extends AppCompatActivity {
             final Spinner spinner = providerSpinListener(apps);
             final Spinner spinner2 = nominalSpinListener(values);
             FirebaseHelper helper = new FirebaseHelper(reportForm.this,title);
-            helper.readReports(new reportFormInt() {
-                @Override
-                public void onCallBack(ArrayList<String> strings, ArrayList<String> colls) {
-
-                }
-            });
             helper.getProviderName(new reportFormInt() {
                 @Override
                 public void onCallBack(ArrayList<String> strings, ArrayList<String> colValz) {
@@ -183,33 +183,48 @@ public class reportForm extends AppCompatActivity {
             String uploading = "Uploading..";
             ((TextView) findViewById(R.id.report_header)).setText(uploading);
             findViewById(R.id.report_content).setVisibility(View.GONE);
-            StorageReference filepath = storageReference.child("SS").child(title).child(imageUri.getLastPathSegment());
-            filepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            final StorageReference filepath = storageReference.child("SS").child(title).child(imageUri.getLastPathSegment());
+            filepath.putFile(imageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadURL = taskSnapshot.getUploadSessionUri();
-                    if(downloadURL!=null) {
-                        Report report = new Report(
-                                String.valueOf(spinner.getSelectedItem()),
-                                spinner2.getSelectedItem().toString(),
-                                true_price.getText().toString(),
-                                downloadURL.toString(), String.valueOf(java.lang.System.currentTimeMillis()));
-                        DatabaseReference newPost = databaseReference.push();
-                        newPost.setValue(report).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(reportForm.this, "berhasil upload", Toast.LENGTH_SHORT).show();
-                                ((TextView) findViewById(R.id.report_header)).setText(title);
-                                ((EditText) findViewById(R.id.true_price)).setText("");
-                                inputImage.setLayoutParams(first_state_image);
-                                inputImage.setImageDrawable(null);
-                                findViewById(R.id.report_content).setVisibility(View.VISIBLE);
-                                providerSpinListener(preSelectedImage);
-                                nominalSpinListener(preSelectedImage2);
-                            }
-                        });
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful() && task.getException()!=null) {
+                        throw task.getException();
+                    }
+                    return filepath.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        if(downloadUri!=null && firebaseUserz!=null) {
+                            Report report = new Report(
+                                    String.valueOf(spinner.getSelectedItem()),
+                                    spinner2.getSelectedItem().toString(),
+                                    true_price.getText().toString(),
+                                    downloadUri.toString(),
+                                    String.valueOf(java.lang.System.currentTimeMillis()),
+                                    firebaseUserz.getEmail()
+                            );
+                            DatabaseReference newPost = databaseReference.push();
+                            newPost.setValue(report).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(reportForm.this, "berhasil upload", Toast.LENGTH_SHORT).show();
+                                    ((TextView) findViewById(R.id.report_header)).setText(title_);
+                                    ((EditText) findViewById(R.id.true_price)).setText("");
+                                    inputImage.setLayoutParams(first_state_image);
+                                    inputImage.setImageDrawable(null);
+                                    findViewById(R.id.report_content).setVisibility(View.VISIBLE);
+                                    providerSpinListener(preSelectedImage);
+                                    nominalSpinListener(preSelectedImage2);
+                                }
+                            });
+                        }
                     } else {
                         Toast.makeText(reportForm.this, "error.. file tidak ditemukan.. harap hubungi help center", Toast.LENGTH_SHORT).show();
+                        String error = "error";
+                        ((TextView) findViewById(R.id.report_header)).setText(error);
                     }
                 }
             });

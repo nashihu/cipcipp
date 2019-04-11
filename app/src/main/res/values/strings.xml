@@ -30,4 +30,5 @@
     <string name="carrier_indosat">Indosat</string>
     <string name="carrier_tsel">Telkomsel</string>
     <string name="sort_image_button">sort image button</string>
+    <string name="data_laporan_harga">Laporan Beda Harga</string>
 </resources>
