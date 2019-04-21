@@ -18,9 +18,9 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
     private List<String> nominal;
     private List<String> price;
     private List<String> provider_name;
-    private List<Integer> provider_image_id;
+    private List<String> provider_image_id;
 
-    public AggAdapter(Context context, List<String> nominal, List<String> price, List<String> provider_name, List<Integer> provider_image_id) {
+    public AggAdapter(Context context, List<String> nominal, List<String> price, List<String> provider_name, List<String> provider_image_id) {
         this.mInflater = LayoutInflater.from(context);
         this.nominal = nominal;
         this.price = price;
@@ -36,7 +36,7 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        int image_id = provider_image_id.get(position);
+        int image_id = Integer.parseInt(provider_image_id.get(position));
         String name = provider_name.get(position);
         String nomin = nominal.get(position);
         String pric = price.get(position);
@@ -63,7 +63,8 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
             nominal = itemView.findViewById(R.id.agg_nominal);
             price = itemView.findViewById(R.id.agg_price);
             provider_name = itemView.findViewById(R.id.agg_provider_name);
-            itemView.findViewById(R.id.agg_provider_img).setOnClickListener(this);
+//            itemView.findViewById(R.id.agg_provider_img).setOnClickListener(this);
+            itemView.setOnClickListener(this);
             itemView.findViewById(R.id.agg_provider_img).setOnLongClickListener(this);
         }
 
@@ -88,7 +89,7 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
 
     public Integer getItem(int id) {
         // convenience method for getting data at click position
-        return provider_image_id.get(id);
+        return Integer.parseInt(provider_image_id.get(id));
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

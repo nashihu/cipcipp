@@ -40,7 +40,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private ArrayList<String> provider_name = new ArrayList<>();
     private ArrayList<String> provider_nominal = new ArrayList<>();
     private ArrayList<String> provider_price = new ArrayList<>();
-    private ArrayList<Integer> provider_img_id = new ArrayList<>();
+    private ArrayList<String> provider_img_id = new ArrayList<>();
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
     private EditText email;
@@ -160,7 +160,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         destroyData();
 
         for(int i = 0; i< aggModels.size(); i++) {
-            provider_img_id.add(aggModels.get(i).getProvider_id());
+            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_id()));
             provider_name.add("Rp."+aggModels.get(i).getPrice()+", by: ");
             provider_nominal.add("Nominal " + aggModels.get(i).getNominal());
             provider_price.add("");

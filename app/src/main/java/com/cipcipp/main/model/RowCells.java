@@ -169,12 +169,52 @@ public class RowCells {
         this.c19 = c19;
     }
 
-    private String getC20() {
+    public String getC20() {
         return c20;
     }
 
     public void setC20(String c20) {
         this.c20 = c20;
+    }
+
+    public String getC21() {
+        return c21;
+    }
+
+    public void setC21(String c21) {
+        this.c21 = c21;
+    }
+
+    public String getC22() {
+        return c22;
+    }
+
+    public void setC22(String c22) {
+        this.c22 = c22;
+    }
+
+    public String getC23() {
+        return c23;
+    }
+
+    public void setC23(String c23) {
+        this.c23 = c23;
+    }
+
+    public String getC24() {
+        return c24;
+    }
+
+    public void setC24(String c24) {
+        this.c24 = c24;
+    }
+
+    public String getC25() {
+        return c25;
+    }
+
+    public void setC25(String c25) {
+        this.c25 = c25;
     }
 
     public String logger(RowCells c) {
@@ -227,25 +267,25 @@ public class RowCells {
 
     public ArrayList<CellModel> bulkGetter(RowCells rowCells) {
         ArrayList<CellModel> price_ = new ArrayList<>();
-        if(!rowCells.getC2().equals("0")){price_.add(new CellModel("1",rowCells.getC2()));}
-        if(!rowCells.getC3().equals("0")){price_.add(new CellModel("2",rowCells.getC3()));}
-        if(!rowCells.getC4().equals("0")){price_.add(new CellModel("3",rowCells.getC4()));}
-        if(!rowCells.getC5().equals("0")){price_.add(new CellModel("4",rowCells.getC5()));}
-        if(!rowCells.getC6().equals("0")){price_.add(new CellModel("5",rowCells.getC6()));}
-        if(!rowCells.getC7().equals("0")){price_.add(new CellModel("6",rowCells.getC7()));}
-        if(!rowCells.getC8().equals("0")){price_.add(new CellModel("7",rowCells.getC8()));}
-        if(!rowCells.getC9().equals("0")){price_.add(new CellModel("8",rowCells.getC9()));}
-        if(!rowCells.getC10().equals("0")){price_.add(new CellModel("9",rowCells.getC10()));}
-        if(!rowCells.getC11().equals("0")){price_.add(new CellModel("10",rowCells.getC11()));}
-        if(!rowCells.getC12().equals("0")){price_.add(new CellModel("11",rowCells.getC12()));}
-        if(!rowCells.getC13().equals("0")){price_.add(new CellModel("12",rowCells.getC13()));}
-        if(!rowCells.getC14().equals("0")){price_.add(new CellModel("13",rowCells.getC14()));}
-        if(!rowCells.getC15().equals("0")){price_.add(new CellModel("14",rowCells.getC15()));}
-        if(!rowCells.getC16().equals("0")){price_.add(new CellModel("15",rowCells.getC16()));}
-        if(!rowCells.getC17().equals("0")){price_.add(new CellModel("16",rowCells.getC17()));}
-        if(!rowCells.getC18().equals("0")){price_.add(new CellModel("17",rowCells.getC18()));}
-        if(!rowCells.getC19().equals("0")){price_.add(new CellModel("18",rowCells.getC19()));}
-        if(!rowCells.getC20().equals("0")){price_.add(new CellModel("19",rowCells.getC20()));}
+        if(!rowCells.getC2().equals("0") && !rowCells.getC2().toLowerCase().contains("http")){price_.add(new CellModel("1",rowCells.getC2()));}
+        if(!rowCells.getC3().equals("0") && !rowCells.getC3().toLowerCase().contains("http")){price_.add(new CellModel("2",rowCells.getC3()));}
+        if(!rowCells.getC4().equals("0") && !rowCells.getC4().toLowerCase().contains("http")){price_.add(new CellModel("3",rowCells.getC4()));}
+        if(!rowCells.getC5().equals("0") && !rowCells.getC5().toLowerCase().contains("http")){price_.add(new CellModel("4",rowCells.getC5()));}
+        if(!rowCells.getC6().equals("0") && !rowCells.getC6().toLowerCase().contains("http")){price_.add(new CellModel("5",rowCells.getC6()));}
+        if(!rowCells.getC7().equals("0") && !rowCells.getC7().toLowerCase().contains("http")){price_.add(new CellModel("6",rowCells.getC7()));}
+        if(!rowCells.getC8().equals("0") && !rowCells.getC8().toLowerCase().contains("http")){price_.add(new CellModel("7",rowCells.getC8()));}
+        if(!rowCells.getC9().equals("0") && !rowCells.getC9().toLowerCase().contains("http")){price_.add(new CellModel("8",rowCells.getC9()));}
+        if(!rowCells.getC10().equals("0") && !rowCells.getC10().toLowerCase().contains("http")){price_.add(new CellModel("9",rowCells.getC10()));}
+        if(!rowCells.getC11().equals("0") && !rowCells.getC11().toLowerCase().contains("http")){price_.add(new CellModel("10",rowCells.getC11()));}
+        if(!rowCells.getC12().equals("0") && !rowCells.getC12().toLowerCase().contains("http")){price_.add(new CellModel("11",rowCells.getC12()));}
+        if(!rowCells.getC13().equals("0") && !rowCells.getC13().toLowerCase().contains("http")){price_.add(new CellModel("12",rowCells.getC13()));}
+        if(!rowCells.getC14().equals("0") && !rowCells.getC14().toLowerCase().contains("http")){price_.add(new CellModel("13",rowCells.getC14()));}
+        if(!rowCells.getC15().equals("0") && !rowCells.getC15().toLowerCase().contains("http")){price_.add(new CellModel("14",rowCells.getC15()));}
+        if(!rowCells.getC16().equals("0") && !rowCells.getC16().toLowerCase().contains("http")){price_.add(new CellModel("15",rowCells.getC16()));}
+        if(!rowCells.getC17().equals("0") && !rowCells.getC17().toLowerCase().contains("http")){price_.add(new CellModel("16",rowCells.getC17()));}
+        if(!rowCells.getC18().equals("0") && !rowCells.getC18().toLowerCase().contains("http")){price_.add(new CellModel("17",rowCells.getC18()));}
+        if(!rowCells.getC19().equals("0") && !rowCells.getC19().toLowerCase().contains("http")){price_.add(new CellModel("18",rowCells.getC19()));}
+        if(!rowCells.getC20().equals("0") && !rowCells.getC20().toLowerCase().contains("http")){price_.add(new CellModel("19",rowCells.getC20()));}
 
         return price_;
     }
@@ -295,4 +335,10 @@ public class RowCells {
     private String c18="0";
     private String c19="0";
     private String c20="0";
+    private String c21="0";
+    private String c22="0";
+    private String c23="0";
+    private String c24="0";
+    private String c25="0";
+
 }

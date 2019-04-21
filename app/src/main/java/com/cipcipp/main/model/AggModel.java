@@ -4,7 +4,7 @@ public class AggModel {
     private String nominal;
     private String price;
     private String provider_name;
-    private int provider_id;
+    private String provider_id;
 
     public String getNominal() {
         return nominal;
@@ -30,15 +30,15 @@ public class AggModel {
         this.provider_name = provider_name;
     }
 
-    public int getProvider_id() {
+    public String getProvider_id() {
         return provider_id;
     }
 
-    public void setProvider_id(int provider_id) {
+    public void setProvider_id(String provider_id) {
         this.provider_id = provider_id;
     }
 
-    public AggModel(String price, String provider_name, int provider_id) {
+    public AggModel(String price, String provider_name, String provider_id) {
         this.nominal = "0";
         this.price = price;
         this.provider_name = provider_name;

@@ -60,12 +60,12 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
 
         } else if (p_nSelectionState == SelectionState.UNSELECTED) {
             nBackgroundColorId = R.color.unselected_header_background_color;
-            nForegroundColorId = R.color.unselected_text_color;
+            nForegroundColorId = R.color.selected_text_color_2;
 
         } else { // SelectionState.SHADOWED
 
             nBackgroundColorId = R.color.shadow_background_color;
-            nForegroundColorId = R.color.unselected_text_color;
+            nForegroundColorId = R.color.selected_text_color;
         }
 
         column_header_container.setBackgroundColor(ContextCompat.getColor(column_header_container

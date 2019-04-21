@@ -171,18 +171,18 @@ public class FirebaseHelper {
 
         }
 
-        List<AggModel> cheapList = db.getAllCheapestValue();
-        if(cheapList.size()==colVallz.size()){
+        List<AggModel> aggModelList = db.getAllCheapestValue();
+        if(aggModelList.size()==colVallz.size()){
             for(int i =0; i<colVallz.size(); i++) {
-                cheapList.get(i).setNominal(colVallz.get(i));
+                aggModelList.get(i).setNominal(colVallz.get(i));
             }
         } else {
-            cheapList = new ArrayList<>();
+            aggModelList = new ArrayList<>();
         }
-        for (AggModel agg : cheapList) {
+        for (AggModel agg : aggModelList) {
             Log.v("aggmodel",agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
         }
-        return cheapList;
+        return aggModelList;
     }
 }
 
