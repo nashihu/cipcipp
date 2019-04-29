@@ -2,6 +2,7 @@ package com.cipcipp.main.engine;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cipcipp.main.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,7 +38,9 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        int image_id = Integer.parseInt(provider_image_id.get(position));
+        int image_id = R.mipmap.ic_launcher;
+        String image_url = provider_image_id.get(position);
+        Log.v("asdfasdf " + "AggAdapter",image_url );
         String name = provider_name.get(position);
         String nomin = nominal.get(position);
         String pric = price.get(position);
@@ -44,6 +48,7 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
         holder.provider_name.setText(name);
         holder.nominal.setText(nomin);
         holder.price.setText(pric);
+        Picasso.get().load(image_url).resize(75,75).placeholder(R.mipmap.ic_launcher).into(holder.provider_image);
 
     }
 
@@ -63,7 +68,7 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
             nominal = itemView.findViewById(R.id.agg_nominal);
             price = itemView.findViewById(R.id.agg_price);
             provider_name = itemView.findViewById(R.id.agg_provider_name);
-//            itemView.findViewById(R.id.agg_provider_img).setOnClickListener(this);
+            itemView.findViewById(R.id.agg_provider_img).setOnClickListener(this);
             itemView.setOnClickListener(this);
             itemView.findViewById(R.id.agg_provider_img).setOnLongClickListener(this);
         }

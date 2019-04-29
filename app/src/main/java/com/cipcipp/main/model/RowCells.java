@@ -238,7 +238,12 @@ public class RowCells {
                 +" ,c17: "+c.getC17()
                 +" ,c18: "+c.getC18()
                 +" ,c19: "+c.getC19()
-                +" ,c20: "+c.getC20();
+                +" ,c20: "+c.getC20()
+                +" ,c21: "+c.getC21()
+                +" ,c22: "+c.getC22()
+                +" ,c23: "+c.getC23()
+                +" ,c24: "+c.getC24()
+                +" ,c25: "+c.getC25();
     }
 
     public void bulkSetter(RowCells rowCells, List<CellModel> price_) {
@@ -263,6 +268,12 @@ public class RowCells {
         try { rowCells.setC18(price_.get(17).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC18(zero); }
         try { rowCells.setC19(price_.get(18).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC19(zero); }
         try { rowCells.setC20(price_.get(19).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC20(zero); }
+        try { rowCells.setC21(price_.get(20).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC21(zero); }
+        try { rowCells.setC22(price_.get(21).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC22(zero); }
+        try { rowCells.setC23(price_.get(22).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC23(zero); }
+        try { rowCells.setC24(price_.get(23).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC24(zero); }
+        try { rowCells.setC25(price_.get(24).getData().toString()); } catch (IndexOutOfBoundsException e) { rowCells.setC25(zero); }
+
     }
 
     public ArrayList<CellModel> bulkGetter(RowCells rowCells) {
@@ -286,6 +297,12 @@ public class RowCells {
         if(!rowCells.getC18().equals("0") && !rowCells.getC18().toLowerCase().contains("http")){price_.add(new CellModel("17",rowCells.getC18()));}
         if(!rowCells.getC19().equals("0") && !rowCells.getC19().toLowerCase().contains("http")){price_.add(new CellModel("18",rowCells.getC19()));}
         if(!rowCells.getC20().equals("0") && !rowCells.getC20().toLowerCase().contains("http")){price_.add(new CellModel("19",rowCells.getC20()));}
+        if(!rowCells.getC21().equals("0") && !rowCells.getC21().toLowerCase().contains("http")){price_.add(new CellModel("20",rowCells.getC21()));}
+        if(!rowCells.getC22().equals("0") && !rowCells.getC22().toLowerCase().contains("http")){price_.add(new CellModel("21",rowCells.getC22()));}
+        if(!rowCells.getC23().equals("0") && !rowCells.getC23().toLowerCase().contains("http")){price_.add(new CellModel("22",rowCells.getC23()));}
+        if(!rowCells.getC24().equals("0") && !rowCells.getC24().toLowerCase().contains("http")){price_.add(new CellModel("23",rowCells.getC24()));}
+        if(!rowCells.getC25().equals("0") && !rowCells.getC25().toLowerCase().contains("http")){price_.add(new CellModel("24",rowCells.getC25()));}
+
 
         return price_;
     }
@@ -311,6 +328,11 @@ public class RowCells {
         if(!rowCells.getC18().equals("0")) {colVal.add(rowCells.getC18());}
         if(!rowCells.getC19().equals("0")) {colVal.add(rowCells.getC19());}
         if(!rowCells.getC20().equals("0")) {colVal.add(rowCells.getC20());}
+        if(!rowCells.getC21().equals("0")) {colVal.add(rowCells.getC21());}
+        if(!rowCells.getC22().equals("0")) {colVal.add(rowCells.getC22());}
+        if(!rowCells.getC23().equals("0")) {colVal.add(rowCells.getC23());}
+        if(!rowCells.getC24().equals("0")) {colVal.add(rowCells.getC24());}
+        if(!rowCells.getC25().equals("0")) {colVal.add(rowCells.getC25());}
         return colVal;
     }
 

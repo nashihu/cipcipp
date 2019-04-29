@@ -54,12 +54,13 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private ArrayList<String> rowNumz = new ArrayList<>();
     private ArrayList<String> colVallz;
     private ArrayList<String> provider_title = new ArrayList<>();
-    private ArrayList<Integer> provider_id = new ArrayList<>();
+    private ArrayList<String> provider_id = new ArrayList<>();
     private List<List<CellModel>> price_test = new ArrayList<>();
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText email;
     private EditText password;
+    private final String TAG = PulseActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +96,8 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
         db.reCreateTable();
         if(db.getAllContacts().size()!=0) {
-            setupData(db);
-            renderData();
+            fetchData();
+            Log.v(TAG,"ini lagi di sini");
         } else {
             FirebaseUser firebaseUser;
             firebaseUser = mAuth.getCurrentUser();
@@ -130,20 +131,18 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
-        String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
-        String[] row_package_name = {"ovo.id",
-                "blibli.mobile.commerce","id.flip","id.dana","com.bukalapak.android","com.tokopedia.tkpd"
-                ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app"};
-        HashMap<String,String> packagename = new HashMap<>();
-        for(int i =0; i<row_name.length;i++) {
-            packagename.put(row_name[i],row_package_name[i]);
-        }
-        OpenApp.openApp(PulseActivity.this,packagename.get(adapterProv.getItem(position)));
+        OpenApp.openApp(PulseActivity.this,adapterProv.getItem(position));
     }
 
 
     private void renderData() {
         CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz);
+        for(int i = 0; i<price_test.size();i++) {
+           for(int j = 0; j<price_test.get(i).size();j++) {
+               Log.v("asdfasdf "+TAG,""+price_test.get(i).get(j).getData());
+           }
+        }
+
         mRowHeaderLists.RowDataGenerator();
         CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz,colVallz);
         mColumnHeaderList.ColumnDataGenerator(true);
@@ -152,7 +151,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         tableView.setAdapter(mTableViewAdapter);
         tableView.setTableViewListener(new MyTableViewListener(PulseActivity.this,false));
         mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
-
+        Log.v("asdfasdf"+TAG,"size: " + price_test.size() + "&" + price_test.size());
         RecyclerView providerRV = findViewById(R.id.rvProvider);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(PulseActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -172,6 +171,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
 
     private void setupData(DatabaseHandler db) {
         List<RowCells> rowCellsList = db.getAllContacts();
+        HashMap<String,String> providerUrl = new HashMap<>();
         for(RowCells rowCell : rowCellsList) {
             String logger = rowCell.logger(rowCell);
             Log.v("price_DB",""+logger);
@@ -180,13 +180,14 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             if(!rowCell.getC1().equals("updatedAt")) {
                 if(!rowCell.getC1().equals("zeroField")) {
                     rowNumz.add(rowCell.getC1());
+                    providerUrl.put(rowCell.getC1(),rowCell.getC2());
                     price_test.add(pricez);
                 } else {
                     colVallz = rowCell.bulkStringGetter(rowCell);
                     Log.v("cols",""+colVallz);
                 }
             } else {
-                String updateText = updatedAt.getText().toString() + rowCell.getC2();
+                String updateText = updatedAt.getText().toString() +" " + rowCell.getC2();
                 updatedAt.setText(updateText);
             }
         }
@@ -201,14 +202,13 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             for(int i =0; i<colVallz.size(); i++) {
                 cheapList.get(i).setNominal(colVallz.get(i));
             }
-        } else {
-            cheapList = new ArrayList<>();
         }
-        for (AggModel agg : cheapList) {
-            Log.v("aggmodel",agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
-        }
+//        for (AggModel agg : cheapList) {
+//            Log.v(PulseActivity.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
+//        }
         for(int i = 0; i<rowNumz.size();i++) {
-            provider_id.add(R.mipmap.ic_launcher);
+//            provider_id.add(R.mipmap.ic_launcher);
+            provider_id.add(providerUrl.get(rowNumz.get(i)));
             provider_title.add(rowNumz.get(i));
         }
     }
@@ -222,6 +222,9 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 password = findViewById(R.id.pass);
                 String emailString = email.getText().toString();
                 String pwd = password.getText().toString();
+                String successLogin = "Loading...";
+                pulsaTitle.setText(successLogin);
+                pulsaTitle.setVisibility(View.VISIBLE);
 
                 if(!emailString.equals("") && !pwd.equals("")) {
                     mAuth.signInWithEmailAndPassword(emailString,pwd)
@@ -230,10 +233,11 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(PulseActivity.this, "Failed sign in !",Toast.LENGTH_SHORT).show();
+                                        String successLogin = "Failed sign in !";
+                                        pulsaTitle.setText(successLogin);
+                                        pulsaTitle.setVisibility(View.VISIBLE);
                                     } else {
                                         Toast.makeText(PulseActivity.this, "sign in Success!",Toast.LENGTH_SHORT).show();
-                                        String successLogin = "Loading...";
-                                        pulsaTitle.setText(successLogin);
                                         fetchData();
                                         findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                         AuthField(View.GONE);
@@ -341,7 +345,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 }
                 setupData(db);
                 renderData();
-                findViewById(R.id.sign_out).setVisibility(View.VISIBLE);
+                findViewById(R.id.sign_out).setVisibility(View.GONE);
                 findViewById(R.id.reportGroup).setVisibility(View.VISIBLE);
             }
             @Override

@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/provider_ic"
         android:src="@mipmap/ic_launcher"
+        android:layout_gravity="center"
         android:contentDescription="@string/app_name" />
 
     <TextView

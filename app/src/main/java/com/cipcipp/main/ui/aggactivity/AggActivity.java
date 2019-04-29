@@ -80,35 +80,13 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
             }
         } catch (NullPointerException e) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AggActivity.this);
-            alertDialogBuilder.setTitle("Error ditemukan :(");
-            alertDialogBuilder.setMessage("Harap hubungi cipcipp help center untuk mengatasi ini.\n" +
-                    " code: AggJava inflation\n");
-            alertDialogBuilder.setCancelable(false);
-            alertDialogBuilder.setPositiveButton("Skip ke tabel data", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent inten = new Intent(AggActivity.this,PulseActivity.class);
-                    inten.putExtra("title",title);
-                    startActivity(inten);
-                    finish();
-                }
-            });
-            alertDialogBuilder.setNegativeButton("Kembali ke menu utama", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivity(new Intent(AggActivity.this,ActivityMain.class));
-                    finish();
-                }
-            });
-            alertDialogBuilder.setNeutralButton("coba di sini dulu", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+            createAlert(title,"Error ditemukan :(",
+                    "Harap hubungi cipcipp help center untuk mengatasi ini.\n" +
+                            " code: AggJava inflation\n",
+                    "Skip ke tabel data",
+                    "Kembali ke menu utama",
+                    "coba di sini dulu"
+                    );
         }
         moveActivity(title);
 
@@ -160,19 +138,24 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         destroyData();
 
         for(int i = 0; i< aggModels.size(); i++) {
-            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_id()));
+//            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_id()));
+            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_name()));
             provider_name.add("Rp."+aggModels.get(i).getPrice()+", by: ");
             provider_nominal.add("Nominal " + aggModels.get(i).getNominal());
             provider_price.add("");
-            iconPair.put(String.valueOf(i),aggModels.get(i).getProvider_name());
-            LinearLayoutManager verticalLayout
-                    = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);
-            RecyclerView aggView = findViewById(R.id.agg_recycler_view);
-            aggView.setLayoutManager(verticalLayout);
-            AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal,provider_price,provider_name,provider_img_id);
-            adapterProv.setClickListener(AggActivity.this);
-            aggView.setAdapter(adapterProv);
+            iconPair.put(String.valueOf(i),aggModels.get(i).getProvider_id());
+            Log.v("asdfasdf AggActivity",aggModels.get(i).getNominal()+"\r\n"
+                    + aggModels.get(i).getPrice() + "\r\n"
+                    + aggModels.get(i).getProvider_id() + "\r\n"
+                    + aggModels.get(i).getProvider_name() + "\r\n");
         }
+        LinearLayoutManager verticalLayout
+                = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView aggView = findViewById(R.id.agg_recycler_view);
+        aggView.setLayoutManager(verticalLayout);
+        AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal,provider_price,provider_name,provider_img_id);
+        adapterProv.setClickListener(AggActivity.this);
+        aggView.setAdapter(adapterProv);
     }
 
     private void moveActivity(final String title) {
@@ -198,6 +181,15 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     public void onItemClick(View view, int position) {
 
         Toast.makeText(AggActivity.this, "you click " + iconPair.get(String.valueOf(position)), Toast.LENGTH_SHORT).show();
+        createAlert("Telkomsel",
+                "Anda akan menuju aplikasi " + iconPair.get(String.valueOf(position)),
+                "apabila data yg kami tunjukkan beda ("+
+                        String.valueOf(provider_nominal.get(position)).replace("-","") +
+                        " Harga: " +provider_name.get(position).replace(", by:","")+
+                        "), silakan laporkan di menu lapokan beda data",
+                "ok",
+                "",
+                "cancel");
     }
 
     @Override
@@ -327,6 +319,37 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         });
     }
 
+    private void createAlert(final String title,String msg_title, String msg_body, String msg_pos, String msg_neg,
+    String msg_neut) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AggActivity.this);
+        alertDialogBuilder.setTitle(msg_title);
+        alertDialogBuilder.setMessage(msg_body);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton(msg_pos, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent inten = new Intent(AggActivity.this,PulseActivity.class);
+                inten.putExtra("title",title);
+                startActivity(inten);
+                finish();
+            }
+        });
+        alertDialogBuilder.setNegativeButton(msg_neg, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(AggActivity.this,ActivityMain.class));
+                finish();
+            }
+        });
+        alertDialogBuilder.setNeutralButton(msg_neut, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 
 }
 

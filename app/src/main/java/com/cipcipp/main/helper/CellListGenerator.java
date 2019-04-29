@@ -24,6 +24,7 @@ public class CellListGenerator {
     private ArrayList<RowHeaderModel> mRowHeaderList;
     private HashMap<String,String> rowHeaderData;
     private final HashMap<String,String> prov_id = new HashMap<>();
+    private final String TAG = CellListGenerator.class.getSimpleName();
 
 
     public CellListGenerator(int col_num,int row_num,ArrayList<String> row_names,ArrayList<String> col_names) {

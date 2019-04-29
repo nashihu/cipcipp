@@ -9,7 +9,6 @@ import com.cipcipp.main.model.CellModel;
 import com.cipcipp.main.model.Report;
 import com.cipcipp.main.model.RowCells;
 import com.cipcipp.main.ui.aggactivity.AggCallback;
-import com.cipcipp.main.R;
 import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.ui.reportform.reportFormInt;
 import com.cipcipp.main.ui.showresult.showresultint;
@@ -179,9 +178,10 @@ public class FirebaseHelper {
         } else {
             aggModelList = new ArrayList<>();
         }
-        for (AggModel agg : aggModelList) {
-            Log.v("aggmodel",agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
-        }
+
+//        for (AggModel agg : aggModelList) {
+//            Log.v(FirebaseHelper.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
+//        }
         return aggModelList;
     }
 }

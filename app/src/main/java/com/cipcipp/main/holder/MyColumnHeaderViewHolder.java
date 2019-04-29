@@ -36,8 +36,7 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
     public void setColumnHeaderModel(ColumnHeaderModel pColumnHeaderModel, int pColumnPosition) {
 
         // Change alignment of textView
-        column_header_textview.setGravity(COLUMN_TEXT_ALIGNS[pColumnPosition] | Gravity
-                .CENTER_VERTICAL);
+        column_header_textview.setGravity(Gravity.CENTER_VERTICAL);
 
         // Set text data
         column_header_textview.setText(pColumnHeaderModel.getData());
@@ -91,16 +90,16 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
 
     private void controlSortState(SortState pSortState) {
         if (pSortState == SortState.ASCENDING) {
-            Log.v("formalitas","asc");
+            Log.v("formalitas", "asc");
 //            column_header_sort_button.setVisibility(View.VISIBLE);
 //            column_header_sort_button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
 
         } else if (pSortState == SortState.DESCENDING) {
-            Log.v("formalitas","desc");
+            Log.v("formalitas", "desc");
 //            column_header_sort_button.setVisibility(View.VISIBLE);
 //            column_header_sort_button.setImageResource(R.drawable.ic_arrow_up);
         } else {
-            Log.v("formalitas","null");
+            Log.v("formalitas", "null");
 //            column_header_sort_button.setVisibility(View.GONE);
 //            column_header_sort_button.setImageResource(R.drawable.ic_sort);
         }
@@ -121,36 +120,4 @@ public class MyColumnHeaderViewHolder extends AbstractSorterViewHolder {
             }
         }
     };
-
-    private static final int[] COLUMN_TEXT_ALIGNS = {
-            // Id
-            Gravity.CENTER,
-            // Name
-            Gravity.START,
-            // Nickname
-            Gravity.START,
-            // Email
-            Gravity.START,
-            // BirthDay
-            Gravity.CENTER,
-            // Gender (Sex)
-            Gravity.CENTER,
-            // Age
-            Gravity.CENTER,
-            // Job
-            Gravity.START,
-            // Salary
-            Gravity.CENTER,
-            // CreatedAt
-            Gravity.CENTER,
-            // UpdatedAt
-            Gravity.CENTER,
-            // Address
-            Gravity.START,
-            // Zip Code
-            Gravity.END,
-            // Phone
-            Gravity.END,
-            // Fax
-            Gravity.END};
 }

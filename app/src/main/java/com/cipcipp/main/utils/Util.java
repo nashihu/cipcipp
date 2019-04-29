@@ -25,5 +25,11 @@ public class Util {
     public static final String KEY_C18 = "c18";
     public static final String KEY_C19 = "c19";
     public static final String KEY_C20 = "c20";
-
+    public static final String KEY_C21 = "c21";
+    public static final String KEY_C22 = "c22";
+    public static final String KEY_C23 = "c23";
+    public static final String KEY_C24 = "c24";
+    public static final String KEY_C25 = "c25";
+    public static final String KEY_C26 = "c26";
+    public static final Integer size = 26;
 }
