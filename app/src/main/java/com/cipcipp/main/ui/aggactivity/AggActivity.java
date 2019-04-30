@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,8 +14,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +37,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class AggActivity extends AppCompatActivity implements AggAdapter.ItemClickListener {
+public class AggActivity extends AppCompatActivity implements AggAdapter.ItemClickListener, MultiSpinner.MultiSpinnerListener {
     private ArrayList<String> provider_name = new ArrayList<>();
     private ArrayList<String> provider_nominal = new ArrayList<>();
     private ArrayList<String> provider_price = new ArrayList<>();
@@ -48,10 +54,17 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private TextView pulsaTitle;
     private String titleparam;
     private HashMap<String,String> iconPair = new HashMap<>();
+    private ArrayList<String> packstrings = new ArrayList<>();
+
+    private static String[] row_name = OpenApp.row_name;
+    private static String[] row_package_name = OpenApp.row_package_name;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agg_activity);
+        findViewById(R.id.agg_spinner1).setVisibility(View.GONE);
+        findViewById(R.id.agg_spinner2).setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         authStateListener();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
@@ -93,12 +106,22 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     }
 
     private void fetchData(final String title) {
-        FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
-        helper.readAggs(new AggCallback() {
+        final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+        helper.getProviders(new AggProvCallback() {
+
             @Override
-            public void onCallback(List<AggModel> aggModels) {
-                attachData(title,aggModels);
+            public void onCallback(final ArrayList<String> strings) {
+
+                helper.readAggs(strings,new AggCallback() {
+                    @Override
+                    public void onCallback( List<AggModel> aggModels) {
+                        List<AggModel> wadaw = attachData(title,aggModels);
+                        attachSpinner(title,aggModels);
+                    }
+                });
+
             }
+
         });
     }
 
@@ -131,12 +154,74 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         provider_nominal = new ArrayList<>();
         provider_price = new ArrayList<>();
     }
+    private void attachSpinner(final String title,final List<AggModel> aggModels) {
 
-    private void attachData(final String title,List<AggModel> aggModels) {
+        findViewById(R.id.agg_spinner1).setVisibility(View.VISIBLE);
+        findViewById(R.id.agg_spinner2).setVisibility(View.VISIBLE);
+
+        final MultiSpinner spinner1 = findViewById(R.id.agg_spinner1);
+        spinner1.setItems(Arrays.asList(row_name),"pilih aplikasi ("+row_name.length+")",this);
+        spinner1.setTitle(title);
+        spinner1.setAggModels(aggModels);
+
+
+        String[] filter = {"semua aplikasi","aplikasi saya"};
+        final Spinner spinner2 = findViewById(R.id.agg_spinner2);
+        ArrayAdapter adapterspinner2 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,filter);
+        adapterspinner2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapterspinner2);
+        spinner2.setSelection(0);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int z, long l) {
+                if(z==1) {
+                    Toast.makeText(AggActivity.this, "Updating list..", Toast.LENGTH_SHORT).show();
+                    ArrayList<String> packstrings = new ArrayList<>();
+                    PackageManager manager = getPackageManager();
+                    for(int j = 0; j<row_name.length; j++) {
+                        if(manager.getLaunchIntentForPackage(row_package_name[j])!=null) {
+                            packstrings.add(row_name[j]);
+                        }
+                    }
+
+                    final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+                    helper.readAggs(packstrings,new AggCallback() {
+                        @Override
+                        public void onCallback( List<AggModel> aggModelz) {
+                            for(int i = 0; i<aggModelz.size();i++ ) {
+                                aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
+                            }
+                            attachData(title,aggModelz);
+                        }
+                    });
+                } else {
+                    final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+                    ArrayList<String> strings = new ArrayList<>();
+                    Collections.addAll(strings,row_name);
+                    helper.readAggs(strings,new AggCallback() {
+                        @Override
+                        public void onCallback( List<AggModel> aggModelz) {
+                            for(int i = 0; i<aggModelz.size();i++ ) {
+                                aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
+                            }
+                            attachData(title,aggModelz);
+                        }
+                    });
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+    private List<AggModel> attachData(final String title,final List<AggModel> aggModels) {
         String title_ = "Harga Termurah " + title ;
         ((TextView) findViewById(R.id.agg_title)).setText(title_);
         destroyData();
-
         for(int i = 0; i< aggModels.size(); i++) {
 //            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_id()));
             provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_name()));
@@ -156,6 +241,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal,provider_price,provider_name,provider_img_id);
         adapterProv.setClickListener(AggActivity.this);
         aggView.setAdapter(adapterProv);
+        return aggModels;
     }
 
     private void moveActivity(final String title) {
@@ -351,5 +437,29 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         alertDialog.show();
     }
 
+
+    @Override
+    public void onItemsSelected(boolean[] selected,final String title,final List<AggModel> aggModels) {
+        ArrayList<String> selectedprovs = new ArrayList<>();
+        for(int i = 0; i<selected.length;i++) {
+            if(selected[i]) {
+                selectedprovs.add(row_name[i]);
+            }
+        }
+        if(selected.length!=selectedprovs.size()){
+            Toast.makeText(AggActivity.this, "Updating list..", Toast.LENGTH_SHORT).show();
+        }
+
+        final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+        helper.readAggs(selectedprovs,new AggCallback() {
+            @Override
+            public void onCallback( List<AggModel> aggModelz) {
+                for(int i = 0; i<aggModelz.size();i++ ) {
+                    aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
+                }
+                attachData(title,aggModelz);
+            }
+        });
+    }
 }
 

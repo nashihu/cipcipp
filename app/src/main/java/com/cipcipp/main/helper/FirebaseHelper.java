@@ -10,6 +10,7 @@ import com.cipcipp.main.model.Report;
 import com.cipcipp.main.model.RowCells;
 import com.cipcipp.main.ui.aggactivity.AggCallback;
 import com.cipcipp.main.engine.DatabaseHandler;
+import com.cipcipp.main.ui.aggactivity.AggProvCallback;
 import com.cipcipp.main.ui.reportform.reportFormInt;
 import com.cipcipp.main.ui.showresult.showresultint;
 import com.google.firebase.FirebaseApp;
@@ -23,6 +24,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -81,7 +83,7 @@ public class FirebaseHelper {
 
     }
 
-    public void readAggs(final AggCallback aggCallback) {
+    public void readAggs(final ArrayList<String> strings,final AggCallback aggCallback) {
         FirebaseDatabase database;
         DatabaseReference databaseReference;
         database = FirebaseDatabase.getInstance();
@@ -95,34 +97,95 @@ public class FirebaseHelper {
                 RowCells rowCells = new RowCells();
                 ArrayList<CellModel> colValz = new ArrayList<>();
                 for (DataSnapshot child_i : dataSnapshot.getChildren()) {
-                    String rownum = child_i.getKey();
-                    ArrayList<CellModel> price_= new ArrayList<>();
-                    for(int i =0;i<(child_i.getChildrenCount());i++) {
-                        if(rownum!=null) {
-                            price_.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
-                            if(rownum.equals("nominal")) {
-                                colValz.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                    if(child_i.getKey() != null) {
+                        if(strings.contains(child_i.getKey())) {
+                            String rownum = child_i.getKey();
+                            ArrayList<CellModel> price_= new ArrayList<>();
+                            for(int i =0;i<(child_i.getChildrenCount());i++) {
+                                if(rownum!=null) {
+                                    price_.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                                    if(rownum.equals("nominal")) {
+                                        colValz.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                                    }
+                                }
                             }
+                            if(rownum!=null && !rownum.equals("updatedAt")) {
+                                if(rownum.equals("nominal")){
+                                    rowCells.bulkSetter(rowCells,colValz);
+                                    db.addColVal(rowCells);
+                                } else {
+                                    rowCells.bulkSetter(rowCells,price_);
+                                    db.addRowCells(rowCells,rownum);
+                                }
+                            } else {
+                                if(rownum!=null) {
+                                    ArrayList<CellModel> rownumm = new ArrayList<>();
+                                    rownumm.add(new CellModel("0",dataSnapshot.child(rownum).getValue()));
+                                    rowCells.bulkSetter(rowCells,rownumm);
+                                    db.addRowCells(rowCells,"updatedAt");
+                                }
+                            }
+
                         }
-                    }
-                    if(rownum!=null && !rownum.equals("updatedAt")) {
-                        if(rownum.equals("nominal")){
-                            rowCells.bulkSetter(rowCells,colValz);
-                            db.addColVal(rowCells);
-                        } else {
-                            rowCells.bulkSetter(rowCells,price_);
-                            db.addRowCells(rowCells,rownum);
-                        }
-                    } else {
-                        if(rownum!=null) {
-                            ArrayList<CellModel> rownumm = new ArrayList<>();
-                            rownumm.add(new CellModel("0",dataSnapshot.child(rownum).getValue()));
-                            rowCells.bulkSetter(rowCells,rownumm);
-                            db.addRowCells(rowCells,"updatedAt");
-                        }
+
                     }
                 }
                 aggCallback.onCallback(setupFirebaseData(db));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("TAGGG","ga nemu coy");
+            }
+        });
+    }
+    private List<AggModel> setupFirebaseData(DatabaseHandler db) {
+        List<RowCells> rowCellsList = db.getAllContacts();
+        ArrayList<String> colVallz = new ArrayList<>();
+        for(RowCells rowCell : rowCellsList) {
+            String logger = rowCell.logger(rowCell);
+            Log.v("price_DB",""+logger);
+            if(rowCell.getC1().equals("zeroField")) {
+                colVallz = rowCell.bulkStringGetter(rowCell);
+                Log.v("cols setupFirebase",""+colVallz);
+            }
+        }
+
+        List<AggModel> aggModelList = db.getAllCheapestValue();
+        if(aggModelList.size()==colVallz.size()){
+            for(int i =0; i<colVallz.size(); i++) {
+                aggModelList.get(i).setNominal(colVallz.get(i));
+            }
+        } else {
+            for(int i = 0;i<aggModelList.size();i++) {
+                aggModelList.get(i).setNominal(".");
+            }
+        }
+//        else {
+//            aggModelList = new ArrayList<>();
+//        }
+
+//        for (AggModel agg : aggModelList) {
+//            Log.v(FirebaseHelper.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
+//        }
+        return aggModelList;
+    }
+
+    public void getProviders(final AggProvCallback aggProvCallback) {
+        FirebaseDatabase database;
+        DatabaseReference databaseReference;
+        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase.getInstance().getReference().child(title);
+        databaseReference = database.getReference("testing").child(title); //Telkomsel,etc
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> providers = new ArrayList<>();
+
+                for (DataSnapshot child_i : dataSnapshot.getChildren()) {
+                    String rownum = child_i.getKey();
+                    providers.add(rownum);
+                }
+                aggProvCallback.onCallback(providers);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -157,32 +220,6 @@ public class FirebaseHelper {
         reportFormInt.onCallBack(rowNums,colVallz);
     }
 
-    private List<AggModel> setupFirebaseData(DatabaseHandler db) {
-        List<RowCells> rowCellsList = db.getAllContacts();
-        ArrayList<String> colVallz = new ArrayList<>();
-        for(RowCells rowCell : rowCellsList) {
-            String logger = rowCell.logger(rowCell);
-            Log.v("price_DB",""+logger);
-            if(rowCell.getC1().equals("zeroField")) {
-                    colVallz = rowCell.bulkStringGetter(rowCell);
-                    Log.v("cols",""+colVallz);
-            }
 
-        }
-
-        List<AggModel> aggModelList = db.getAllCheapestValue();
-        if(aggModelList.size()==colVallz.size()){
-            for(int i =0; i<colVallz.size(); i++) {
-                aggModelList.get(i).setNominal(colVallz.get(i));
-            }
-        } else {
-            aggModelList = new ArrayList<>();
-        }
-
-//        for (AggModel agg : aggModelList) {
-//            Log.v(FirebaseHelper.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
-//        }
-        return aggModelList;
-    }
 }
 

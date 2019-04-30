@@ -11,10 +11,10 @@ import java.util.HashMap;
 public class OpenApp {
 //    private Context context;
 //    private String packageName;
-    private static String[] row_name = {
+    public static String[] row_name = {
             "Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek","Akulaku",
             "GjmPulsa","Kudo","LinkAja","m-BL"};
-    private static String[] row_package_name = {
+    public static String[] row_package_name = {
             "ovo.id","blibli.mobile.commerce","id.flip","id.dana","com.bukalapak.android","com.tokopedia.tkpd"
             ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app",
     "io.silvrr.installment","com.gjmpulsa.webapp","kudo.mobile.app","com.telkom.mwallet","com.bukalapak.mitra"};

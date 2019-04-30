@@ -8,6 +8,7 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.cipcipp.main.model.AggModel;
 import com.cipcipp.main.model.RowCells;
@@ -122,6 +123,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         Cursor cursor = db.rawQuery("SELECT * FROM PulsaTsel WHERE c1 = 'zeroField'",null);
+
         ArrayList<String> colVallz = new ArrayList<>();
         if(cursor.moveToFirst()) {
             do {
@@ -130,10 +132,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 }
             } while(cursor.moveToNext());
         }
-        for(int i =0; i<cheapList.size();i++) {
-            cheapList.get(i).setNominal(colVallz.get(i));
+
+        if(cheapList.size() == colVallz.size()) {
+            for(int i =0; i<cheapList.size();i++) {
+                cheapList.get(i).setNominal(colVallz.get(i));
+            }
         }
         cursor.close();
+        db.close();
         return  cheapList;
     }
     public List<RowCells> getAllContacts() {
@@ -178,11 +184,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return rowCellsList;
     }
-    public List<String> getAllUrlProviderImg() {
 
-
-        return new ArrayList<>();
-    }
     public void reCreateTable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + Util.TABLE_NAME);
