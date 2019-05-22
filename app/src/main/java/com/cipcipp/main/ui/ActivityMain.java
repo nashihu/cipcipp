@@ -41,6 +41,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         smartfren.setOnClickListener(this);
         cipvideo = findViewById(R.id.cipcipphow);
         cipvideo.setOnClickListener(this);
+        cipvideo.setVisibility(View.GONE);
     }
     @Override
     public void onClick(View view) {

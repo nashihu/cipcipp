@@ -3,7 +3,7 @@ package com.cipcipp.main.model;
 public class AggModel {
     private String nominal;
     private String price;
-    private String provider_name;
+    private String provider_url;
     private String provider_id;
 
     public String getNominal() {
@@ -22,12 +22,12 @@ public class AggModel {
         this.price = price;
     }
 
-    public String getProvider_name() {
-        return provider_name;
+    public String getProvider_url() {
+        return provider_url;
     }
 
-    public void setProvider_name(String provider_name) {
-        this.provider_name = provider_name;
+    public void setProvider_url(String provider_url) {
+        this.provider_url = provider_url;
     }
 
     public String getProvider_id() {
@@ -38,10 +38,10 @@ public class AggModel {
         this.provider_id = provider_id;
     }
 
-    public AggModel(String price, String provider_name, String provider_id) {
+    public AggModel(String price, String provider_url, String provider_id) {
         this.nominal = "0";
         this.price = price;
-        this.provider_name = provider_name;
+        this.provider_url = provider_url;
         this.provider_id = provider_id;
     }
 }

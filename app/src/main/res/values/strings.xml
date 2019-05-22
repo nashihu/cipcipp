@@ -12,7 +12,7 @@
     <string name="harga">Harga</string>
     <string name="provider">Provider</string>
     <string name="provider_icon">provider_icon</string>
-    <string name="lebih_lengkap">Lebih Lengkap</string>
+    <string name="lebih_lengkap">lihat lebih Lengkap</string>
     <string name="icon_lebih_lengkap">icon_lebih_lengkap</string>
     <string name="email_filed">email</string>
     <string name="password_field">password</string>
@@ -31,4 +31,6 @@
     <string name="carrier_tsel">Telkomsel</string>
     <string name="sort_image_button">sort image button</string>
     <string name="data_laporan_harga">Laporan Beda Harga</string>
+    <string name="yuk_kontribusi_di_sini">yuk kontribusi di sini</string>
+    <string name="punya_harga_lain">menemukan harga yang lebih murah selain di atas?</string>
 </resources>

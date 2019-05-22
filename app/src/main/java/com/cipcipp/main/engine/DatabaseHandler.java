@@ -111,7 +111,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             try{
                 cheapList.add(new AggModel(cursor.getString(1),
                         cursor.getString(0),
-//                        String.valueOf(R.mipmap.ic_launcher))
                         cursor.getString(2))
                 );
                 cursor.close();

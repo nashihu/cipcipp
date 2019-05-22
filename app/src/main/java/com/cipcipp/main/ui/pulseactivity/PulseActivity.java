@@ -72,6 +72,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         report = findViewById(R.id.report);
         check_report = findViewById(R.id.report_check);
         title = getIntent().getStringExtra("title");
+//        title = null;
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,8 +111,17 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 findViewById(R.id.reportGroup).setVisibility(View.GONE);
                 AuthField(View.VISIBLE);
             }
-
+        Log.e("TAG","ONCREATE CALLED");
         }
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                //Catch your exception
+                // Without System.exit() this will not work.
+
+
+            }
+        });
     }
 
     @Override
@@ -204,7 +214,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             }
         }
 //        for (AggModel agg : cheapList) {
-//            Log.v(PulseActivity.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
+//            Log.v(PulseActivity.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_url()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
 //        }
         for(int i = 0; i<rowNumz.size();i++) {
 //            provider_id.add(R.mipmap.ic_launcher);

@@ -1,77 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/aggGroup"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/agg_title"
-        android:text="@string/harga_pulsa"
-        android:gravity="center"
-        android:textColor="@color/unselected_background_color"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="35dp"
-        android:textSize="20sp"/>
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/aggGroup"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        >
-        <Spinner android:id="@+id/agg_spinner2"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp">
-        </Spinner>
+        android:layout_height="wrap_content">
 
-        <com.cipcipp.main.ui.aggactivity.MultiSpinner
+        <TextView android:id="@+id/agg_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/agg_spinner1"
-            android:layout_weight="1"
-            />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.6"
+            android:text="@string/harga_pulsa"
+            android:gravity="center"
+            android:textColor="@color/unselected_background_color"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
             android:layout_marginBottom="35dp"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"
-            android:id="@+id/agg_recycler_view"/>
+            android:textSize="20sp"/>
+        <!--spinner-->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:orientation="horizontal"
-            android:layout_margin="10dp">
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            >
+            <Spinner android:id="@+id/agg_spinner2"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp">
+            </Spinner>
 
-            <Button
+            <com.cipcipp.main.ui.aggactivity.MultiSpinner
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/agg_spinner1"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+        <!--recycler view-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginBottom="35dp"
+                android:scrollbars="vertical"
+                android:fadeScrollbars="false"
+                android:id="@+id/agg_recycler_view"/>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/to_pulse_activity"
-                android:text="@string/lebih_lengkap"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="vertical"
+                android:id="@+id/agg_contribute"
                 android:layout_gravity="center"
-                android:contentDescription="@string/icon_lebih_lengkap"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+                >
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/punya_harga_lain"
+                    android:gravity="center"
+                    />
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/agg_contribute_button"
+                    android:text="@string/yuk_kontribusi_di_sini"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:id="@+id/agg_more">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/to_pulse_activity"
+                    android:text="@string/lebih_lengkap"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/icon_lebih_lengkap"
+                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>

@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.cipcipp.main.helper.FirebaseHelper;
 import com.cipcipp.main.helper.OpenApp;
 import com.cipcipp.main.model.AggModel;
+import com.cipcipp.main.ui.contribute.ContriActivity;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.R;
 import com.cipcipp.main.engine.AggAdapter;
@@ -43,10 +45,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AggActivity extends AppCompatActivity implements AggAdapter.ItemClickListener, MultiSpinner.MultiSpinnerListener {
-    private ArrayList<String> provider_name = new ArrayList<>();
-    private ArrayList<String> provider_nominal = new ArrayList<>();
     private ArrayList<String> provider_price = new ArrayList<>();
-    private ArrayList<String> provider_img_id = new ArrayList<>();
+    private ArrayList<String> provider_nominal = new ArrayList<>();
+    private ArrayList<String> provider_null_field = new ArrayList<>();
+    private ArrayList<String> provider_url = new ArrayList<>();
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
     private EditText email;
@@ -54,7 +56,6 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private TextView pulsaTitle;
     private String titleparam;
     private HashMap<String,String> iconPair = new HashMap<>();
-    private ArrayList<String> packstrings = new ArrayList<>();
 
     private static String[] row_name = OpenApp.row_name;
     private static String[] row_package_name = OpenApp.row_package_name;
@@ -65,17 +66,37 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         setContentView(R.layout.agg_activity);
         findViewById(R.id.agg_spinner1).setVisibility(View.GONE);
         findViewById(R.id.agg_spinner2).setVisibility(View.GONE);
+        findViewById(R.id.agg_contribute).setVisibility(View.GONE);
+        findViewById(R.id.agg_more).setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         authStateListener();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         final String title = getIntent().getStringExtra("title");
         titleparam = getIntent().getStringExtra("title");
+        String title_ = "Harga Termurah " + title ;
+        ((TextView) findViewById(R.id.agg_title)).setText(title_);
+        if(getActionBar() != null) {
+            getActionBar().setTitle(title_);
+
+        } else {
+            if(getSupportActionBar()!= null ) {
+                getSupportActionBar().setTitle(title_);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            } else {
+                Toast.makeText(this, "getActionBar null", Toast.LENGTH_SHORT).show();
+            }
+        }
         TextView agg_title = findViewById(R.id.agg_title);
-        String title_ = "Loading..";
-        agg_title.setText(title_);
+        String title__ = "Loading..";
+        agg_title.setText(title__);
         LinearLayout item = findViewById(R.id.aggGroup);
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        try {
+        if(title == null || titleparam == null) {
+            startActivity(new Intent(AggActivity.this,ActivityMain.class));
+
+        }
+        if(layoutInflater!=null) {
             item.addView(layoutInflater.inflate(R.layout.pulse_activity, item,false),1);
             signInListener(item);
             signOutListener();
@@ -92,19 +113,28 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 AuthField(View.VISIBLE);
 
             }
-        } catch (NullPointerException e) {
-            createAlert(title,"Error ditemukan :(",
-                    "Harap hubungi cipcipp help center untuk mengatasi ini.\n" +
+        } else  {
+            createAlert("Error ditemukan :(",
+                    "Harap hubungi cipcipp untuk mengatasi ini.\n" +
                             " code: AggJava inflation\n",
                     "Skip ke tabel data",
                     "Kembali ke menu utama",
-                    "coba di sini dulu"
+                    "coba di sini dulu",
+                    null
                     );
         }
         moveActivity(title);
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home ) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void fetchData(final String title) {
         final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
         helper.getProviders(new AggProvCallback() {
@@ -115,7 +145,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 helper.readAggs(strings,new AggCallback() {
                     @Override
                     public void onCallback( List<AggModel> aggModels) {
-                        List<AggModel> wadaw = attachData(title,aggModels);
+                        attachData(aggModels);
                         attachSpinner(title,aggModels);
                     }
                 });
@@ -149,10 +179,10 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     }
 
     private void destroyData() {
-        provider_img_id = new ArrayList<>();
-        provider_name = new ArrayList<>();
-        provider_nominal = new ArrayList<>();
+        provider_url = new ArrayList<>();
         provider_price = new ArrayList<>();
+        provider_nominal = new ArrayList<>();
+        provider_null_field = new ArrayList<>();
     }
     private void attachSpinner(final String title,final List<AggModel> aggModels) {
 
@@ -191,7 +221,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                             for(int i = 0; i<aggModelz.size();i++ ) {
                                 aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                             }
-                            attachData(title,aggModelz);
+                            attachData(aggModelz);
                         }
                     });
                 } else {
@@ -204,7 +234,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                             for(int i = 0; i<aggModelz.size();i++ ) {
                                 aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                             }
-                            attachData(title,aggModelz);
+                            attachData(aggModelz);
                         }
                     });
 
@@ -218,31 +248,41 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             }
         });
     }
-    private List<AggModel> attachData(final String title,final List<AggModel> aggModels) {
-        String title_ = "Harga Termurah " + title ;
-        ((TextView) findViewById(R.id.agg_title)).setText(title_);
+    private void attachData(final List<AggModel> old_agg) {
+        final List<AggModel> aggModels = new ArrayList<>();
+        for(AggModel agg : old_agg) {
+            if(!agg.getPrice().equals(String.valueOf(999999999))) {
+                aggModels.add(agg);
+            }
+        }
+
+        ( findViewById(R.id.agg_title)).setVisibility(View.GONE);
+
         destroyData();
         for(int i = 0; i< aggModels.size(); i++) {
-//            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_id()));
-            provider_img_id.add(String.valueOf(aggModels.get(i).getProvider_name()));
-            provider_name.add("Rp."+aggModels.get(i).getPrice()+", by: ");
+            provider_url.add(String.valueOf(aggModels.get(i).getProvider_url()));
+            provider_price.add("Rp."+aggModels.get(i).getPrice()+", by: ");
             provider_nominal.add("Nominal " + aggModels.get(i).getNominal());
-            provider_price.add("");
+            provider_null_field.add("");
             iconPair.put(String.valueOf(i),aggModels.get(i).getProvider_id());
+
             Log.v("asdfasdf AggActivity",aggModels.get(i).getNominal()+"\r\n"
                     + aggModels.get(i).getPrice() + "\r\n"
                     + aggModels.get(i).getProvider_id() + "\r\n"
-                    + aggModels.get(i).getProvider_name() + "\r\n");
+                    + aggModels.get(i).getProvider_url() + "\r\n");
         }
         LinearLayoutManager verticalLayout
                 = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);
         RecyclerView aggView = findViewById(R.id.agg_recycler_view);
         aggView.setLayoutManager(verticalLayout);
-        AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal,provider_price,provider_name,provider_img_id);
+        AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal, provider_null_field, provider_price, provider_url);
         adapterProv.setClickListener(AggActivity.this);
         aggView.setAdapter(adapterProv);
-        return aggModels;
+        findViewById(R.id.agg_contribute).setVisibility(View.VISIBLE);
+        findViewById(R.id.agg_more).setVisibility(View.VISIBLE);
+
     }
+
 
     private void moveActivity(final String title) {
         (findViewById(R.id.to_pulse_activity)).setOnClickListener(new View.OnClickListener() {
@@ -256,26 +296,34 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 }
             }
         });
+        (findViewById(R.id.agg_contribute_button)).setOnClickListener(new View.OnClickListener() {
+            Intent moveIntent;
+            @Override
+            public void onClick(View view) {
+                if(view.getId()==R.id.agg_contribute_button) {
+                    moveIntent = new Intent(AggActivity.this, ContriActivity.class);
+                    moveIntent.putExtra("title",title);
+                    startActivity(moveIntent);
+                }
+            }
+        });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     @Override
     public void onItemClick(View view, int position) {
 
-        Toast.makeText(AggActivity.this, "you click " + iconPair.get(String.valueOf(position)), Toast.LENGTH_SHORT).show();
-        createAlert("Telkomsel",
+        createAlert(
                 "Anda akan menuju aplikasi " + iconPair.get(String.valueOf(position)),
                 "apabila data yg kami tunjukkan beda ("+
                         String.valueOf(provider_nominal.get(position)).replace("-","") +
-                        " Harga: " +provider_name.get(position).replace(", by:","")+
+                        " Harga: " + provider_price.get(position).replace(", by:","")+
                         "), silakan laporkan di menu lapokan beda data",
                 "ok",
                 "",
-                "cancel");
+                "cancel",
+                iconPair.get(String.valueOf(position))
+                );
     }
 
     @Override
@@ -405,8 +453,8 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         });
     }
 
-    private void createAlert(final String title,String msg_title, String msg_body, String msg_pos, String msg_neg,
-    String msg_neut) {
+    private void createAlert(String msg_title, String msg_body, String msg_pos, String msg_neg,
+                             String msg_neut, final String packagename) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AggActivity.this);
         alertDialogBuilder.setTitle(msg_title);
         alertDialogBuilder.setMessage(msg_body);
@@ -414,10 +462,12 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         alertDialogBuilder.setPositiveButton(msg_pos, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent inten = new Intent(AggActivity.this,PulseActivity.class);
-                inten.putExtra("title",title);
-                startActivity(inten);
-                finish();
+                if(packagename==null) {
+                    startActivity(new Intent(AggActivity.this,ActivityMain.class));
+                    finish();
+                } else {
+                    OpenApp.openApp(AggActivity.this,packagename);
+                }
             }
         });
         alertDialogBuilder.setNegativeButton(msg_neg, new DialogInterface.OnClickListener() {
@@ -457,7 +507,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 for(int i = 0; i<aggModelz.size();i++ ) {
                     aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                 }
-                attachData(title,aggModelz);
+                attachData(aggModelz);
             }
         });
     }

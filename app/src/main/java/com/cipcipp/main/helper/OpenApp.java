@@ -9,8 +9,6 @@ import android.net.Uri;
 import java.util.HashMap;
 
 public class OpenApp {
-//    private Context context;
-//    private String packageName;
     public static String[] row_name = {
             "Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek","Akulaku",
             "GjmPulsa","Kudo","LinkAja","m-BL"};
@@ -19,23 +17,19 @@ public class OpenApp {
             ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app",
     "io.silvrr.installment","com.gjmpulsa.webapp","kudo.mobile.app","com.telkom.mwallet","com.bukalapak.mitra"};
 
-//    public OpenApp(Context context, String packageName) {
-//        this.context = context;
-//        this.packageName = packageName;
-//    }
 
 
 
-    public static void openApp(Context context, String packageName) {
+    public static void openApp(Context context, String appName) {
         HashMap<String,String> packagename = new HashMap<>();
         for(int i =0; i<row_name.length;i++) {
             packagename.put(row_name[i],row_package_name[i]);
         }
         PackageManager manager = context.getPackageManager();
         try {
-            Intent i = manager.getLaunchIntentForPackage(packagename.get(packageName));
+            Intent i = manager.getLaunchIntentForPackage(packagename.get(appName));
             if (i == null) {
-                String url = "https://play.google.com/store/apps/details?id="+packageName;
+                String url = "https://play.google.com/store/apps/details?id="+packagename.get(appName);
                 Uri uri = Uri.parse(url); // missing 'http://' will cause crashed
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 context.startActivity(intent);

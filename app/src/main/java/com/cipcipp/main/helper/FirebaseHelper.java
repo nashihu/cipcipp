@@ -165,7 +165,7 @@ public class FirebaseHelper {
 //        }
 
 //        for (AggModel agg : aggModelList) {
-//            Log.v(FirebaseHelper.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_name()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
+//            Log.v(FirebaseHelper.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_url()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
 //        }
         return aggModelList;
     }

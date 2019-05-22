@@ -25,6 +25,7 @@
         <activity android:name=".ui.pulseactivity.PulseActivity"/>
         <activity android:name=".ui.reportform.reportForm"/>
         <activity android:name=".ui.showresult.ShowResult"/>
+        <activity android:name=".ui.contribute.ContriActivity"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
