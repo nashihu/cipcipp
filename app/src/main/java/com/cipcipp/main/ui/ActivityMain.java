@@ -41,7 +41,6 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         smartfren.setOnClickListener(this);
         cipvideo = findViewById(R.id.cipcipphow);
         cipvideo.setOnClickListener(this);
-        cipvideo.setVisibility(View.GONE);
     }
     @Override
     public void onClick(View view) {
@@ -85,7 +84,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
                 startActivity(moveIntent);
                 break;
             case R.id.cipcipphow:
-                String url = "http://www.youtube.com/nashihu";
+                String url = "http://www.github.com/nashihu/cipcipp";
                 Uri uri = Uri.parse(url); // missing 'http://' will cause crashed
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
