@@ -102,16 +102,24 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             signOutListener();
             signUpListener(item);
             pulsaTitle = findViewById(R.id.pulsa_title);
-            if(firebaseUser!=null) {
+            if(firebaseUser==null) {
+                Toast.makeText(this, "sign in as guest in process..", Toast.LENGTH_SHORT).show();
+                mAuth.signInWithEmailAndPassword("guest@cipcipp.com","uiuiui89")
+                        .addOnCompleteListener(AggActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Toast.makeText(AggActivity.this, "No internet connection..",Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(AggActivity.this, "Sign in as guest success", Toast.LENGTH_SHORT).show();
+                                    fetchData(title);
+                                }
+                            }
+                        });
+                item.removeView(findViewById(R.id.pulse_activity));
+            } else {
                 item.removeView(findViewById(R.id.pulse_activity));
                 fetchData(title);
-
-            } else {
-                String noUser = "silakan sign in dulu";
-                ((TextView) (findViewById(R.id.agg_title))).setText(noUser);
-                ((findViewById(R.id.pulsa_title))).setVisibility(View.GONE);
-                AuthField(View.VISIBLE);
-
             }
         } else  {
             createAlert("Error ditemukan :(",
