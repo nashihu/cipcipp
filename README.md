@@ -5,4 +5,4 @@ Aplikasi ini memberikan informasi mengenai pulsa termurah dari belasan provider 
 
 Harga yang ditampilkan merupakan hasil scraper menggunakan python (tidak tersedia di repo ini)
 
-link apk: https://github.com/nashihu/cipcipp/raw/10_add_filter_to_agg_activity/cipcipp-debug.apk
+link apk: https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug.apk
