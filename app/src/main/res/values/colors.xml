@@ -17,4 +17,5 @@
 
     <color name="female_icon_color">#e9515f</color>
     <color name="male_icon_color">#f28944</color>
+    <color name="spinner_bg_color">#F0F0F0</color>
 </resources>

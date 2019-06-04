@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.cipcipp.main.helper.FirebaseHelper;
 import com.cipcipp.main.model.Report;
 import com.cipcipp.main.R;
+import com.cipcipp.main.ui.signupactivity.SignUpActivity;
+import com.cipcipp.main.ui.signupactivityMVVM.ui.login.LoginActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,21 +56,39 @@ public class reportForm extends AppCompatActivity {
     final FirebaseAuth firebaseAuthz = FirebaseAuth.getInstance();
     final FirebaseUser firebaseUserz = firebaseAuthz.getCurrentUser();
     private EditText true_price;
+    private ArrayList<String> provinces = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+//        try {
+//            final JSONObject obj = new JSONObject(Indonesia.wawa);
+//            for(int i = 1; i<34;i++) {
+//                provinces.add(obj.getJSONObject(String.valueOf(i)).names().get(0).toString());
+//            }
+//        } catch (JSONException error) {
+//            Log.e("error json",error+"");
+//        }
         super.onCreate(savedInstanceState);
-        title = getIntent().getStringExtra("title");
+        final String title = getIntent().getStringExtra("title");
         storageReference = FirebaseStorage.getInstance().getReference();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser!=null) {
-            Log.v("ASDFASDF",firebaseUser.getEmail());
+            if(firebaseUser.getEmail()!=null) {
+                if(firebaseUser.getEmail().equals("guest@cipcipp.com")) {
+                    startActivity(new Intent(reportForm.this, SignUpActivity.class)
+                    .putExtra("title",title));
+                    finish();
+                }
+            }
         }
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("report").child(title);
 
         setContentView(R.layout.report_form);
+        findViewById(R.id.spinner).setVisibility(View.GONE);
+        findViewById(R.id.spinner2).setVisibility(View.GONE);
+        findViewById(R.id.true_price).setVisibility(View.GONE);
         TextView report_header = findViewById(R.id.report_header);
         title_ = report_header.getText().toString() +" "+ title;
         ((TextView) findViewById(R.id.report_header)).setText(title_);
@@ -97,6 +120,9 @@ public class reportForm extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        findViewById(R.id.spinner).setVisibility(View.VISIBLE);
+        findViewById(R.id.spinner2).setVisibility(View.VISIBLE);
+        findViewById(R.id.true_price).setVisibility(View.VISIBLE);
         if(requestCode == GALLERY_CODE && resultCode == RESULT_OK) {
             imageUri = data.getData();
             final RelativeLayout.LayoutParams first_state_image = (RelativeLayout.LayoutParams) inputImage.getLayoutParams();

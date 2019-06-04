@@ -33,4 +33,17 @@
     <string name="data_laporan_harga">Laporan Beda Harga</string>
     <string name="yuk_kontribusi_di_sini">yuk kontribusi di sini</string>
     <string name="punya_harga_lain">menemukan harga yang lebih murah selain di atas?</string>
+    <string name="username">username</string>
+    <string name="tahun_lahir">tahun lahir</string>
+    <string name="title_activity_sign_up">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="sudah_punya_akun_sebelumnya">sudah punya akun sebelumnya?</string>
+    <string name="belum_punya_akun">belum punya akun?</string>
 </resources>
