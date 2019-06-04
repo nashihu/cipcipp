@@ -24,6 +24,7 @@ import com.cipcipp.main.engine.ProviderAdapter;
 import com.cipcipp.main.ui.ActivityMain;
 import com.cipcipp.main.ui.reportform.reportForm;
 import com.cipcipp.main.ui.showresult.ShowResult;
+import com.cipcipp.main.ui.signupactivity.SignUpActivity;
 import com.evrencoskun.tableview.TableView;
 import com.cipcipp.main.engine.MyTableViewAdapter;
 import com.cipcipp.main.engine.MyTableViewListener;
@@ -66,6 +67,18 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser!=null) {
+            if(firebaseUser.getEmail()!=null) {
+                if(firebaseUser.getEmail().equals("guest@cipcipp.com")) {
+                    startActivity(new Intent(PulseActivity.this, SignUpActivity.class)
+                            .putExtra("title",title));
+                    finish();
+                }
+            }
+        }
         pulsaTitle = findViewById(R.id.pulsa_title);
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
@@ -100,7 +113,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             fetchData();
             Log.v(TAG,"ini lagi di sini");
         } else {
-            FirebaseUser firebaseUser;
             firebaseUser = mAuth.getCurrentUser();
             if(firebaseUser!=null) {
                 fetchData();

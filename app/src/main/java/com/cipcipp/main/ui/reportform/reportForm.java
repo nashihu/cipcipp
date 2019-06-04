@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.cipcipp.main.helper.FirebaseHelper;
 import com.cipcipp.main.model.Report;
 import com.cipcipp.main.R;
+import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.ui.signupactivity.SignUpActivity;
 import com.cipcipp.main.ui.signupactivityMVVM.ui.login.LoginActivity;
 import com.google.android.gms.tasks.Continuation;
@@ -71,17 +72,6 @@ public class reportForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final String title = getIntent().getStringExtra("title");
         storageReference = FirebaseStorage.getInstance().getReference();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(firebaseUser!=null) {
-            if(firebaseUser.getEmail()!=null) {
-                if(firebaseUser.getEmail().equals("guest@cipcipp.com")) {
-                    startActivity(new Intent(reportForm.this, SignUpActivity.class)
-                    .putExtra("title",title));
-                    finish();
-                }
-            }
-        }
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("report").child(title);
 

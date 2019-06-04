@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.cipcipp.main.R;
 import com.cipcipp.main.model.RealUser;
+import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.ui.reportform.Indonesia;
 import com.cipcipp.main.ui.reportform.reportForm;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -202,7 +203,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "No internet connection..",Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(SignUpActivity.this, "hello "+username+" !", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SignUpActivity.this, reportForm.class)
+                    startActivity(new Intent(SignUpActivity.this, PulseActivity.class)
                     .putExtra("title",title));
                     finish();
 

@@ -46,4 +46,5 @@
     <string name="login_failed">"Login failed"</string>
     <string name="sudah_punya_akun_sebelumnya">sudah punya akun sebelumnya?</string>
     <string name="belum_punya_akun">belum punya akun?</string>
+    <string name="untuk_melanjutkan_silakan_daftar_sign_in">untuk melanjutkan, silakan daftar / sign in</string>
 </resources>
