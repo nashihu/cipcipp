@@ -5,4 +5,4 @@ Aplikasi ini memberikan rekomendasi mengenai pulsa termurah dari belasan provide
 
 Harga yang ditampilkan merupakan hasil scraper menggunakan python (tidak tersedia di repo ini)
 
-link apk: https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug.apk
+link apk: https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug_.apk
