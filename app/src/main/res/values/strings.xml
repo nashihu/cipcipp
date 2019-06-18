@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">Cipcipp</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Rekomendasi Pulsa</string>
+    <string name="menu_gallery">Lihat lebih lengkap</string>
+    <string name="menu_slideshow">Kontribusi</string>
+    <string name="menu_tools">Lihat Kontribusi</string>
+    <string name="menu_about">Tentang Cipcipp</string>
+    <string name="menu_send">Hubungi kami</string>
     <string name="harga_pulsa">Harga Termurah</string>
     <string name="loading_title">Loading....</string>
     <string name="last_update">update terakhir:</string>
@@ -24,8 +35,8 @@
     <string name="masukkan_screenshot">masukkan screenshot</string>
     <string name="source_code_link">source code link</string>
     <string name="carrier_smartfren">Smartfren</string>
-    <string name="carrier_tri">3</string>
-    <string name="carrier_axis">AXIS</string>
+    <string name="carrier_tri">Tri</string>
+    <string name="carrier_axis">Axis</string>
     <string name="carrier_xl">XL</string>
     <string name="carrier_indosat">Indosat</string>
     <string name="carrier_tsel">Telkomsel</string>
@@ -47,4 +58,12 @@
     <string name="sudah_punya_akun_sebelumnya">sudah punya akun sebelumnya?</string>
     <string name="belum_punya_akun">belum punya akun?</string>
     <string name="untuk_melanjutkan_silakan_daftar_sign_in">untuk melanjutkan, silakan daftar / sign in</string>
+    <string name="open_drawer">open navigation</string>
+    <string name="close_drawer">close drawer</string>
+    <string name="rekomendasi_pulsa">Rekomendasi Pulsa</string>
+    <string name="guest">Guest</string>
+    <string name="guest_email">guest@cipcipp.com</string>
+    <string name="menu_policy">Kebijakan Privasi</string>
+    <string name="menu_tac">Syarat dan Ketentuan</string>
+    <string name="refresh">refresh</string>
 </resources>

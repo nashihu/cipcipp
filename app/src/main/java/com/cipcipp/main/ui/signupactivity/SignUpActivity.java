@@ -18,7 +18,6 @@ import com.cipcipp.main.R;
 import com.cipcipp.main.model.RealUser;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.ui.reportform.Indonesia;
-import com.cipcipp.main.ui.reportform.reportForm;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +42,8 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.sign_up_activity);
         mAuth = FirebaseAuth.getInstance();
         ArrayList<String> jenis_kelamins = new ArrayList<>();
-        final String title = getIntent().getStringExtra("title");
+        final String titlevar = getIntent().getStringExtra("title");
+        Toast.makeText(this, getIntent().getStringExtra("title"), Toast.LENGTH_SHORT).show();
         jenis_kelamins.add("Jenis Kelamin");
         jenis_kelamins.add("Laki-laki");
         jenis_kelamins.add("Perempuan");
@@ -148,16 +148,33 @@ public class SignUpActivity extends AppCompatActivity {
                         final String password = ((TextView) findViewById(R.id.sign_up_password)).getText().toString();
                         if(!username.equals("") && !jenis_kelamin.equals("") && !tahun_lahir.equals("") && !provinsi.equals("")
                             && !kota.equals("") && !email.equals("") && !password.equals("") ) {
-                            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                            mAuth.createUserWithEmailAndPassword(email,password).addOnSuccessListener(SignUpActivity.this, new OnSuccessListener<AuthResult>() {
                                 @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    doLogin(email,password,title,username);
-                                    DatabaseReference databaseReference;
-                                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                                    databaseReference = firebaseDatabase.getReference().child("users");
-                                    DatabaseReference newPost = databaseReference.push();
-                                    RealUser realUser = new RealUser(username,jenis_kelamin,tahun_lahir,provinsi,kota,email);
-                                    newPost.setValue(realUser);
+                                public void onSuccess(AuthResult authResult) {
+                                    if(authResult!=null) {
+                                        DatabaseReference databaseReference;
+                                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                        String userid;
+                                        if(authResult.getUser()!=null) {
+                                            userid = authResult.getUser().getUid();
+                                            databaseReference = firebaseDatabase.getReference().child("users").child(userid);
+                                            databaseReference.child("username").setValue(username);
+                                            databaseReference.child("jenis_kelamin").setValue(jenis_kelamin);
+                                            databaseReference.child("tahun_lahir").setValue(tahun_lahir);
+                                            databaseReference.child("provinsi").setValue(provinsi);
+                                            databaseReference.child("kota").setValue(kota);
+                                            databaseReference.child("email").setValue(email);
+                                            doLogin(email,password,titlevar,username);
+                                        } else {
+                                            databaseReference = firebaseDatabase.getReference().child("users");
+                                            DatabaseReference newPost = databaseReference.push();
+                                            RealUser realUser = new RealUser(username,jenis_kelamin,tahun_lahir,provinsi,kota,email);
+                                            newPost.setValue(realUser);
+
+                                        }
+
+                                    }
+
 
                                 }
                             });
@@ -170,7 +187,7 @@ public class SignUpActivity extends AppCompatActivity {
                         String email = ((TextView) findViewById(R.id.sign_up_email)).getText().toString();
                         String password = ((TextView) findViewById(R.id.sign_up_password)).getText().toString();
                         if(!email.equals("") && !password.equals("")) {
-                            doLogin(email,password,title,"defaultUser");
+                            doLogin(email,password,titlevar,"defaultUser");
                         } else {
                             if(email.equals("")) {
                                 Toast.makeText(SignUpActivity.this, "email masih kosong..", Toast.LENGTH_SHORT).show();
@@ -183,6 +200,8 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
         }
+
+
     }
 
     private void setSpinner(int id, ArrayList<String> arrayList) {

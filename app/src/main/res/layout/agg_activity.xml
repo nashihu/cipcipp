@@ -52,9 +52,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="35dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginBottom="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
                 android:scrollbars="vertical"
                 android:fadeScrollbars="false"
                 android:id="@+id/agg_recycler_view"/>

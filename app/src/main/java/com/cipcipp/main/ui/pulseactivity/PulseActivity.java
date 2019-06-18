@@ -70,6 +70,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        title = getIntent().getStringExtra("title");
         if(firebaseUser!=null) {
             if(firebaseUser.getEmail()!=null) {
                 if(firebaseUser.getEmail().equals("guest@cipcipp.com")) {
@@ -84,7 +85,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         updatedAt = findViewById(R.id.last_update);
         report = findViewById(R.id.report);
         check_report = findViewById(R.id.report_check);
-        title = getIntent().getStringExtra("title");
 //        title = null;
         report.setOnClickListener(new View.OnClickListener() {
             @Override

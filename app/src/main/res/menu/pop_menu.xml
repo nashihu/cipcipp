@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_Tsel"
+        android:title="@string/carrier_tsel"/>
+    <item
+        android:id="@+id/menu_Indosat"
+        android:title="@string/carrier_indosat" />
+    <item
+        android:id="@+id/menu_XL"
+        android:title="@string/carrier_xl" />
+    <item
+        android:id="@+id/menu_Axis"
+        android:title="@string/carrier_axis" />
+    <item
+        android:id="@+id/menu_tri"
+        android:title="@string/carrier_tri" />
+    <item
+        android:id="@+id/menu_smartfren"
+        android:title="@string/carrier_smartfren" />
+</menu>

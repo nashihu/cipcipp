@@ -69,8 +69,8 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         findViewById(R.id.agg_contribute).setVisibility(View.GONE);
         findViewById(R.id.agg_more).setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
-        authStateListener();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        authStateListener();
         final String title = getIntent().getStringExtra("title");
         titleparam = getIntent().getStringExtra("title");
         String title_ = "Harga Termurah " + title ;
