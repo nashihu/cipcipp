@@ -7,4 +7,4 @@ Harga yang ditampilkan merupakan hasil scraper menggunakan python (tidak tersedi
 
 link apk: [klik di sini][link-cipcipp]
 
-[link-cipcipp]https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug.apk
+[link-cipcipp]: https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug.apk
