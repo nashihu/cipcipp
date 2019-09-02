@@ -1,5 +1,5 @@
 # Cipcipp
-Repository ini dipublish untuk keperluan seleksi beasiswa Google Developer Kejar 2019 (alhamdulillah [lolos][loloss] dan lulus[luluss], terima kasihh Google dan Dicoding)
+Repository ini dipublish untuk keperluan seleksi beasiswa Google Developer Kejar 2019 (alhamdulillah [lolos][loloss] dan [luluss], terima kasihh Google dan Dicoding)
 
 Aplikasi ini memberikan rekomendasi mengenai pulsa termurah dari belasan provider penjual pulsa seperti Bukalapak, Dana, Akulaku, dan sebagainya.
 
