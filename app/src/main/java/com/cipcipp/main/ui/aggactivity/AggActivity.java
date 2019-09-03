@@ -23,15 +23,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import com.cipcipp.main.R;
+import com.cipcipp.main.engine.AggAdapter;
 import com.cipcipp.main.helper.FirebaseHelper;
 import com.cipcipp.main.helper.OpenApp;
 import com.cipcipp.main.model.AggModel;
+import com.cipcipp.main.ui.activitymain.ActivityMain;
 import com.cipcipp.main.ui.contribute.ContriActivity;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
-import com.cipcipp.main.R;
-import com.cipcipp.main.engine.AggAdapter;
-import com.cipcipp.main.ui.activitymain.ActivityMain;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -55,7 +54,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private EditText password;
     private TextView pulsaTitle;
     private String titleparam;
-    private HashMap<String,String> iconPair = new HashMap<>();
+    private HashMap<String, String> iconPair = new HashMap<>();
 
     private static String[] row_name = OpenApp.row_name;
     private static String[] row_package_name = OpenApp.row_package_name;
@@ -73,13 +72,12 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         authStateListener();
         final String title = getIntent().getStringExtra("title");
         titleparam = getIntent().getStringExtra("title");
-        String title_ = "Harga Termurah " + title ;
-        ((TextView) findViewById(R.id.agg_title)).setText(title_);
-        if(getActionBar() != null) {
+        String title_ = "Harga Termurah " + title;
+        if (getActionBar() != null) {
             getActionBar().setTitle(title_);
 
         } else {
-            if(getSupportActionBar()!= null ) {
+            if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(title_);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -87,29 +85,27 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 Toast.makeText(this, "getActionBar null", Toast.LENGTH_SHORT).show();
             }
         }
-        TextView agg_title = findViewById(R.id.agg_title);
-        String title__ = "Loading..";
-        agg_title.setText(title__);
+
         LinearLayout item = findViewById(R.id.aggGroup);
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(title == null || titleparam == null) {
-            startActivity(new Intent(AggActivity.this,ActivityMain.class));
+        if (title == null || titleparam == null) {
+            startActivity(new Intent(AggActivity.this, ActivityMain.class));
 
         }
-        if(layoutInflater!=null) {
-            item.addView(layoutInflater.inflate(R.layout.pulse_activity, item,false),1);
+        if (layoutInflater != null) {
+            item.addView(layoutInflater.inflate(R.layout.pulse_activity, item, false), 1);
             signInListener(item);
             signOutListener();
             signUpListener(item);
             pulsaTitle = findViewById(R.id.pulsa_title);
-            if(firebaseUser==null) {
+            if (firebaseUser == null) {
                 Toast.makeText(this, "sign in as guest in process..", Toast.LENGTH_SHORT).show();
-                mAuth.signInWithEmailAndPassword("guest@cipcipp.com","uiuiui89")
+                mAuth.signInWithEmailAndPassword("guest@cipcipp.com", "uiuiui89")
                         .addOnCompleteListener(AggActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(AggActivity.this, "No internet connection..",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AggActivity.this, "No internet connection..", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(AggActivity.this, "Sign in as guest success", Toast.LENGTH_SHORT).show();
                                     fetchData(title);
@@ -121,7 +117,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 item.removeView(findViewById(R.id.pulse_activity));
                 fetchData(title);
             }
-        } else  {
+        } else {
             createAlert("Error ditemukan :(",
                     "Harap hubungi cipcipp untuk mengatasi ini.\n" +
                             " code: AggJava inflation\n",
@@ -129,7 +125,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                     "Kembali ke menu utama",
                     "coba di sini dulu",
                     null
-                    );
+            );
         }
         moveActivity(title);
 
@@ -137,24 +133,25 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home ) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void fetchData(final String title) {
-        final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+        final FirebaseHelper helper = new FirebaseHelper(AggActivity.this, title);
         helper.getProviders(new AggProvCallback() {
 
             @Override
             public void onCallback(final ArrayList<String> strings) {
 
-                helper.readAggs(strings,new AggCallback() {
+                helper.readAggs(strings, new AggCallback() {
                     @Override
-                    public void onCallback( List<AggModel> aggModels) {
+                    public void onCallback(List<AggModel> aggModels) {
                         attachData(aggModels);
-                        attachSpinner(title,aggModels);
+                        attachSpinner(title, aggModels);
                     }
                 });
 
@@ -180,7 +177,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     @Override
     protected void onStop() {
         super.onStop();
-        if(mAuthListener != null) {
+        if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
 
@@ -192,54 +189,55 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         provider_nominal = new ArrayList<>();
         provider_null_field = new ArrayList<>();
     }
-    private void attachSpinner(final String title,final List<AggModel> aggModels) {
+
+    private void attachSpinner(final String title, final List<AggModel> aggModels) {
 
         findViewById(R.id.agg_spinner1).setVisibility(View.VISIBLE);
         findViewById(R.id.agg_spinner2).setVisibility(View.VISIBLE);
 
         final MultiSpinner spinner1 = findViewById(R.id.agg_spinner1);
-        spinner1.setItems(Arrays.asList(row_name),"pilih aplikasi ("+row_name.length+")",this);
+        spinner1.setItems(Arrays.asList(row_name), "pilih aplikasi (" + row_name.length + ")", this);
         spinner1.setTitle(title);
         spinner1.setAggModels(aggModels);
 
 
-        String[] filter = {"semua aplikasi","aplikasi saya"};
+        String[] filter = {"semua aplikasi", "aplikasi saya"};
         final Spinner spinner2 = findViewById(R.id.agg_spinner2);
-        ArrayAdapter adapterspinner2 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,filter);
+        ArrayAdapter adapterspinner2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filter);
         adapterspinner2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapterspinner2);
         spinner2.setSelection(0);
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int z, long l) {
-                if(z==1) {
+                if (z == 1) {
                     Toast.makeText(AggActivity.this, "Updating list..", Toast.LENGTH_SHORT).show();
                     ArrayList<String> packstrings = new ArrayList<>();
                     PackageManager manager = getPackageManager();
-                    for(int j = 0; j<row_name.length; j++) {
-                        if(manager.getLaunchIntentForPackage(row_package_name[j])!=null) {
+                    for (int j = 0; j < row_name.length; j++) {
+                        if (manager.getLaunchIntentForPackage(row_package_name[j]) != null) {
                             packstrings.add(row_name[j]);
                         }
                     }
 
-                    final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
-                    helper.readAggs(packstrings,new AggCallback() {
+                    final FirebaseHelper helper = new FirebaseHelper(AggActivity.this, title);
+                    helper.readAggs(packstrings, new AggCallback() {
                         @Override
-                        public void onCallback( List<AggModel> aggModelz) {
-                            for(int i = 0; i<aggModelz.size();i++ ) {
+                        public void onCallback(List<AggModel> aggModelz) {
+                            for (int i = 0; i < aggModelz.size(); i++) {
                                 aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                             }
                             attachData(aggModelz);
                         }
                     });
                 } else {
-                    final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
+                    final FirebaseHelper helper = new FirebaseHelper(AggActivity.this, title);
                     ArrayList<String> strings = new ArrayList<>();
-                    Collections.addAll(strings,row_name);
-                    helper.readAggs(strings,new AggCallback() {
+                    Collections.addAll(strings, row_name);
+                    helper.readAggs(strings, new AggCallback() {
                         @Override
-                        public void onCallback( List<AggModel> aggModelz) {
-                            for(int i = 0; i<aggModelz.size();i++ ) {
+                        public void onCallback(List<AggModel> aggModelz) {
+                            for (int i = 0; i < aggModelz.size(); i++) {
                                 aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                             }
                             attachData(aggModelz);
@@ -256,25 +254,25 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             }
         });
     }
+
     private void attachData(final List<AggModel> old_agg) {
         final List<AggModel> aggModels = new ArrayList<>();
-        for(AggModel agg : old_agg) {
-            if(!agg.getPrice().equals(String.valueOf(999999999))) {
+        for (AggModel agg : old_agg) {
+            if (!agg.getPrice().equals(String.valueOf(999999999))) {
                 aggModels.add(agg);
             }
         }
 
-        ( findViewById(R.id.agg_title)).setVisibility(View.GONE);
 
         destroyData();
-        for(int i = 0; i< aggModels.size(); i++) {
+        for (int i = 0; i < aggModels.size(); i++) {
             provider_url.add(String.valueOf(aggModels.get(i).getProvider_url()));
-            provider_price.add("Rp."+aggModels.get(i).getPrice()+", by: ");
+            provider_price.add("Rp." + aggModels.get(i).getPrice() + ", by: ");
             provider_nominal.add("Nominal " + aggModels.get(i).getNominal());
             provider_null_field.add("");
-            iconPair.put(String.valueOf(i),aggModels.get(i).getProvider_id());
+            iconPair.put(String.valueOf(i), aggModels.get(i).getProvider_id());
 
-            Log.v("asdfasdf AggActivity",aggModels.get(i).getNominal()+"\r\n"
+            Log.v("asdfasdf AggActivity", aggModels.get(i).getNominal() + "\r\n"
                     + aggModels.get(i).getPrice() + "\r\n"
                     + aggModels.get(i).getProvider_id() + "\r\n"
                     + aggModels.get(i).getProvider_url() + "\r\n");
@@ -283,11 +281,12 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);
         RecyclerView aggView = findViewById(R.id.agg_recycler_view);
         aggView.setLayoutManager(verticalLayout);
-        AggAdapter adapterProv = new AggAdapter(AggActivity.this,provider_nominal, provider_null_field, provider_price, provider_url);
+        AggAdapter adapterProv = new AggAdapter(AggActivity.this, provider_nominal, provider_null_field, provider_price, provider_url);
         adapterProv.setClickListener(AggActivity.this);
         aggView.setAdapter(adapterProv);
         findViewById(R.id.agg_contribute).setVisibility(View.VISIBLE);
         findViewById(R.id.agg_more).setVisibility(View.VISIBLE);
+        findViewById(R.id.agg_progressbar).setVisibility(View.GONE);
 
     }
 
@@ -295,22 +294,24 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private void moveActivity(final String title) {
         (findViewById(R.id.to_pulse_activity)).setOnClickListener(new View.OnClickListener() {
             Intent moveIntent;
+
             @Override
             public void onClick(View view) {
-                if(view.getId()==R.id.to_pulse_activity) {
+                if (view.getId() == R.id.to_pulse_activity) {
                     moveIntent = new Intent(AggActivity.this, PulseActivity.class);
-                    moveIntent.putExtra("title",title);
+                    moveIntent.putExtra("title", title);
                     startActivity(moveIntent);
                 }
             }
         });
         (findViewById(R.id.agg_contribute_button)).setOnClickListener(new View.OnClickListener() {
             Intent moveIntent;
+
             @Override
             public void onClick(View view) {
-                if(view.getId()==R.id.agg_contribute_button) {
+                if (view.getId() == R.id.agg_contribute_button) {
                     moveIntent = new Intent(AggActivity.this, ContriActivity.class);
-                    moveIntent.putExtra("title",title);
+                    moveIntent.putExtra("title", title);
                     startActivity(moveIntent);
                 }
             }
@@ -323,29 +324,29 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
         createAlert(
                 "Anda akan menuju aplikasi " + iconPair.get(String.valueOf(position)),
-                "apabila data yg kami tunjukkan beda ("+
-                        String.valueOf(provider_nominal.get(position)).replace("-","") +
-                        " Harga: " + provider_price.get(position).replace(", by:","")+
+                "apabila data yg kami tunjukkan beda (" +
+                        String.valueOf(provider_nominal.get(position)).replace("-", "") +
+                        " Harga: " + provider_price.get(position).replace(", by:", "") +
                         "), silakan laporkan di menu lapokan beda data",
                 "ok",
                 "",
                 "cancel",
                 iconPair.get(String.valueOf(position))
-                );
+        );
     }
 
     @Override
     public void onLongClick(View view, int position) {
-        String[] row_name = {"Ovo","Blibli","Flip","Dana","BL","Tokped","Paytren","Payfazz","Lazada","Shopee","Gojek"};
+        String[] row_name = {"Ovo", "Blibli", "Flip", "Dana", "BL", "Tokped", "Paytren", "Payfazz", "Lazada", "Shopee", "Gojek"};
         String[] row_package_name = {"ovo.id",
-                "blibli.mobile.commerce","id.flip","id.dana","com.bukalapak.android","com.tokopedia.tkpd"
-                ,"id.co.paytren.user","com.payfazz.android","com.lazada.android","com.shopee.id","com.gojek.app"};
-        HashMap<String,String> packagename = new HashMap<>();
-        for(int i =0; i<row_name.length;i++) {
-            packagename.put(row_name[i],row_package_name[i]);
+                "blibli.mobile.commerce", "id.flip", "id.dana", "com.bukalapak.android", "com.tokopedia.tkpd"
+                , "id.co.paytren.user", "com.payfazz.android", "com.lazada.android", "com.shopee.id", "com.gojek.app"};
+        HashMap<String, String> packagename = new HashMap<>();
+        for (int i = 0; i < row_name.length; i++) {
+            packagename.put(row_name[i], row_package_name[i]);
         }
-        OpenApp.openApp(AggActivity.this,packagename.get(iconPair.get(String.valueOf(position))));
-        Toast.makeText(this, "you long click "+position, Toast.LENGTH_SHORT).show();
+        OpenApp.openApp(AggActivity.this, packagename.get(iconPair.get(String.valueOf(position))));
+        Toast.makeText(this, "you long click " + position, Toast.LENGTH_SHORT).show();
     }
 
     private void AuthField(int state) {
@@ -362,10 +363,10 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     //user is signed in
-                    Log.d("Firebase Auth","user signed in");
+                    Log.d("Firebase Auth", "user signed in");
                 } else {
                     //user is signed out
-                    Log.d("Firebase Auth","user signed out");
+                    Log.d("Firebase Auth", "user signed out");
                 }
             }
         };
@@ -380,15 +381,15 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 password = findViewById(R.id.pass);
                 String emailString = email.getText().toString();
                 String pwd = password.getText().toString();
-                if(!emailString.equals("") && !pwd.equals("")) {
-                    mAuth.signInWithEmailAndPassword(emailString,pwd)
+                if (!emailString.equals("") && !pwd.equals("")) {
+                    mAuth.signInWithEmailAndPassword(emailString, pwd)
                             .addOnCompleteListener(AggActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
-                                        Toast.makeText(AggActivity.this, "Failed sign in !",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AggActivity.this, "Failed sign in !", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(AggActivity.this, "sign in Success!",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AggActivity.this, "sign in Success!", Toast.LENGTH_SHORT).show();
                                         String successLogin = "Loading...";
                                         pulsaTitle.setText(successLogin);
                                         fetchData(titleparam);
@@ -414,21 +415,21 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                 password = findViewById(R.id.pass);
                 String emailString = email.getText().toString();
                 String pwd = password.getText().toString();
-                if(!emailString.equals("") && !pwd.equals("")) {
-                    mAuth.createUserWithEmailAndPassword(emailString,pwd).addOnCompleteListener(AggActivity.this, new OnCompleteListener<AuthResult>() {
+                if (!emailString.equals("") && !pwd.equals("")) {
+                    mAuth.createUserWithEmailAndPassword(emailString, pwd).addOnCompleteListener(AggActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             String emailString = email.getText().toString();
                             String pwd = password.getText().toString();
-                            if(!emailString.equals("") && !pwd.equals("")) {
-                                mAuth.signInWithEmailAndPassword(emailString,pwd)
+                            if (!emailString.equals("") && !pwd.equals("")) {
+                                mAuth.signInWithEmailAndPassword(emailString, pwd)
                                         .addOnCompleteListener(AggActivity.this, new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (!task.isSuccessful()) {
-                                                    Toast.makeText(AggActivity.this, "Failed sign up..",Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AggActivity.this, "Failed sign up..", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(AggActivity.this, "sign up Success!",Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AggActivity.this, "sign up Success!", Toast.LENGTH_SHORT).show();
                                                     String successLogin = "Loading...";
                                                     pulsaTitle.setText(successLogin);
                                                     fetchData(titleparam);
@@ -470,18 +471,18 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         alertDialogBuilder.setPositiveButton(msg_pos, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(packagename==null) {
-                    startActivity(new Intent(AggActivity.this,ActivityMain.class));
+                if (packagename == null) {
+                    startActivity(new Intent(AggActivity.this, ActivityMain.class));
                     finish();
                 } else {
-                    OpenApp.openApp(AggActivity.this,packagename);
+                    OpenApp.openApp(AggActivity.this, packagename);
                 }
             }
         });
         alertDialogBuilder.setNegativeButton(msg_neg, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(new Intent(AggActivity.this,ActivityMain.class));
+                startActivity(new Intent(AggActivity.this, ActivityMain.class));
                 finish();
             }
         });
@@ -497,22 +498,22 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
 
     @Override
-    public void onItemsSelected(boolean[] selected,final String title,final List<AggModel> aggModels) {
+    public void onItemsSelected(boolean[] selected, final String title, final List<AggModel> aggModels) {
         ArrayList<String> selectedprovs = new ArrayList<>();
-        for(int i = 0; i<selected.length;i++) {
-            if(selected[i]) {
+        for (int i = 0; i < selected.length; i++) {
+            if (selected[i]) {
                 selectedprovs.add(row_name[i]);
             }
         }
-        if(selected.length!=selectedprovs.size()){
+        if (selected.length != selectedprovs.size()) {
             Toast.makeText(AggActivity.this, "Updating list..", Toast.LENGTH_SHORT).show();
         }
 
-        final FirebaseHelper helper = new FirebaseHelper(AggActivity.this,title);
-        helper.readAggs(selectedprovs,new AggCallback() {
+        final FirebaseHelper helper = new FirebaseHelper(AggActivity.this, title);
+        helper.readAggs(selectedprovs, new AggCallback() {
             @Override
-            public void onCallback( List<AggModel> aggModelz) {
-                for(int i = 0; i<aggModelz.size();i++ ) {
+            public void onCallback(List<AggModel> aggModelz) {
+                for (int i = 0; i < aggModelz.size(); i++) {
                     aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                 }
                 attachData(aggModelz);
