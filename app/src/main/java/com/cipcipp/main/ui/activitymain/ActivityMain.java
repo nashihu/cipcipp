@@ -1,15 +1,19 @@
-package com.cipcipp.main.ui;
+package com.cipcipp.main.ui.activitymain;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +24,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cipcipp.main.ui.aggactivity.AggActivity;
 import com.cipcipp.main.R;
 import com.cipcipp.main.engine.DatabaseHandler;
+import com.cipcipp.main.model.User;
+import com.cipcipp.main.ui.aggactivity.AggActivity;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.ui.reportform.reportForm;
 import com.cipcipp.main.ui.showresult.ShowResult;
@@ -37,8 +42,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener {
+    static final String TAG = ActivityMain.class.getSimpleName();
     LinearLayout tsel;
     LinearLayout im3;
     LinearLayout xl;
@@ -49,8 +57,25 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     NavigationView navigationView;
     private ProgressBar progressBar;
     FirebaseAuth mAuth;
+    TextView nav_useremail, nav_username;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        model.setData();
+//        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        model.setData();
+//        model.getData().observe(this,result);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DatabaseHandler db = new DatabaseHandler(this);
@@ -82,20 +107,22 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         cipvideo.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        final TextView nav_username = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
-        final TextView nav_email = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
+        nav_useremail = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
+        nav_username = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
+        TextView nav_email = nav_useremail;
         progressBar = findViewById(R.id.ProgressBar);
-        if(firebaseUser==null) {
+        if (firebaseUser == null) {
             signInAsGuest();
         } else {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
-                    .child(firebaseUser.getUid()).child("username");
+                    .child(firebaseUser.getUid());
 
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.getValue()!=null) {
-                        nav_username.setText(dataSnapshot.getValue().toString());
+                    if (dataSnapshot.getValue() != null) {
+//                        TextView nav_useremail = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
+//                        nav_useremail.setText(dataSnapshot.getValue().toString());
                     }
                 }
 
@@ -106,7 +133,23 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
             });
             nav_email.setText(firebaseUser.getEmail());
         }
+        model = ViewModelProviders.of(this).get(ActivityMainViewModel.class);
+        model.getData().observe(this,result);
+
     }
+
+    private final Observer<User> result = new Observer<User>() {
+        @Override
+        public void onChanged(@Nullable User strings) {
+            if (strings != null) {
+                Log.e(TAG, "masuk pak eko!");
+                nav_useremail.setText(strings.getUseremail());
+                nav_username.setText(strings.getUsername());
+            }
+        }
+    };
+    ActivityMainViewModel model;
+
     @Override
     public void onClick(View view) {
         String title;
@@ -115,37 +158,37 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
             case R.id.imgTelkomsel:
                 title = getString(R.string.carrier_tsel);
                 moveIntent = new Intent(ActivityMain.this, AggActivity.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
                 break;
             case R.id.imgIndosat:
                 title = getString(R.string.carrier_indosat);
                 moveIntent = new Intent(ActivityMain.this, AggActivity.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
                 break;
             case R.id.imgXL:
                 title = getString(R.string.carrier_xl);
                 moveIntent = new Intent(ActivityMain.this, AggActivity.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
                 break;
             case R.id.img3:
                 title = getString(R.string.carrier_tri);
                 moveIntent = new Intent(ActivityMain.this, AggActivity.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
                 break;
             case R.id.imgAXIS:
                 title = getString(R.string.carrier_axis);
                 moveIntent = new Intent(ActivityMain.this, AggActivity.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
                 break;
             case R.id.imgSmartfren:
                 title = getString(R.string.carrier_smartfren);
                 moveIntent = new Intent(ActivityMain.this, AggActivity.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
                 break;
             case R.id.cipcipphow:
@@ -155,7 +198,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             default:
-                Toast.makeText(ActivityMain.this,"Not Available Yet",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityMain.this, "Not Available Yet", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -175,9 +218,9 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            if(mAuth.getCurrentUser()!=null) {
-                if(mAuth.getCurrentUser().getEmail()!=null) {
-                    if(!mAuth.getCurrentUser().getEmail().equals("guest@cipcipp.com")) {
+            if (mAuth.getCurrentUser() != null) {
+                if (mAuth.getCurrentUser().getEmail() != null) {
+                    if (!mAuth.getCurrentUser().getEmail().equals("guest@cipcipp.com")) {
                         mAuth.signOut();
                         signInAsGuest();
                     } else {
@@ -189,7 +232,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
             }
             return true;
         } else if (id == R.id.action_refresh) {
-            startActivity(new Intent(ActivityMain.this,ActivityMain.class));
+            startActivity(new Intent(ActivityMain.this, ActivityMain.class));
             finish();
         }
 
@@ -201,7 +244,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_rekomendasi_pulsa) {
-            attachMenuListener(item,AggActivity.class);
+            attachMenuListener(item, AggActivity.class);
         } else if (id == R.id.nav_gallery) {
             attachMenuListener(item, PulseActivity.class);
         } else if (id == R.id.nav_slideshow) {
@@ -227,12 +270,12 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
                 MenuItem menuItem = navigationView.getMenu().findItem(R.id.nav_rekomendasi_pulsa);
                 PopupMenu popupMenu = new PopupMenu(ActivityMain.this, MenuItemCompat.getActionView(menuItem));
-                popupMenu.getMenuInflater().inflate(R.menu.pop_menu,popupMenu.getMenu());
+                popupMenu.getMenuInflater().inflate(R.menu.pop_menu, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        startActivity(new Intent(ActivityMain.this,cls)
-                                .putExtra("title",menuItem.getTitle().toString()));
+                        startActivity(new Intent(ActivityMain.this, cls)
+                                .putExtra("title", menuItem.getTitle().toString()));
 
                         return true;
                     }

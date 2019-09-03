@@ -31,7 +31,7 @@ import com.cipcipp.main.ui.contribute.ContriActivity;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.R;
 import com.cipcipp.main.engine.AggAdapter;
-import com.cipcipp.main.ui.ActivityMain;
+import com.cipcipp.main.ui.activitymain.ActivityMain;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

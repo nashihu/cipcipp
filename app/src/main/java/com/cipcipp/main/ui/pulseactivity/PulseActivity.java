@@ -21,7 +21,7 @@ import com.cipcipp.main.model.RowCells;
 import com.cipcipp.main.R;
 import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.engine.ProviderAdapter;
-import com.cipcipp.main.ui.ActivityMain;
+import com.cipcipp.main.ui.activitymain.ActivityMain;
 import com.cipcipp.main.ui.reportform.reportForm;
 import com.cipcipp.main.ui.showresult.ShowResult;
 import com.cipcipp.main.ui.signupactivity.SignUpActivity;
@@ -51,6 +51,13 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private TextView pulsaTitle;
     private TextView appopen;
     private TextView updatedAt;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        startActivity(new Intent(this,ActivityMain.class));
+    }
+
     private ProviderAdapter adapterProv;
     private ArrayList<String> rowNumz = new ArrayList<>();
     private ArrayList<String> colVallz;
