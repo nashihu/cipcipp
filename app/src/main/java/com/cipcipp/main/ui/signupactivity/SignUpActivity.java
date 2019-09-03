@@ -18,13 +18,17 @@ import com.cipcipp.main.R;
 import com.cipcipp.main.model.RealUser;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.ui.reportform.Indonesia;
+import com.cipcipp.main.utils.Util;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -43,7 +48,6 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         ArrayList<String> jenis_kelamins = new ArrayList<>();
         final String titlevar = getIntent().getStringExtra("title");
-        Toast.makeText(this, getIntent().getStringExtra("title"), Toast.LENGTH_SHORT).show();
         jenis_kelamins.add("Jenis Kelamin");
         jenis_kelamins.add("Laki-laki");
         jenis_kelamins.add("Perempuan");
@@ -112,32 +116,32 @@ public class SignUpActivity extends AppCompatActivity {
         //switch button locic
         {
             findViewById(R.id.sign_up_switch_button_sign).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 
-                if (findViewById(R.id.sign_up_group).getVisibility() == View.VISIBLE) {
-                    ((Button) findViewById(R.id.sign_up_action_button_sign)).setText(R.string.sign_in_field);
-                    ((Button) findViewById(R.id.sign_up_switch_button_sign)).setText(R.string.sign_up_field);
-                    findViewById(R.id.sign_up_group).setVisibility(View.INVISIBLE);
-                    ((TextView) findViewById(R.id.sign_up_sudah_punya_akun_sebelumnya)).setText(R.string.belum_punya_akun);
+                    if (findViewById(R.id.sign_up_group).getVisibility() == View.VISIBLE) {
+                        ((Button) findViewById(R.id.sign_up_action_button_sign)).setText(R.string.sign_in_field);
+                        ((Button) findViewById(R.id.sign_up_switch_button_sign)).setText(R.string.sign_up_field);
+                        findViewById(R.id.sign_up_group).setVisibility(View.INVISIBLE);
+                        ((TextView) findViewById(R.id.sign_up_sudah_punya_akun_sebelumnya)).setText(R.string.belum_punya_akun);
 
-                } else {
-                    ((Button) findViewById(R.id.sign_up_action_button_sign)).setText(R.string.sign_up_field);
-                    ((Button) findViewById(R.id.sign_up_switch_button_sign)).setText(R.string.sign_in_field);
-                    findViewById(R.id.sign_up_group).setVisibility(View.VISIBLE);
-                    ((TextView) findViewById(R.id.sign_up_sudah_punya_akun_sebelumnya)).setText(R.string.sudah_punya_akun_sebelumnya);
+                    } else {
+                        ((Button) findViewById(R.id.sign_up_action_button_sign)).setText(R.string.sign_up_field);
+                        ((Button) findViewById(R.id.sign_up_switch_button_sign)).setText(R.string.sign_in_field);
+                        findViewById(R.id.sign_up_group).setVisibility(View.VISIBLE);
+                        ((TextView) findViewById(R.id.sign_up_sudah_punya_akun_sebelumnya)).setText(R.string.sudah_punya_akun_sebelumnya);
+                    }
+
                 }
-
-            }
-        });
-    }
+            });
+        }
 
         //action button logic
         {
             findViewById(R.id.sign_up_action_button_sign).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(findViewById(R.id.sign_up_group).getVisibility()==View.VISIBLE) {
+                    if (findViewById(R.id.sign_up_group).getVisibility() == View.VISIBLE) {
                         //sign up
                         final String username = ((TextView) findViewById(R.id.sign_up_username)).getText().toString();
                         final String jenis_kelamin = ((Spinner) findViewById(R.id.sign_up_kelamin)).getSelectedItem().toString();
@@ -146,16 +150,16 @@ public class SignUpActivity extends AppCompatActivity {
                         final String kota = ((Spinner) findViewById(R.id.sign_up_kota)).getSelectedItem().toString();
                         final String email = ((TextView) findViewById(R.id.sign_up_email)).getText().toString();
                         final String password = ((TextView) findViewById(R.id.sign_up_password)).getText().toString();
-                        if(!username.equals("") && !jenis_kelamin.equals("") && !tahun_lahir.equals("") && !provinsi.equals("")
-                            && !kota.equals("") && !email.equals("") && !password.equals("") ) {
-                            mAuth.createUserWithEmailAndPassword(email,password).addOnSuccessListener(SignUpActivity.this, new OnSuccessListener<AuthResult>() {
+                        if (!username.equals("") && !jenis_kelamin.equals("") && !tahun_lahir.equals("") && !provinsi.equals("")
+                                && !kota.equals("") && !email.equals("") && !password.equals("")) {
+                            mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(SignUpActivity.this, new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
-                                    if(authResult!=null) {
+                                    if (authResult != null) {
                                         DatabaseReference databaseReference;
                                         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                                         String userid;
-                                        if(authResult.getUser()!=null) {
+                                        if (authResult.getUser() != null) {
                                             userid = authResult.getUser().getUid();
                                             databaseReference = firebaseDatabase.getReference().child("users").child(userid);
                                             databaseReference.child("username").setValue(username);
@@ -164,11 +168,11 @@ public class SignUpActivity extends AppCompatActivity {
                                             databaseReference.child("provinsi").setValue(provinsi);
                                             databaseReference.child("kota").setValue(kota);
                                             databaseReference.child("email").setValue(email);
-                                            doLogin(email,password,titlevar,username);
+                                            doLogin(email, password, titlevar, username);
                                         } else {
                                             databaseReference = firebaseDatabase.getReference().child("users");
                                             DatabaseReference newPost = databaseReference.push();
-                                            RealUser realUser = new RealUser(username,jenis_kelamin,tahun_lahir,provinsi,kota,email);
+                                            RealUser realUser = new RealUser(username, jenis_kelamin, tahun_lahir, provinsi, kota, email);
                                             newPost.setValue(realUser);
 
                                         }
@@ -186,12 +190,12 @@ public class SignUpActivity extends AppCompatActivity {
                         //login
                         String email = ((TextView) findViewById(R.id.sign_up_email)).getText().toString();
                         String password = ((TextView) findViewById(R.id.sign_up_password)).getText().toString();
-                        if(!email.equals("") && !password.equals("")) {
-                            doLogin(email,password,titlevar,"defaultUser");
+                        if (!email.equals("") && !password.equals("")) {
+                            doLogin(email, password, titlevar, "defaultUser");
                         } else {
-                            if(email.equals("")) {
+                            if (email.equals("")) {
                                 Toast.makeText(SignUpActivity.this, "email masih kosong..", Toast.LENGTH_SHORT).show();
-                            } else if(password.equals("")) {
+                            } else if (password.equals("")) {
                                 Toast.makeText(SignUpActivity.this, "password masih kosong..", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -206,24 +210,48 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void setSpinner(int id, ArrayList<String> arrayList) {
         Spinner spinner = findViewById(id);
-        ArrayAdapter spinner_adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,arrayList);
+        ArrayAdapter spinner_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayList);
         spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinner_adapter);
         spinner.setSelection(0);
     }
 
-    private void doLogin(String email, String password,final String title,final String username) {
+    private void doLogin(String email, String password, final String title, final String username) {
 
         mAuth = FirebaseAuth.getInstance();
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-                    Toast.makeText(SignUpActivity.this, "No internet connection..",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Error connecting server..", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SignUpActivity.this, "hello "+username+" !", Toast.LENGTH_SHORT).show();
+                    String uid;
+                    if (mAuth.getCurrentUser() != null) {
+                        uid = mAuth.getCurrentUser().getUid();
+                    } else {
+                        uid = Util.UID_Guest;
+                    }
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(uid);
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() != null) {
+                                String usern = ((HashMap) dataSnapshot.getValue()).get("username").toString();
+                                Toast.makeText(SignUpActivity.this, "hello " + usern + " !", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+                        }
+                    });
+
                     startActivity(new Intent(SignUpActivity.this, PulseActivity.class)
-                    .putExtra("title",title));
+                            .putExtra("title", title));
                     finish();
 
                 }
@@ -239,7 +267,7 @@ public class SignUpActivity extends AppCompatActivity {
         final String kota = ((Spinner) findViewById(R.id.sign_up_kota)).getSelectedItem().toString();
         final String email = ((TextView) findViewById(R.id.sign_up_email)).getText().toString();
         final String password = ((TextView) findViewById(R.id.sign_up_password)).getText().toString();
-        if(username.equals("")) {
+        if (username.equals("")) {
             Toast.makeText(this, "username masih kosong..", Toast.LENGTH_SHORT).show();
         } else if (jenis_kelamin.equals("Jenis Kelamin")) {
             Toast.makeText(this, "jenis kelamin belum dipilih..", Toast.LENGTH_SHORT).show();

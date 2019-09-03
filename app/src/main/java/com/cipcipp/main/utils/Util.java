@@ -32,4 +32,6 @@ public class Util {
     public static final String KEY_C25 = "c25";
     public static final String KEY_C26 = "c26";
     public static final Integer size = 26;
+
+    public static final String UID_Guest = "0t5Sav6FpnXyJFwhbkDfCBVUNQ73";
 }

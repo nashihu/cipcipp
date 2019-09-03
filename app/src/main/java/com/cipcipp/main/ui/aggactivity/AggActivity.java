@@ -52,7 +52,6 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private FirebaseAuth mAuth;
     private EditText email;
     private EditText password;
-    private TextView pulsaTitle;
     private String titleparam;
     private HashMap<String, String> iconPair = new HashMap<>();
 
@@ -97,7 +96,6 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             signInListener(item);
             signOutListener();
             signUpListener(item);
-            pulsaTitle = findViewById(R.id.pulsa_title);
             if (firebaseUser == null) {
                 Toast.makeText(this, "sign in as guest in process..", Toast.LENGTH_SHORT).show();
                 mAuth.signInWithEmailAndPassword("guest@cipcipp.com", "uiuiui89")
@@ -391,7 +389,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                     } else {
                                         Toast.makeText(AggActivity.this, "sign in Success!", Toast.LENGTH_SHORT).show();
                                         String successLogin = "Loading...";
-                                        pulsaTitle.setText(successLogin);
+
                                         fetchData(titleparam);
                                         findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                         AuthField(View.GONE);
@@ -431,7 +429,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                                 } else {
                                                     Toast.makeText(AggActivity.this, "sign up Success!", Toast.LENGTH_SHORT).show();
                                                     String successLogin = "Loading...";
-                                                    pulsaTitle.setText(successLogin);
+
                                                     fetchData(titleparam);
                                                     findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                                     AuthField(View.GONE);

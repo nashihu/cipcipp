@@ -1,33 +1,34 @@
 package com.cipcipp.main.ui.pulseactivity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cipcipp.main.R;
+import com.cipcipp.main.engine.DatabaseHandler;
+import com.cipcipp.main.engine.MyTableViewAdapter;
+import com.cipcipp.main.engine.MyTableViewListener;
+import com.cipcipp.main.engine.ProviderAdapter;
 import com.cipcipp.main.helper.CellListGenerator;
 import com.cipcipp.main.helper.OpenApp;
 import com.cipcipp.main.model.AggModel;
 import com.cipcipp.main.model.CellModel;
 import com.cipcipp.main.model.RowCells;
-import com.cipcipp.main.R;
-import com.cipcipp.main.engine.DatabaseHandler;
-import com.cipcipp.main.engine.ProviderAdapter;
 import com.cipcipp.main.ui.activitymain.ActivityMain;
 import com.cipcipp.main.ui.reportform.reportForm;
 import com.cipcipp.main.ui.showresult.ShowResult;
 import com.cipcipp.main.ui.signupactivity.SignUpActivity;
 import com.evrencoskun.tableview.TableView;
-import com.cipcipp.main.engine.MyTableViewAdapter;
-import com.cipcipp.main.engine.MyTableViewListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -52,12 +53,6 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private TextView appopen;
     private TextView updatedAt;
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-//        startActivity(new Intent(this,ActivityMain.class));
-    }
-
     private ProviderAdapter adapterProv;
     private ArrayList<String> rowNumz = new ArrayList<>();
     private ArrayList<String> colVallz;
@@ -71,6 +66,15 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private final String TAG = PulseActivity.class.getSimpleName();
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
@@ -78,16 +82,22 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         title = getIntent().getStringExtra("title");
-        if(firebaseUser!=null) {
-            if(firebaseUser.getEmail()!=null) {
-                if(firebaseUser.getEmail().equals("guest@cipcipp.com")) {
+        if(getSupportActionBar()!=null & title != null) {
+            getSupportActionBar().setTitle(getString(R.string.harga_detail_pulsa) +" "+ title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        }
+        if (firebaseUser != null) {
+            if (firebaseUser.getEmail() != null) {
+                if (firebaseUser.getEmail().equals("guest@cipcipp.com")) {
                     startActivity(new Intent(PulseActivity.this, SignUpActivity.class)
-                            .putExtra("title",title));
+                            .putExtra("title", title));
                     finish();
                 }
             }
         }
         pulsaTitle = findViewById(R.id.pulsa_title);
+        pulsaTitle.setVisibility(View.GONE);
         appopen = findViewById(R.id.app_open_text);
         updatedAt = findViewById(R.id.last_update);
         report = findViewById(R.id.report);
@@ -97,7 +107,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             @Override
             public void onClick(View view) {
                 Intent moveIntent = new Intent(PulseActivity.this, reportForm.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
             }
         });
@@ -105,7 +115,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
             @Override
             public void onClick(View view) {
                 Intent moveIntent = new Intent(PulseActivity.this, ShowResult.class);
-                moveIntent.putExtra("title",title);
+                moveIntent.putExtra("title", title);
                 startActivity(moveIntent);
             }
         });
@@ -116,21 +126,21 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         authStateListener();
         DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
         db.reCreateTable();
-        if(db.getAllContacts().size()!=0) {
+        if (db.getAllContacts().size() != 0) {
             fetchData();
-            Log.v(TAG,"ini lagi di sini");
         } else {
             firebaseUser = mAuth.getCurrentUser();
-            if(firebaseUser!=null) {
+            if (firebaseUser != null) {
                 fetchData();
             } else {
                 String noUser = "silakan sign in dulu";
                 pulsaTitle.setText(noUser);
                 pulsaTitle.setVisibility(View.VISIBLE);
+                findViewById(R.id.pulse_progress).setVisibility(View.GONE);
                 findViewById(R.id.reportGroup).setVisibility(View.GONE);
                 AuthField(View.VISIBLE);
             }
-        Log.e("TAG","ONCREATE CALLED");
+            Log.e("TAG", "ONCREATE CALLED");
         }
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -152,7 +162,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     @Override
     protected void onStop() {
         super.onStop();
-        if(mAuthListener != null) {
+        if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
 
@@ -160,37 +170,38 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
-        OpenApp.openApp(PulseActivity.this,adapterProv.getItem(position));
+        OpenApp.openApp(PulseActivity.this, adapterProv.getItem(position));
     }
 
 
     private void renderData() {
-        CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz);
-        for(int i = 0; i<price_test.size();i++) {
-           for(int j = 0; j<price_test.get(i).size();j++) {
-               Log.v("asdfasdf "+TAG,""+price_test.get(i).get(j).getData());
-           }
+        CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(), (price_test.size()), rowNumz);
+        for (int i = 0; i < price_test.size(); i++) {
+            for (int j = 0; j < price_test.get(i).size(); j++) {
+                Log.v("asdfasdf " + TAG, "" + price_test.get(i).get(j).getData());
+            }
         }
 
         mRowHeaderLists.RowDataGenerator();
-        CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(),(price_test.size()),rowNumz,colVallz);
+        CellListGenerator mColumnHeaderList = new CellListGenerator(price_test.get(0).size(), (price_test.size()), rowNumz, colVallz);
         mColumnHeaderList.ColumnDataGenerator(true);
         TableView tableView = findViewById(R.id.content_container);
         MyTableViewAdapter mTableViewAdapter = new MyTableViewAdapter(PulseActivity.this);
         tableView.setAdapter(mTableViewAdapter);
-        tableView.setTableViewListener(new MyTableViewListener(PulseActivity.this,false));
+        tableView.setTableViewListener(new MyTableViewListener(PulseActivity.this, false));
         mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
-        Log.v("asdfasdf"+TAG,"size: " + price_test.size() + "&" + price_test.size());
+        Log.v("asdfasdf" + TAG, "size: " + price_test.size() + "&" + price_test.size());
         RecyclerView providerRV = findViewById(R.id.rvProvider);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(PulseActivity.this, LinearLayoutManager.HORIZONTAL, false);
         providerRV.setLayoutManager(horizontalLayoutManager);
-        adapterProv = new ProviderAdapter(PulseActivity.this,provider_title,provider_id);
+        adapterProv = new ProviderAdapter(PulseActivity.this, provider_title, provider_id);
         adapterProv.setClickListener(PulseActivity.this);
         providerRV.setAdapter(adapterProv);
         String titlee = "Harga Pulsa " + title;
         pulsaTitle.setText(titlee);
-        pulsaTitle.setVisibility(View.VISIBLE);
+        pulsaTitle.setVisibility(View.GONE);
+        findViewById(R.id.pulse_progress).setVisibility(View.GONE);
         appopen.setVisibility(View.VISIBLE);
         updatedAt.setVisibility(View.VISIBLE);
         report.setVisibility(View.VISIBLE);
@@ -200,42 +211,42 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
 
     private void setupData(DatabaseHandler db) {
         List<RowCells> rowCellsList = db.getAllContacts();
-        HashMap<String,String> providerUrl = new HashMap<>();
-        for(RowCells rowCell : rowCellsList) {
+        HashMap<String, String> providerUrl = new HashMap<>();
+        for (RowCells rowCell : rowCellsList) {
             String logger = rowCell.logger(rowCell);
-            Log.v("price_DB",""+logger);
+            Log.v("price_DB", "" + logger);
             ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
-            Log.v("WADIDII",pricez.get(0).getData().toString());
-            if(!rowCell.getC1().equals("updatedAt")) {
-                if(!rowCell.getC1().equals("zeroField")) {
+            Log.v("WADIDII", pricez.get(0).getData().toString());
+            if (!rowCell.getC1().equals("updatedAt")) {
+                if (!rowCell.getC1().equals("zeroField")) {
                     rowNumz.add(rowCell.getC1());
-                    providerUrl.put(rowCell.getC1(),rowCell.getC2());
+                    providerUrl.put(rowCell.getC1(), rowCell.getC2());
                     price_test.add(pricez);
                 } else {
                     colVallz = rowCell.bulkStringGetter(rowCell);
-                    Log.v("cols",""+colVallz);
+                    Log.v("cols", "" + colVallz);
                 }
             } else {
-                String updateText = updatedAt.getText().toString() +" " + rowCell.getC2();
+                String updateText = updatedAt.getText().toString() + " " + rowCell.getC2();
                 updatedAt.setText(updateText);
             }
         }
-        Log.v("WADIDII","============ separator ======================");
-        for(List<CellModel> pricez : price_test) {
-            Log.v("WADIDII",pricez.get(0).getData().toString() + " " + pricez.get(1).getData().toString());
+        Log.v("WADIDII", "============ separator ======================");
+        for (List<CellModel> pricez : price_test) {
+            Log.v("WADIDII", pricez.get(0).getData().toString() + " " + pricez.get(1).getData().toString());
         }
 
         List<AggModel> cheapList = db.getAllCheapestValue();
-        Log.v("cheapcheap",cheapList+" "+cheapList.size()+" "+cheapList.get(0));
-        if(cheapList.size()==colVallz.size()){
-            for(int i =0; i<colVallz.size(); i++) {
+        Log.v("cheapcheap", cheapList + " " + cheapList.size() + " " + cheapList.get(0));
+        if (cheapList.size() == colVallz.size()) {
+            for (int i = 0; i < colVallz.size(); i++) {
                 cheapList.get(i).setNominal(colVallz.get(i));
             }
         }
 //        for (AggModel agg : cheapList) {
 //            Log.v(PulseActivity.class.getSimpleName(),agg.getNominal()+" "+agg.getPrice()+" "+agg.getProvider_url()+" "+agg.getProvider_id()+" "+R.mipmap.ic_launcher);
 //        }
-        for(int i = 0; i<rowNumz.size();i++) {
+        for (int i = 0; i < rowNumz.size(); i++) {
 //            provider_id.add(R.mipmap.ic_launcher);
             provider_id.add(providerUrl.get(rowNumz.get(i)));
             provider_title.add(rowNumz.get(i));
@@ -252,21 +263,17 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 String emailString = email.getText().toString();
                 String pwd = password.getText().toString();
                 String successLogin = "Loading...";
-                pulsaTitle.setText(successLogin);
-                pulsaTitle.setVisibility(View.VISIBLE);
 
-                if(!emailString.equals("") && !pwd.equals("")) {
-                    mAuth.signInWithEmailAndPassword(emailString,pwd)
+                if (!emailString.equals("") && !pwd.equals("")) {
+                    mAuth.signInWithEmailAndPassword(emailString, pwd)
                             .addOnCompleteListener(PulseActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
-                                        Toast.makeText(PulseActivity.this, "Failed sign in !",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PulseActivity.this, "Failed sign in !", Toast.LENGTH_SHORT).show();
                                         String successLogin = "Failed sign in !";
-                                        pulsaTitle.setText(successLogin);
-                                        pulsaTitle.setVisibility(View.VISIBLE);
                                     } else {
-                                        Toast.makeText(PulseActivity.this, "sign in Success!",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PulseActivity.this, "sign in Success!", Toast.LENGTH_SHORT).show();
                                         fetchData();
                                         findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                         AuthField(View.GONE);
@@ -298,23 +305,21 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 password = findViewById(R.id.pass);
                 String emailString = email.getText().toString();
                 String pwd = password.getText().toString();
-                if(!emailString.equals("") && !pwd.equals("")) {
-                    mAuth.createUserWithEmailAndPassword(emailString,pwd).addOnCompleteListener(PulseActivity.this, new OnCompleteListener<AuthResult>() {
+                if (!emailString.equals("") && !pwd.equals("")) {
+                    mAuth.createUserWithEmailAndPassword(emailString, pwd).addOnCompleteListener(PulseActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             String emailString = email.getText().toString();
                             String pwd = password.getText().toString();
-                            if(!emailString.equals("") && !pwd.equals("")) {
-                                mAuth.signInWithEmailAndPassword(emailString,pwd)
+                            if (!emailString.equals("") && !pwd.equals("")) {
+                                mAuth.signInWithEmailAndPassword(emailString, pwd)
                                         .addOnCompleteListener(PulseActivity.this, new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (!task.isSuccessful()) {
-                                                    Toast.makeText(PulseActivity.this, "Failed sign in..",Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(PulseActivity.this, "Failed sign in..", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(PulseActivity.this, "sign up Success!",Toast.LENGTH_SHORT).show();
-                                                    String successLogin = "Loading...";
-                                                    pulsaTitle.setText(successLogin);
+                                                    Toast.makeText(PulseActivity.this, "sign up Success!", Toast.LENGTH_SHORT).show();
                                                     fetchData();
                                                     findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
                                                     AuthField(View.GONE);
@@ -346,29 +351,29 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 ArrayList<CellModel> colValz = new ArrayList<>();
                 for (DataSnapshot child_i : dataSnapshot.getChildren()) {
                     String rownum = child_i.getKey();
-                    ArrayList<CellModel> price_= new ArrayList<>();
-                    for(int i =0;i<(child_i.getChildrenCount());i++) {
-                        if(rownum!=null) {
-                            price_.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
-                            if(rownum.equals("nominal")) {
-                                colValz.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                    ArrayList<CellModel> price_ = new ArrayList<>();
+                    for (int i = 0; i < (child_i.getChildrenCount()); i++) {
+                        if (rownum != null) {
+                            price_.add(new CellModel(String.valueOf(i), dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                            if (rownum.equals("nominal")) {
+                                colValz.add(new CellModel(String.valueOf(i), dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
                             }
                         }
                     }
-                    if(rownum!=null && !rownum.equals("updatedAt")) {
-                        if(rownum.equals("nominal")){
-                            rowCells.bulkSetter(rowCells,colValz);
+                    if (rownum != null && !rownum.equals("updatedAt")) {
+                        if (rownum.equals("nominal")) {
+                            rowCells.bulkSetter(rowCells, colValz);
                             db.addColVal(rowCells);
                         } else {
-                            rowCells.bulkSetter(rowCells,price_);
-                            db.addRowCells(rowCells,rownum);
+                            rowCells.bulkSetter(rowCells, price_);
+                            db.addRowCells(rowCells, rownum);
                         }
                     } else {
-                        if(rownum!=null) {
+                        if (rownum != null) {
                             ArrayList<CellModel> rownumm = new ArrayList<>();
-                            rownumm.add(new CellModel("0",dataSnapshot.child(rownum).getValue()));
-                            rowCells.bulkSetter(rowCells,rownumm);
-                            db.addRowCells(rowCells,"updatedAt");
+                            rownumm.add(new CellModel("0", dataSnapshot.child(rownum).getValue()));
+                            rowCells.bulkSetter(rowCells, rownumm);
+                            db.addRowCells(rowCells, "updatedAt");
                         }
                     }
                 }
@@ -377,9 +382,10 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 findViewById(R.id.sign_out).setVisibility(View.GONE);
                 findViewById(R.id.reportGroup).setVisibility(View.VISIBLE);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("TAGGG","ga nemu coy");
+                Log.d("TAGGG", "ga nemu coy");
             }
         });
 
@@ -392,10 +398,10 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     //user is signed in
-                    Log.d("Firebase Auth","user signed in");
+                    Log.d("Firebase Auth", "user signed in");
                 } else {
                     //user is signed out
-                    Log.d("Firebase Auth","user signed out");
+                    Log.d("Firebase Auth", "user signed out");
                 }
             }
         };

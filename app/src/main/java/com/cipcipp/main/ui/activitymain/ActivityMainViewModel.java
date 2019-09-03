@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.cipcipp.main.utils.Util;
 
 import java.util.HashMap;
 
@@ -25,7 +26,7 @@ public class ActivityMainViewModel extends ViewModel {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         } else {
-            uid = "0t5Sav6FpnXyJFwhbkDfCBVUNQ73"; //guest uid
+            uid = Util.UID_Guest; //guest uid
         }
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
                 .child(uid);

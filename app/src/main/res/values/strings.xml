@@ -12,7 +12,7 @@
     <string name="menu_about">Tentang Cipcipp</string>
     <string name="menu_send">Hubungi kami</string>
     <string name="harga_pulsa">Harga Termurah</string>
-    <string name="loading_title">Loading....</string>
+    <string name="harga_detail_pulsa">Tabel Pulsa </string>
     <string name="last_update">update terakhir:</string>
     <string name="open_app_text">Buka aplikasi:</string>
     <string name="report"> Laporkan beda data </string>

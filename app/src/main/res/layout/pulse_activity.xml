@@ -1,142 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:verticalScrollbarPosition="right"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pulse_activity"
-    >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="4dp">
-
-<LinearLayout android:id="@+id/pulse_header"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
-    <TextView android:id="@+id/pulsa_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/loading_title"
-        android:textSize="20sp"
-        android:textColor="@color/unselected_background_color"
-        />
-    <View android:id="@+id/separator"
-        android:layout_width="match_parent"
-        android:layout_height="10dp">
-        </View>
-</LinearLayout>
-<LinearLayout android:id="@+id/contentGroup"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
-
-    <com.evrencoskun.tableview.TableView android:id="@+id/content_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        />
-    <TextView android:text="@string/last_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/last_update"
-        android:visibility="invisible"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        />
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimary"
-        >
-
-    </View>
-    <TextView android:id="@+id/app_open_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/open_app_text"
-        android:layout_margin="10dp"
-        />
-    <android.support.v7.widget.RecyclerView android:id="@+id/rvProvider"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-
+    android:verticalScrollbarPosition="right">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        android:id="@+id/reportGroup"
-        android:visibility="invisible">
-        <Button
-            style="?android:attr/button"
-            android:id="@+id/report"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:text="@string/report"/>
-
-        <Button
-            style="?android:attr/button"
-            android:id="@+id/report_check"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/report_check"/>
-
-    </LinearLayout>
-</LinearLayout>
-<LinearLayout android:id="@+id/authGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="4dp"
         android:orientation="vertical">
-        <EditText
+
+        <LinearLayout
+            android:id="@+id/pulse_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:id="@+id/email"
-            android:hint="@string/email_filed"
-            android:visibility="gone"/>
-        <EditText
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pulsa_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:text="@string/harga_detail_pulsa"
+                android:textColor="@color/unselected_background_color"
+                android:textSize="20sp" />
+
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"></View>
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/contentGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/pulse_progress"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.evrencoskun.tableview.TableView
+                android:id="@+id/content_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:id="@+id/last_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/last_update"
+                android:visibility="invisible" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary">
+
+            </View>
+
+            <TextView
+                android:id="@+id/app_open_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/open_app_text"
+                android:visibility="invisible" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvProvider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"></android.support.v7.widget.RecyclerView>
+
+
+            <LinearLayout
+                android:id="@+id/reportGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <Button
+                    android:id="@+id/report"
+                    style="?android:attr/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/report" />
+
+                <Button
+                    android:id="@+id/report_check"
+                    style="?android:attr/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/report_check" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/authGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pass"
-            android:inputType="textPassword"
-            android:hint="@string/password_field"
-            android:visibility="gone"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sign_in"
-            android:text="@string/sign_in_field"
-            android:visibility="gone"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sign_out"
-            android:text="@string/sign_out_field"
-            android:visibility="gone"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sign_up"
-            android:text="@string/sign_up_field"
-            android:visibility="gone"/>
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email_filed"
+                android:inputType="textEmailAddress"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_field"
+                android:inputType="textPassword"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_in_field"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/sign_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_out_field"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up_field"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </ScrollView>
