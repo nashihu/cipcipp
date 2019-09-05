@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cipcipp.main.R;
@@ -54,6 +53,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private EditText password;
     private String titleparam;
     private HashMap<String, String> iconPair = new HashMap<>();
+    //TODO kasih progressbar tiap pilih filter dari spinner
 
     private static String[] row_name = OpenApp.row_name;
     private static String[] row_package_name = OpenApp.row_package_name;
@@ -70,8 +70,8 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         authStateListener();
         final String title = getIntent().getStringExtra("title");
-        titleparam = getIntent().getStringExtra("title");
-        String title_ = "Harga Termurah " + title;
+        titleparam = title;
+        String title_ = getString(R.string.harga_pulsa) + " " + title;
         if (getActionBar() != null) {
             getActionBar().setTitle(title_);
 
@@ -89,6 +89,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (title == null || titleparam == null) {
             startActivity(new Intent(AggActivity.this, ActivityMain.class));
+            Toast.makeText(this, "titleparam null", Toast.LENGTH_SHORT).show();
 
         }
         if (layoutInflater != null) {

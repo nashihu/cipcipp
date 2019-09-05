@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -41,8 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.List;
+import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener {
@@ -55,9 +55,9 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     LinearLayout smartfren;
     Button cipvideo;
     NavigationView navigationView;
-    private ProgressBar progressBar;
     FirebaseAuth mAuth;
     TextView nav_useremail, nav_username;
+    ImageView nav_photo;
 
     @Override
     protected void onPause() {
@@ -105,12 +105,13 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         smartfren.setOnClickListener(this);
         cipvideo = findViewById(R.id.cipcipphow);
         cipvideo.setOnClickListener(this);
+        findViewById(R.id.cipcipphow).setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         nav_useremail = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
-        nav_username = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
+        nav_username  = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
+        nav_photo     = navigationView.getHeaderView(0).findViewById(R.id.nav_imageView);
         TextView nav_email = nav_useremail;
-        progressBar = findViewById(R.id.ProgressBar);
         if (firebaseUser == null) {
             signInAsGuest();
         } else {
@@ -134,17 +135,17 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
             nav_email.setText(firebaseUser.getEmail());
         }
         model = ViewModelProviders.of(this).get(ActivityMainViewModel.class);
-        model.getData().observe(this,result);
+        model.getData().observe(this, result);
 
     }
 
     private final Observer<User> result = new Observer<User>() {
         @Override
-        public void onChanged(@Nullable User strings) {
-            if (strings != null) {
-                Log.e(TAG, "masuk pak eko!");
-                nav_useremail.setText(strings.getUseremail());
-                nav_username.setText(strings.getUsername());
+        public void onChanged(@Nullable User user) {
+            if (user != null) {
+                nav_useremail.setText(user.getUseremail());
+                nav_username.setText(user.getUsername());
+                Picasso.get().load(user.getPhoto_url()).into(nav_photo);
             }
         }
     };
@@ -217,7 +218,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sign_out) {
             if (mAuth.getCurrentUser() != null) {
                 if (mAuth.getCurrentUser().getEmail() != null) {
                     if (!mAuth.getCurrentUser().getEmail().equals("guest@cipcipp.com")) {
@@ -231,9 +232,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
                 }
             }
             return true;
-        } else if (id == R.id.action_refresh) {
-            startActivity(new Intent(ActivityMain.this, ActivityMain.class));
-            finish();
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -287,7 +286,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     }
 
     private void signInAsGuest() {
-        progressBar.setVisibility(View.VISIBLE);
+
         TextView nav_username = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
         TextView nav_email = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
         nav_username.setText(getString(R.string.guest));
@@ -299,7 +298,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
                         if (!task.isSuccessful()) {
                             Toast.makeText(ActivityMain.this, "Failed connect to server", Toast.LENGTH_SHORT).show();
                         }
-                        progressBar.setVisibility(View.GONE);
+
                     }
                 });
 

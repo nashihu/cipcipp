@@ -11,11 +11,11 @@
     <string name="menu_tools">Lihat Kontribusi</string>
     <string name="menu_about">Tentang Cipcipp</string>
     <string name="menu_send">Hubungi kami</string>
-    <string name="harga_pulsa">Harga Termurah</string>
+    <string name="harga_pulsa">Pulsa Termurah </string>
     <string name="harga_detail_pulsa">Tabel Pulsa </string>
     <string name="last_update">update terakhir:</string>
     <string name="open_app_text">Buka aplikasi:</string>
-    <string name="report"> Laporkan beda data </string>
+    <string name="report"> Lapor beda data </string>
     <string name="report_check"> cek laporan beda data </string>
     <string name="facebook_app_id">1066367710221280</string>
     <string name="fb_login_protocol_scheme">fb1066367710221280</string>
@@ -41,7 +41,7 @@
     <string name="carrier_indosat">Indosat</string>
     <string name="carrier_tsel">Telkomsel</string>
     <string name="sort_image_button">sort image button</string>
-    <string name="data_laporan_harga">Laporan Beda Harga</string>
+    <string name="data_laporan_harga">Laporan harga</string>
     <string name="yuk_kontribusi_di_sini">yuk kontribusi di sini</string>
     <string name="punya_harga_lain">menemukan harga yang lebih murah selain di atas?</string>
     <string name="username">username</string>
@@ -66,4 +66,5 @@
     <string name="menu_policy">Kebijakan Privasi</string>
     <string name="menu_tac">Syarat dan Ketentuan</string>
     <string name="refresh">refresh</string>
+    <string name="eh_apaan_ini">126723861127-fa3g196lk966r1d3mgfpd0ars5j12qs9.apps.googleusercontent.com</string>
 </resources>

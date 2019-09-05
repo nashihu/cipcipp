@@ -36,7 +36,8 @@ public class ActivityMainViewModel extends ViewModel {
                 if (dataSnapshot.getValue() != null) {
                     String email = ((HashMap) dataSnapshot.getValue()).get("email").toString();
                     String usern = ((HashMap) dataSnapshot.getValue()).get("username").toString();
-                    User user = new User(usern, email);
+                    String photo_url = ((HashMap) dataSnapshot.getValue()).get("url_photo").toString();
+                    User user = new User(usern, email, photo_url);
                     data.postValue(user);
                 }
             }

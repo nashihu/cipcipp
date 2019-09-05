@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,11 +20,20 @@ import com.cipcipp.main.model.RealUser;
 import com.cipcipp.main.ui.pulseactivity.PulseActivity;
 import com.cipcipp.main.ui.reportform.Indonesia;
 import com.cipcipp.main.utils.Util;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
         kelamin_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         kelamin_spinner.setAdapter(kelamin_adapter);
         kelamin_spinner.setSelection(0);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setSpinner(R.id.sign_up_kelamin, jenis_kelamins);
 
@@ -122,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (findViewById(R.id.sign_up_group).getVisibility() == View.VISIBLE) {
                         ((Button) findViewById(R.id.sign_up_action_button_sign)).setText(R.string.sign_in_field);
                         ((Button) findViewById(R.id.sign_up_switch_button_sign)).setText(R.string.sign_up_field);
-                        findViewById(R.id.sign_up_group).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.sign_up_group).setVisibility(View.GONE);
                         ((TextView) findViewById(R.id.sign_up_sudah_punya_akun_sebelumnya)).setText(R.string.belum_punya_akun);
 
                     } else {
@@ -134,6 +145,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 }
             });
+            findViewById(R.id.sign_up_switch_button_sign).callOnClick();
         }
 
         //action button logic
@@ -205,8 +217,127 @@ public class SignUpActivity extends AppCompatActivity {
             });
         }
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.eh_apaan_ini))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        SignInButton signInButton = findViewById(R.id.google_sign_sign);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        findViewById(R.id.google_sign_sign).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    public static final String TAG = SignUpActivity.class.getSimpleName();
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
+            Toast.makeText(this, "your name: " + acct.getDisplayName(), Toast.LENGTH_LONG).show();
+            Log.w(TAG, "GOOGLE name: " + acct.getDisplayName());
+            Log.w(TAG, "GOOGLE email: " + acct.getEmail());
+            Log.w(TAG, "GOOGLE photo: " + acct.getPhotoUrl());
+            Log.w(TAG, "GOOGLE id: " + acct.getId());
+
+            mAuth.signOut();
+            AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithCredential:success");
+                                final FirebaseUser user = mAuth.getCurrentUser();
+
+                                if (user != null) {
+                                    Log.w(TAG, "success with user: " + user.getDisplayName());
+                                    Log.w(TAG, user.getUid());
+                                    Log.w(TAG, user.getEmail());
+                                    Log.w(TAG, user.getPhotoUrl() + "");
+                                    final DatabaseReference databaseReference;
+                                    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                    databaseReference = firebaseDatabase.getReference().child("users");
+                                    databaseReference.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Log.w(TAG, dataSnapshot.getValue().toString());
+                                            ArrayList<String> emails = new ArrayList<>();
+                                            for (DataSnapshot data234 : dataSnapshot.getChildren()) {
+                                                emails.add(data234.child("email").getValue() + "");
+
+
+                                            }
+                                            if (!emails.contains(user.getEmail())) {
+
+                                                DatabaseReference databaseReference = firebaseDatabase.getReference().child("users").child(user.getUid());
+                                                databaseReference.child("username").setValue(user.getDisplayName());
+                                                databaseReference.child("email").setValue(user.getEmail());
+                                                Log.w(TAG, user.getPhotoUrl() + "");
+                                                databaseReference.child("url_photo").setValue(user.getPhotoUrl() + "");
+
+                                            }
+
+                                        }
+
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                    Log.w(TAG, databaseReference.getKey());
+                                }
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+
+                            }
+
+                            // ...
+                        }
+                    });
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+//            updateUI(null);
+        }
+    }
+
+    public static final int RC_SIGN_IN = 101;
+    GoogleSignInClient mGoogleSignInClient;
+
 
     private void setSpinner(int id, ArrayList<String> arrayList) {
         Spinner spinner = findViewById(id);

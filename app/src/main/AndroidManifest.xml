@@ -27,7 +27,6 @@
         <activity android:name=".ui.reportform.reportForm" />
         <activity android:name=".ui.showresult.ShowResult" />
         <activity android:name=".ui.contribute.ContriActivity" />
-        <activity android:name=".ui.signupactivityMVVM.ui.login.LoginActivity"/>
         <activity android:name=".ui.signupactivity.SignUpActivity"/>
 
         <meta-data

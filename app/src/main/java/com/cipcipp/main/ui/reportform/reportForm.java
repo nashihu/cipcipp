@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,8 +37,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class reportForm extends AppCompatActivity {
-    private String[] apps = {"pilih provider","Loading data provider.."};
-    private String[] values = {"pilih nominal","Loading data nominal.."};
+    private String[] apps = {"pilih provider", "Loading data provider.."};
+    private String[] values = {"pilih nominal", "Loading data nominal.."};
     private String[] preSelectedImage = {"pilih provider", "silakan pilih screenshot terlebih dahulu"};
     private String[] preSelectedImage2 = {"pilih nominal", "silakan pilih screenshot terlebih dahulu"};
     private static final int GALLERY_CODE = 1;
@@ -51,6 +52,15 @@ public class reportForm extends AppCompatActivity {
     final FirebaseUser firebaseUserz = firebaseAuthz.getCurrentUser();
     private EditText true_price;
     private ArrayList<String> provinces = new ArrayList<>();
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,8 +83,12 @@ public class reportForm extends AppCompatActivity {
         findViewById(R.id.spinner2).setVisibility(View.GONE);
         findViewById(R.id.true_price).setVisibility(View.GONE);
         TextView report_header = findViewById(R.id.report_header);
-        title_ = report_header.getText().toString() +" "+ title;
-        ((TextView) findViewById(R.id.report_header)).setText(title_);
+        title_ = report_header.getText().toString() + " " + title;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title_);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        (findViewById(R.id.report_header)).setVisibility(View.GONE);
         providerSpinListener(preSelectedImage);
         nominalSpinListener(preSelectedImage2);
         inputImage = findViewById(R.id.input_image);
@@ -83,7 +97,7 @@ public class reportForm extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,GALLERY_CODE);
+                startActivityForResult(intent, GALLERY_CODE);
             }
         });
 
@@ -92,7 +106,7 @@ public class reportForm extends AppCompatActivity {
         report_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(imageUri==null) {
+                if (imageUri == null) {
                     Toast.makeText(reportForm.this, "pilih bukti screenshot terlebih dahulu", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -106,7 +120,7 @@ public class reportForm extends AppCompatActivity {
         findViewById(R.id.spinner).setVisibility(View.VISIBLE);
         findViewById(R.id.spinner2).setVisibility(View.VISIBLE);
         findViewById(R.id.true_price).setVisibility(View.VISIBLE);
-        if(requestCode == GALLERY_CODE && resultCode == RESULT_OK) {
+        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK) {
             imageUri = data.getData();
             final RelativeLayout.LayoutParams first_state_image = (RelativeLayout.LayoutParams) inputImage.getLayoutParams();
             inputImage.setImageURI(imageUri);
@@ -117,19 +131,19 @@ public class reportForm extends AppCompatActivity {
             inputImage.setLayoutParams(imageViewParam);
             final Spinner spinner = providerSpinListener(apps);
             final Spinner spinner2 = nominalSpinListener(values);
-            FirebaseHelper helper = new FirebaseHelper(reportForm.this,title);
+            FirebaseHelper helper = new FirebaseHelper(reportForm.this, title);
             helper.getProviderName(new reportFormInt() {
                 @Override
                 public void onCallBack(ArrayList<String> strings, ArrayList<String> colValz) {
-                    String[] providers = Arrays.copyOf(strings.toArray(),strings.toArray().length,String[].class);
-                    String[] nominal = Arrays.copyOf(colValz.toArray(),colValz.toArray().length,String[].class);
+                    String[] providers = Arrays.copyOf(strings.toArray(), strings.toArray().length, String[].class);
+                    String[] nominal = Arrays.copyOf(colValz.toArray(), colValz.toArray().length, String[].class);
                     final Spinner spinner = providerSpinListener(providers);
                     final Spinner spinner2 = nominalSpinListener(nominal);
                     findViewById(R.id.report_button).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(nullchecker(spinner,spinner2)){
-                                postReport(imageUri,first_state_image,spinner,spinner2);
+                            if (nullchecker(spinner, spinner2)) {
+                                postReport(imageUri, first_state_image, spinner, spinner2);
                             }
                         }
                     });
@@ -139,8 +153,8 @@ public class reportForm extends AppCompatActivity {
             findViewById(R.id.report_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(nullchecker(spinner,spinner2)){
-                        postReport(imageUri,first_state_image,spinner,spinner2);
+                    if (nullchecker(spinner, spinner2)) {
+                        postReport(imageUri, first_state_image, spinner, spinner2);
                     }
                 }
             });
@@ -149,7 +163,7 @@ public class reportForm extends AppCompatActivity {
 
     private Spinner providerSpinListener(String[] apps) {
         final Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter adapterspinner = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,apps);
+        ArrayAdapter adapterspinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, apps);
         adapterspinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapterspinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -167,9 +181,10 @@ public class reportForm extends AppCompatActivity {
         });
         return spinner;
     }
+
     private Spinner nominalSpinListener(String[] values) {
         final Spinner spinner2 = findViewById(R.id.spinner2);
-        ArrayAdapter adapterspinner2 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,values);
+        ArrayAdapter adapterspinner2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values);
         adapterspinner2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapterspinner2);
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -186,9 +201,10 @@ public class reportForm extends AppCompatActivity {
         });
         return spinner2;
     }
-    private void postReport(Uri imageUri,final RelativeLayout.LayoutParams first_state_image,
+
+    private void postReport(Uri imageUri, final RelativeLayout.LayoutParams first_state_image,
                             final Spinner spinner, final Spinner spinner2) {
-        if(imageUri.getLastPathSegment()!=null) {
+        if (imageUri.getLastPathSegment() != null) {
             String uploading = "Uploading..";
             ((TextView) findViewById(R.id.report_header)).setText(uploading);
             findViewById(R.id.report_content).setVisibility(View.GONE);
@@ -196,7 +212,7 @@ public class reportForm extends AppCompatActivity {
             filepath.putFile(imageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful() && task.getException()!=null) {
+                    if (!task.isSuccessful() && task.getException() != null) {
                         throw task.getException();
                     }
                     return filepath.getDownloadUrl();
@@ -206,7 +222,7 @@ public class reportForm extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
-                        if(downloadUri!=null && firebaseUserz!=null) {
+                        if (downloadUri != null && firebaseUserz != null) {
                             Report report = new Report(
                                     String.valueOf(spinner.getSelectedItem()),
                                     spinner2.getSelectedItem().toString(),
@@ -242,16 +258,16 @@ public class reportForm extends AppCompatActivity {
 
     private boolean nullchecker(final Spinner spinner, final Spinner spinner2) {
         boolean checker = true;
-        if(imageUri==null) {
+        if (imageUri == null) {
             Toast.makeText(reportForm.this, "pilih bukti screenshot terlebih dahulu", Toast.LENGTH_SHORT).show();
             checker = false;
-        }else if(spinner.getSelectedItemPosition()==0) {
+        } else if (spinner.getSelectedItemPosition() == 0) {
             Toast.makeText(reportForm.this, "opsi provider tidak boleh kosong..", Toast.LENGTH_SHORT).show();
             checker = false;
-        }else if(spinner2.getSelectedItemPosition()==0) {
+        } else if (spinner2.getSelectedItemPosition() == 0) {
             Toast.makeText(reportForm.this, "opsi nominal tidak boleh kosong..", Toast.LENGTH_SHORT).show();
             checker = false;
-        }else if(true_price.getText().toString().equals("")) {
+        } else if (true_price.getText().toString().equals("")) {
             Toast.makeText(reportForm.this, "field harga sebenarnya tidak boleh kosong", Toast.LENGTH_SHORT).show();
             checker = false;
         }
