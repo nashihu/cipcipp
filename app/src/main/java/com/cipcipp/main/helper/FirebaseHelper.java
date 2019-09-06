@@ -4,12 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.model.AggModel;
 import com.cipcipp.main.model.CellModel;
 import com.cipcipp.main.model.Report;
 import com.cipcipp.main.model.RowCells;
 import com.cipcipp.main.ui.aggactivity.AggCallback;
-import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.ui.aggactivity.AggProvCallback;
 import com.cipcipp.main.ui.reportform.reportFormInt;
 import com.cipcipp.main.ui.showresult.showresultint;
@@ -24,7 +24,6 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,6 +32,7 @@ import java.util.Set;
 public class FirebaseHelper {
     private String title;
     private Context context;
+
     public FirebaseHelper(Context context, String title) {
         this.context = context;
         FirebaseApp.initializeApp(context);
@@ -55,24 +55,24 @@ public class FirebaseHelper {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Report report = child.getValue(Report.class);
                     List<CellModel> reports = new ArrayList<>();
-                    if(report!=null) {
+                    if (report != null) {
                         nominal.add(report.getNominal());
                         rowNum.add(report.getProvider());
                         DateFormat sdf = SimpleDateFormat.getDateInstance();
-                        reports.add(new CellModel("0",report.getNominal()));
-                        reports.add(new CellModel("1",report.getPrice()));
-                        reports.add(new CellModel("2",sdf.format(new Date(Long.parseLong(report.getTimestamp())))));
-                        reports.add(new CellModel("3",report.getImageUri()));
-                        reports.add(new CellModel("4",report.getUser_email().replaceAll("(^[^@]{4}|(?!^)\\G)[^@]","$1*")));
+                        reports.add(new CellModel("0", report.getNominal()));
+                        reports.add(new CellModel("1", report.getPrice()));
+                        reports.add(new CellModel("2", sdf.format(new Date(Long.parseLong(report.getTimestamp())))));
+                        reports.add(new CellModel("3", report.getImageUri()));
+                        reports.add(new CellModel("4", report.getUser_email().replaceAll("(^[^@]{4}|(?!^)\\G)[^@]", "$1*")));
                         reportz.add(reports);
-                        }
+                    }
                 }
                 Set<String> set = new LinkedHashSet<>(nominal);
                 nominal.clear();
                 nominal.addAll(set);
                 nominal.clear();
                 nominal.add("semua harga");
-                showresultint.onCallBack(nominal,reportz,rowNum);
+                showresultint.onCallBack(nominal, reportz, rowNum);
             }
 
             @Override
@@ -83,7 +83,7 @@ public class FirebaseHelper {
 
     }
 
-    public void readAggs(final ArrayList<String> strings,final AggCallback aggCallback) {
+    public void readAggs(final ArrayList<String> strings, final AggCallback aggCallback) {
         FirebaseDatabase database;
         DatabaseReference databaseReference;
         database = FirebaseDatabase.getInstance();
@@ -97,32 +97,32 @@ public class FirebaseHelper {
                 RowCells rowCells = new RowCells();
                 ArrayList<CellModel> colValz = new ArrayList<>();
                 for (DataSnapshot child_i : dataSnapshot.getChildren()) {
-                    if(child_i.getKey() != null) {
-                        if(strings.contains(child_i.getKey())) {
+                    if (child_i.getKey() != null) {
+                        if (strings.contains(child_i.getKey())) {
                             String rownum = child_i.getKey();
-                            ArrayList<CellModel> price_= new ArrayList<>();
-                            for(int i =0;i<(child_i.getChildrenCount());i++) {
-                                if(rownum!=null) {
-                                    price_.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
-                                    if(rownum.equals("nominal")) {
-                                        colValz.add(new CellModel(String.valueOf(i),dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                            ArrayList<CellModel> price_ = new ArrayList<>();
+                            for (int i = 0; i < (child_i.getChildrenCount()); i++) {
+                                if (rownum != null) {
+                                    price_.add(new CellModel(String.valueOf(i), dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
+                                    if (rownum.equals("nominal")) {
+                                        colValz.add(new CellModel(String.valueOf(i), dataSnapshot.child(rownum).child(String.valueOf(i)).getValue()));
                                     }
                                 }
                             }
-                            if(rownum!=null && !rownum.equals("updatedAt")) {
-                                if(rownum.equals("nominal")){
-                                    rowCells.bulkSetter(rowCells,colValz);
+                            if (rownum != null && !rownum.equals("updatedAt")) {
+                                if (rownum.equals("nominal")) {
+                                    rowCells.bulkSetter(rowCells, colValz);
                                     db.addColVal(rowCells);
                                 } else {
-                                    rowCells.bulkSetter(rowCells,price_);
-                                    db.addRowCells(rowCells,rownum);
+                                    rowCells.bulkSetter(rowCells, price_);
+                                    db.addRowCells(rowCells, rownum);
                                 }
                             } else {
-                                if(rownum!=null) {
+                                if (rownum != null) {
                                     ArrayList<CellModel> rownumm = new ArrayList<>();
-                                    rownumm.add(new CellModel("0",dataSnapshot.child(rownum).getValue()));
-                                    rowCells.bulkSetter(rowCells,rownumm);
-                                    db.addRowCells(rowCells,"updatedAt");
+                                    rownumm.add(new CellModel("0", dataSnapshot.child(rownum).getValue()));
+                                    rowCells.bulkSetter(rowCells, rownumm);
+                                    db.addRowCells(rowCells, "updatedAt");
                                 }
                             }
 
@@ -132,31 +132,33 @@ public class FirebaseHelper {
                 }
                 aggCallback.onCallback(setupFirebaseData(db));
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("TAGGG","ga nemu coy");
+                Log.d("TAGGG", "ga nemu coy");
             }
         });
     }
+
     private List<AggModel> setupFirebaseData(DatabaseHandler db) {
         List<RowCells> rowCellsList = db.getAllContacts();
         ArrayList<String> colVallz = new ArrayList<>();
-        for(RowCells rowCell : rowCellsList) {
+        for (RowCells rowCell : rowCellsList) {
             String logger = rowCell.logger(rowCell);
-            Log.v("price_DB",""+logger);
-            if(rowCell.getC1().equals("zeroField")) {
+            Log.v("price_DB", "" + logger);
+            if (rowCell.getC1().equals("zeroField")) {
                 colVallz = rowCell.bulkStringGetter(rowCell);
-                Log.v("cols setupFirebase",""+colVallz);
+                Log.v("cols setupFirebase", "" + colVallz);
             }
         }
 
         List<AggModel> aggModelList = db.getAllCheapestValue();
-        if(aggModelList.size()==colVallz.size()){
-            for(int i =0; i<colVallz.size(); i++) {
+        if (aggModelList.size() == colVallz.size()) {
+            for (int i = 0; i < colVallz.size(); i++) {
                 aggModelList.get(i).setNominal(colVallz.get(i));
             }
         } else {
-            for(int i = 0;i<aggModelList.size();i++) {
+            for (int i = 0; i < aggModelList.size(); i++) {
                 aggModelList.get(i).setNominal(".");
             }
         }
@@ -187,9 +189,10 @@ public class FirebaseHelper {
                 }
                 aggProvCallback.onCallback(providers);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("TAGGG","ga nemu coy");
+                Log.d("TAGGG", "ga nemu coy");
             }
         });
     }
@@ -200,24 +203,24 @@ public class FirebaseHelper {
         ArrayList<String> colVallz = new ArrayList<>();
         ArrayList<String> rowNums = new ArrayList<>();
         rowNums.add("pilih Provider");
-        for(RowCells rowCell : rowCellsList) {
+        for (RowCells rowCell : rowCellsList) {
             String logger = rowCell.logger(rowCell);
-            Log.v("price_DB",""+logger);
-            if(rowCell.getC1().equals("zeroField")) {
+            Log.v("price_DB", "" + logger);
+            if (rowCell.getC1().equals("zeroField")) {
                 colVallz = rowCell.bulkStringGetter(rowCell);
-                Log.v("cols",""+colVallz);
-            } else if(!rowCell.getC1().equals("updatedAt")) {
+                Log.v("cols", "" + colVallz);
+            } else if (!rowCell.getC1().equals("updatedAt")) {
                 rowNums.add(rowCell.getC1());
             }
         }
         colVallz.add("pilih Nominal");
-        for(int i = 0;i<colVallz.size();i++) {
-            if(i!=(colVallz.size()-1)){
-                Collections.swap(colVallz,i,(colVallz.size()-1));
+        for (int i = 0; i < colVallz.size(); i++) {
+            if (i != (colVallz.size() - 1)) {
+                Collections.swap(colVallz, i, (colVallz.size() - 1));
             }
 
         }
-        reportFormInt.onCallBack(rowNums,colVallz);
+        reportFormInt.onCallBack(rowNums, colVallz);
     }
 
 

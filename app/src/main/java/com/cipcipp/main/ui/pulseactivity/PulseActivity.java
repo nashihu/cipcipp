@@ -228,7 +228,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                 }
             } else {
                 String updateText = updatedAt.getText().toString() + " " + rowCell.getC2();
-                updatedAt.setText(updateText);
+                updatedAt.setText(getString(R.string.last_update,rowCell.getC2()));
             }
         }
         Log.v("WADIDII", "============ separator ======================");
