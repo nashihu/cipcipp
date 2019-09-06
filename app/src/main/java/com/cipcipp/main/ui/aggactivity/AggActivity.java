@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cipcipp.main.R;
@@ -54,6 +54,12 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     private String titleparam;
     private HashMap<String, String> iconPair = new HashMap<>();
     //TODO kasih progressbar tiap pilih filter dari spinner
+    //TODO bikin profil trus nampilin dia udah lapor apa aja dan dia bisa hapus yang udah dia laporin
+    //TODO ini ikon ikon nya ganti sama yang relevan
+    //TODO last update di aggActivity tambahin
+    //TODO bikin logic maksimum 7 laporan (?)
+    //TODO admin bisa ngasih tau user kalo laporannya sudah diterima dan sudah diupdate (mending di-automate sih)
+
 
     private static String[] row_name = OpenApp.row_name;
     private static String[] row_package_name = OpenApp.row_package_name;
@@ -131,7 +137,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
@@ -201,16 +207,18 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
 
         String[] filter = {"semua aplikasi", "aplikasi saya"};
-        final Spinner spinner2 = findViewById(R.id.agg_spinner2);
+        final SpinnerTrigger spinner2 = findViewById(R.id.agg_spinner2);
         ArrayAdapter adapterspinner2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filter);
         adapterspinner2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapterspinner2);
-        spinner2.setSelection(0);
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int z, long l) {
-                if (z == 1) {
-                    Toast.makeText(AggActivity.this, "Updating list..", Toast.LENGTH_SHORT).show();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                ((CardView) findViewById(R.id.background_spinner1)).setCardBackgroundColor(getColor(R.color.colorAccent));
+                ((CardView) findViewById(R.id.background_spinner2)).setCardBackgroundColor(getColor(R.color.colorPrimaryDark));
+                findViewById(R.id.agg_recycler_view).setVisibility(View.GONE);
+                findViewById(R.id.agg_progressbar).setVisibility(View.VISIBLE);
+                if (position == 1) {
                     ArrayList<String> packstrings = new ArrayList<>();
                     PackageManager manager = getPackageManager();
                     for (int j = 0; j < row_name.length; j++) {
@@ -249,6 +257,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(AggActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -286,6 +295,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         findViewById(R.id.agg_contribute).setVisibility(View.VISIBLE);
         findViewById(R.id.agg_more).setVisibility(View.VISIBLE);
         findViewById(R.id.agg_progressbar).setVisibility(View.GONE);
+        findViewById(R.id.agg_recycler_view).setVisibility(View.VISIBLE);
 
     }
 
@@ -348,7 +358,8 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
         Toast.makeText(this, "you long click " + position, Toast.LENGTH_SHORT).show();
     }
 
-    private void AuthField(int state) {
+    private void AuthFieldGONE() {
+        int state = View.GONE;
         findViewById(R.id.email).setVisibility(state);
         findViewById(R.id.pass).setVisibility(state);
         findViewById(R.id.sign_in).setVisibility(state);
@@ -389,11 +400,10 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                         Toast.makeText(AggActivity.this, "Failed sign in !", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(AggActivity.this, "sign in Success!", Toast.LENGTH_SHORT).show();
-                                        String successLogin = "Loading...";
 
                                         fetchData(titleparam);
                                         findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
-                                        AuthField(View.GONE);
+                                        AuthFieldGONE();
                                         item.removeView(findViewById(R.id.pulse_activity));
                                     }
                                 }
@@ -429,11 +439,10 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                                                     Toast.makeText(AggActivity.this, "Failed sign up..", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(AggActivity.this, "sign up Success!", Toast.LENGTH_SHORT).show();
-                                                    String successLogin = "Loading...";
 
                                                     fetchData(titleparam);
                                                     findViewById(R.id.contentGroup).setVisibility(View.VISIBLE);
-                                                    AuthField(View.GONE);
+                                                    AuthFieldGONE();
                                                     item.removeView(findViewById(R.id.pulse_activity));
                                                 }
                                             }
@@ -498,14 +507,15 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
 
     @Override
     public void onItemsSelected(boolean[] selected, final String title, final List<AggModel> aggModels) {
+        ((CardView) findViewById(R.id.background_spinner1)).setCardBackgroundColor(getColor(R.color.colorPrimaryDark));
+        ((CardView) findViewById(R.id.background_spinner2)).setCardBackgroundColor(getColor(R.color.colorAccent));
+        findViewById(R.id.agg_recycler_view).setVisibility(View.GONE);
+        findViewById(R.id.agg_progressbar).setVisibility(View.VISIBLE);
         ArrayList<String> selectedprovs = new ArrayList<>();
         for (int i = 0; i < selected.length; i++) {
             if (selected[i]) {
                 selectedprovs.add(row_name[i]);
             }
-        }
-        if (selected.length != selectedprovs.size()) {
-            Toast.makeText(AggActivity.this, "Updating list..", Toast.LENGTH_SHORT).show();
         }
 
         final FirebaseHelper helper = new FirebaseHelper(AggActivity.this, title);
@@ -516,6 +526,7 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
                     aggModelz.get(i).setNominal(aggModels.get(i).getNominal());
                 }
                 attachData(aggModelz);
+
             }
         });
     }

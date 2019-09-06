@@ -17,6 +17,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.CardView
+            android:id="@+id/background_spinner2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -26,7 +27,8 @@
             app:cardCornerRadius="5dp">
 
 
-            <Spinner
+            <com.cipcipp.main.ui.aggactivity.SpinnerTrigger
+
                 android:id="@+id/agg_spinner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
             android:layout_height="1dp" />
 
         <android.support.v7.widget.CardView
+            android:id="@+id/background_spinner1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
