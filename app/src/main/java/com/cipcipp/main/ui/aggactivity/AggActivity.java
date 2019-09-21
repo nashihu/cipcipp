@@ -48,6 +48,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.cipcipp.main.utils.Util.packagename;
+import static com.cipcipp.main.utils.Util.row_name;
+import static com.cipcipp.main.utils.Util.row_package_name;
+
 public class AggActivity extends AppCompatActivity implements AggAdapter.ItemClickListener, MultiSpinner.MultiSpinnerListener {
     private ArrayList<String> provider_price = new ArrayList<>();
     private ArrayList<String> provider_nominal = new ArrayList<>();
@@ -64,9 +68,6 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
     //TODO bikin logic maksimum 7 laporan (?)
     //TODO admin bisa ngasih tau user kalo laporannya sudah diterima dan sudah diupdate (mending di-automate sih)
 
-
-    private static String[] row_name = OpenApp.row_name;
-    private static String[] row_package_name = OpenApp.row_package_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
