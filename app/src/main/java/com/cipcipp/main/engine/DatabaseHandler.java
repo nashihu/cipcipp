@@ -64,6 +64,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         value.put(Util.KEY_C24, rowCells.getC23());
         value.put(Util.KEY_C25, rowCells.getC24());
         value.put(Util.KEY_C26, rowCells.getC25());
+        value.put(Util.KEY_C27, rowCells.getC26());
+        value.put(Util.KEY_C28, rowCells.getC27());
+        value.put(Util.KEY_C29, rowCells.getC28());
+        value.put(Util.KEY_C30, rowCells.getC29());
+        value.put(Util.KEY_C31, rowCells.getC30());
+        value.put(Util.KEY_C32, rowCells.getC31());
+        value.put(Util.KEY_C33, rowCells.getC32());
         db.insert(Util.TABLE_NAME,null,value);
         db.close();
     }
@@ -98,6 +105,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         value.put(Util.KEY_C24, rowCells.getC23());
         value.put(Util.KEY_C25, rowCells.getC24());
         value.put(Util.KEY_C26, rowCells.getC25());
+        value.put(Util.KEY_C27, rowCells.getC26());
+        value.put(Util.KEY_C28, rowCells.getC27());
+        value.put(Util.KEY_C29, rowCells.getC28());
+        value.put(Util.KEY_C30, rowCells.getC29());
+        value.put(Util.KEY_C31, rowCells.getC30());
+        value.put(Util.KEY_C32, rowCells.getC31());
+        value.put(Util.KEY_C33, rowCells.getC32());
         db.insert(Util.TABLE_NAME,null,value);
         db.close();
     }
@@ -132,11 +146,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
         }
 
-        if(cheapList.size() == colVallz.size()) {
-            for(int i =0; i<cheapList.size();i++) {
-                cheapList.get(i).setNominal(colVallz.get(i));
-            }
-        }
+//        if(cheapList.size() == colVallz.size()) {
+//            for(int i =0; i<cheapList.size();i++) {
+//                cheapList.get(i).setNominal(colVallz.get(i));
+//            }
+//        }
         cursor.close();
         db.close();
         return  cheapList;
@@ -175,6 +189,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 rowCells.setC23(cursor.getString(23));
                 rowCells.setC24(cursor.getString(24));
                 rowCells.setC25(cursor.getString(25));
+                rowCells.setC26(cursor.getString(26));
+                rowCells.setC27(cursor.getString(27));
+                rowCells.setC28(cursor.getString(28));
+                rowCells.setC29(cursor.getString(29));
+                rowCells.setC30(cursor.getString(30));
+                rowCells.setC31(cursor.getString(31));
+                rowCells.setC32(cursor.getString(32));
 
                 rowCellsList.add(rowCells);
             } while(cursor.moveToNext());
@@ -219,7 +240,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             + Util.KEY_C23 + " TEXT, "
             + Util.KEY_C24 + " TEXT, "
             + Util.KEY_C25 + " TEXT, "
-            + Util.KEY_C26 + " TEXT " + " )";
+            + Util.KEY_C26 + " TEXT, "
+            + Util.KEY_C27 + " TEXT, "
+            + Util.KEY_C28 + " TEXT, "
+            + Util.KEY_C29 + " TEXT, "
+            + Util.KEY_C30 + " TEXT, "
+            + Util.KEY_C31 + " TEXT, "
+            + Util.KEY_C32 + " TEXT, "
+            + Util.KEY_C33 + " TEXT " + " )";
 
     private String[] queries = {
             "SELECT * FROM (SELECT c2, cast(replace(c3,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c3 != 0 and c3 not like '%000-' ORDER BY c3 ) as waw ORDER BY 2 LIMIT 1",
@@ -245,6 +273,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             "SELECT * FROM (SELECT c2, cast(replace(c23,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c23 != 0 and c23 not like '%000-' ORDER BY c23 ) as waw ORDER BY 2 LIMIT 1",
             "SELECT * FROM (SELECT c2, cast(replace(c24,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c24 != 0 and c24 not like '%000-' ORDER BY c24 ) as waw ORDER BY 2 LIMIT 1",
             "SELECT * FROM (SELECT c2, cast(replace(c25,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c25 != 0 and c25 not like '%000-' ORDER BY c25 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c26,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c26 != 0 and c26 not like '%000-' ORDER BY c26 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c27,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c27 != 0 and c27 not like '%000-' ORDER BY c27 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c28,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c28 != 0 and c28 not like '%000-' ORDER BY c28 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c29,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c29 != 0 and c29 not like '%000-' ORDER BY c29 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c30,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c30 != 0 and c30 not like '%000-' ORDER BY c30 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c31,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c31 != 0 and c31 not like '%000-' ORDER BY c31 ) as waw ORDER BY 2 LIMIT 1",
+            "SELECT * FROM (SELECT c2, cast(replace(c32,'-','999999999') as integer) as c8,c1 FROM PulsaTsel WHERE c32 != 0 and c32 not like '%000-' ORDER BY c32 ) as waw ORDER BY 2 LIMIT 1",
+
+
 
 
 
