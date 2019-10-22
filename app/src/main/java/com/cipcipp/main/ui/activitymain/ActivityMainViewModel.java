@@ -52,7 +52,6 @@ public class ActivityMainViewModel extends ViewModel {
     }
 
     public LiveData<User> getData() {
-        Log.e(ActivityMain.TAG, "mulai getData");
         return data;
     }
 }

@@ -144,11 +144,11 @@ public class FirebaseHelper {
         List<RowCells> rowCellsList = db.getAllContacts();
         ArrayList<String> colVallz = new ArrayList<>();
         for (RowCells rowCell : rowCellsList) {
-            String logger = rowCell.logger(rowCell);
-            Log.v("price_DB", "" + logger);
+//            String logger = rowCell.logger(rowCell);
+//            Log.v("price_DB", "" + logger);
             if (rowCell.getC1().equals("zeroField")) {
                 colVallz = rowCell.bulkStringGetter(rowCell);
-                Log.v("cols setupFirebase", "" + colVallz);
+//                Log.v("cols setupFirebase", "" + colVallz);
             }
         }
 
@@ -204,11 +204,11 @@ public class FirebaseHelper {
         ArrayList<String> rowNums = new ArrayList<>();
         rowNums.add("pilih Provider");
         for (RowCells rowCell : rowCellsList) {
-            String logger = rowCell.logger(rowCell);
-            Log.v("price_DB", "" + logger);
+//            String logger = rowCell.logger(rowCell);
+//            Log.v("price_DB", "" + logger);
             if (rowCell.getC1().equals("zeroField")) {
                 colVallz = rowCell.bulkStringGetter(rowCell);
-                Log.v("cols", "" + colVallz);
+//                Log.v("cols", "" + colVallz);
             } else if (!rowCell.getC1().equals("updatedAt")) {
                 rowNums.add(rowCell.getC1());
             }

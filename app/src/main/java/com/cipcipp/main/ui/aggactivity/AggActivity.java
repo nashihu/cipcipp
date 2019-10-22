@@ -306,10 +306,10 @@ public class AggActivity extends AppCompatActivity implements AggAdapter.ItemCli
             provider_null_field.add("");
             iconPair.put(String.valueOf(i), aggModels.get(i).getProvider_id());
 
-            Log.v("asdfasdf AggActivity", aggModels.get(i).getNominal() + "\r\n"
-                    + aggModels.get(i).getPrice() + "\r\n"
-                    + aggModels.get(i).getProvider_id() + "\r\n"
-                    + aggModels.get(i).getProvider_url() + "\r\n");
+//            Log.v("asdfasdf AggActivity", aggModels.get(i).getNominal() + "\r\n"
+//                    + aggModels.get(i).getPrice() + "\r\n"
+//                    + aggModels.get(i).getProvider_id() + "\r\n"
+//                    + aggModels.get(i).getProvider_url() + "\r\n");
         }
         LinearLayoutManager verticalLayout
                 = new LinearLayoutManager(AggActivity.this, LinearLayoutManager.VERTICAL, false);

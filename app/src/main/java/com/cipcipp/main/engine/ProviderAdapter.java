@@ -36,7 +36,7 @@ public class ProviderAdapter extends RecyclerView.Adapter<ProviderAdapter.ViewHo
         int image = R.mipmap.ic_launcher;
         String title = provider_title.get(position);
         String url = provider_image_id.get(position);
-        Log.v("asdfasdf ProviderAdapte",url);
+//        Log.v("asdfasdf ProviderAdapte",url);
         holder.prov_image.getResources().getDrawable(image);
         holder.prov_text.setText(title);
         Picasso

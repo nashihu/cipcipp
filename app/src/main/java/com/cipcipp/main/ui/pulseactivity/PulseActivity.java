@@ -178,7 +178,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         CellListGenerator mRowHeaderLists = new CellListGenerator(price_test.get(0).size(), (price_test.size()), rowNumz);
         for (int i = 0; i < price_test.size(); i++) {
             for (int j = 0; j < price_test.get(i).size(); j++) {
-                Log.v("asdfasdf " + TAG, "" + price_test.get(i).get(j).getData());
+//                Log.v("asdfasdf " + TAG, "" + price_test.get(i).get(j).getData());
             }
         }
 
@@ -190,7 +190,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         tableView.setAdapter(mTableViewAdapter);
         tableView.setTableViewListener(new MyTableViewListener(PulseActivity.this, false));
         mTableViewAdapter.setAllItems(mColumnHeaderList.GetColumnData(), mRowHeaderLists.GetRowData(), price_test);
-        Log.v("asdfasdf" + TAG, "size: " + price_test.size() + "&" + price_test.size());
+//        Log.v("asdfasdf" + TAG, "size: " + price_test.size() + "&" + price_test.size());
         RecyclerView providerRV = findViewById(R.id.rvProvider);
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(PulseActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -213,10 +213,10 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         List<RowCells> rowCellsList = db.getAllContacts();
         HashMap<String, String> providerUrl = new HashMap<>();
         for (RowCells rowCell : rowCellsList) {
-            String logger = rowCell.logger(rowCell);
-            Log.v("price_DB", "" + logger);
+//            String logger = rowCell.logger(rowCell);
+//            Log.v("price_DB", "" + logger);
             ArrayList<CellModel> pricez = rowCell.bulkGetter(rowCell);
-            Log.v("WADIDII", pricez.get(0).getData().toString());
+//            Log.v("WADIDII", pricez.get(0).getData().toString());
             if (!rowCell.getC1().equals("updatedAt")) {
                 if (!rowCell.getC1().equals("zeroField")) {
                     rowNumz.add(rowCell.getC1());
@@ -224,17 +224,17 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
                     price_test.add(pricez);
                 } else {
                     colVallz = rowCell.bulkStringGetter(rowCell);
-                    Log.v("cols", "" + colVallz);
+//                    Log.v("cols", "" + colVallz);
                 }
             } else {
                 String updateText = updatedAt.getText().toString() + " " + rowCell.getC2();
                 updatedAt.setText(getString(R.string.last_update,rowCell.getC2()));
             }
         }
-        Log.v("WADIDII", "============ separator ======================");
-        for (List<CellModel> pricez : price_test) {
-            Log.v("WADIDII", pricez.get(0).getData().toString() + " " + pricez.get(1).getData().toString());
-        }
+//        Log.v("WADIDII", "============ separator ======================");
+//        for (List<CellModel> pricez : price_test) {
+//            Log.v("WADIDII", pricez.get(0).getData().toString() + " " + pricez.get(1).getData().toString());
+//        }
 
         List<AggModel> cheapList = db.getAllCheapestValue();
         Log.v("cheapcheap", cheapList + " " + cheapList.size() + " " + cheapList.get(0));

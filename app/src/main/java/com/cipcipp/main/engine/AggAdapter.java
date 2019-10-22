@@ -40,7 +40,7 @@ public class AggAdapter extends RecyclerView.Adapter<AggAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         int image_id = R.mipmap.ic_launcher;
         String image_url = provider_image_id.get(position);
-        Log.v("asdfasdf " + "AggAdapter",image_url );
+//        Log.v("asdfasdf " + "AggAdapter",image_url );
         String name = provider_name.get(position);
         String nomin = nominal.get(position);
         String pric = price.get(position);
