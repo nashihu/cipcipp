@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,6 +107,17 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         nav_useremail = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
+        if(firebaseUser!=null && firebaseUser.getEmail()!=null) {
+            if(firebaseUser.getEmail().equals("ahmad.n.id@gmail.com")) {
+                navigationView.inflateMenu(R.menu.admin_drawer);
+            } else {
+                navigationView.inflateMenu(R.menu.users_drawer);
+            }
+        } else {
+            navigationView.inflateMenu(R.menu.users_drawer);
+        }
+
+
         nav_username  = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
         nav_photo     = navigationView.getHeaderView(0).findViewById(R.id.nav_imageView);
         TextView nav_email = nav_useremail;

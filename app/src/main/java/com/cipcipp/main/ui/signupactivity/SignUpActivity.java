@@ -55,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up_activity);
+        Intent intent = getIntent();
         mAuth = FirebaseAuth.getInstance();
         ArrayList<String> jenis_kelamins = new ArrayList<>();
         final String titlevar = getIntent().getStringExtra("title");
@@ -262,7 +263,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
-            Toast.makeText(this, "your name: " + acct.getDisplayName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "halo " + acct.getDisplayName() +" !", Toast.LENGTH_LONG).show();
             Log.w(TAG, "GOOGLE name: " + acct.getDisplayName());
             Log.w(TAG, "GOOGLE email: " + acct.getEmail());
             Log.w(TAG, "GOOGLE photo: " + acct.getPhotoUrl());
@@ -278,7 +279,10 @@ public class SignUpActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
                                 final FirebaseUser user = mAuth.getCurrentUser();
-
+                                String title = getIntent().getStringExtra("title");
+                                startActivity(new Intent(SignUpActivity.this, PulseActivity.class)
+                                        .putExtra("title", title));
+                                finish();
                                 if (user != null) {
                                     Log.w(TAG, "success with user: " + user.getDisplayName());
                                     Log.w(TAG, user.getUid());
@@ -302,7 +306,6 @@ public class SignUpActivity extends AppCompatActivity {
                                                 DatabaseReference databaseReference = firebaseDatabase.getReference().child("users").child(user.getUid());
                                                 databaseReference.child("username").setValue(user.getDisplayName());
                                                 databaseReference.child("email").setValue(user.getEmail());
-                                                Log.w(TAG, user.getPhotoUrl() + "");
                                                 databaseReference.child("url_photo").setValue(user.getPhotoUrl() + "");
 
                                             }
@@ -315,7 +318,6 @@ public class SignUpActivity extends AppCompatActivity {
 
                                         }
                                     });
-                                    Log.w(TAG, databaseReference.getKey());
                                 }
                             } else {
                                 // If sign in fails, display a message to the user.
