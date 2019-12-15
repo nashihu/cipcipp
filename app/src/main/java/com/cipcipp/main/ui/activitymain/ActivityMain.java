@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cipcipp.main.R;
+import com.cipcipp.main.di.MainApp;
 import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.model.User;
 import com.cipcipp.main.ui.aggactivity.AggActivity;
@@ -41,6 +42,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener {
@@ -71,12 +74,15 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
 //        model.getData().observe(this,result);
     }
 
+    @Inject
+    DatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        ((MainApp) getApplication()).getComponent().inject(this);
         setContentView(R.layout.activity_main);
-        DatabaseHandler db = new DatabaseHandler(this);
         db.reCreateTable();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

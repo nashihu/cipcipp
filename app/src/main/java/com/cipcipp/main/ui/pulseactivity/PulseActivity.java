@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cipcipp.main.R;
+import com.cipcipp.main.di.MainApp;
 import com.cipcipp.main.engine.DatabaseHandler;
 import com.cipcipp.main.engine.MyTableViewAdapter;
 import com.cipcipp.main.engine.MyTableViewListener;
@@ -45,6 +46,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class PulseActivity extends AppCompatActivity implements ProviderAdapter.ItemClickListener {
     private Button report;
     private Button check_report;
@@ -64,6 +67,8 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     private EditText email;
     private EditText password;
     private final String TAG = PulseActivity.class.getSimpleName();
+    @Inject
+    DatabaseHandler db;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -78,7 +83,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pulse_activity);
-
+        ((MainApp) getApplication()).getComponent().inject(this);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         title = getIntent().getStringExtra("title");
@@ -124,7 +129,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         signOutListener();
         signUpListener();
         authStateListener();
-        DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
+//        DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
         db.reCreateTable();
         if (db.getAllContacts().size() != 0) {
             fetchData();
@@ -345,7 +350,7 @@ public class PulseActivity extends AppCompatActivity implements ProviderAdapter.
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
+//                DatabaseHandler db = new DatabaseHandler(PulseActivity.this);
                 db.reCreateTable();
                 RowCells rowCells = new RowCells();
                 ArrayList<CellModel> colValz = new ArrayList<>();
