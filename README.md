@@ -1,5 +1,5 @@
 # Cipcipp
-This repository published (previously private) to fulfill Google Developer Kejar 2019 scholarship requirements (and thanks god i have [completed][luluss] the scholarship program).
+This repository published (previously private) to fulfill Google Developer Kejar 2019 scholarship requirements (and thanks God i have [completed][luluss] the scholarship program).
 
 This app gives recommendation about cheapest phone charges among many online seller such as Bukalapak, Tokopedia, Gojek, Dana, etc. The app is using Firebase as interface to operate Google Cloud as the back-end system.
 
