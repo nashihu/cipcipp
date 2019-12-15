@@ -1,11 +1,11 @@
 # Cipcipp
-Repository ini dipublish untuk keperluan seleksi beasiswa Google Developer Kejar 2019 (alhamdulillah [lolos][loloss] dan [luluss], terima kasihh Google dan Dicoding)
+This repository published (previously private) to fulfill Google Developer Kejar 2019 scholarship requirements (and thanks god i have [completed][luluss] the scholarship program).
 
-Aplikasi ini memberikan rekomendasi mengenai pulsa termurah dari belasan provider penjual pulsa seperti Bukalapak, Dana, Akulaku, dan sebagainya.
+This app gives recommendation about cheapest phone charges among many online seller such as Bukalapak, Tokopedia, Gojek, Dana, etc. The app is using Firebase as interface to operate Google Cloud as the back-end system.
 
-Harga yang ditampilkan merupakan hasil scraper menggunakan python (tidak tersedia di repo ini)
+The prices shown in the app are coming from scraping result using python (scraper not available in this repo)
 
-link apk: [klik di sini][link-cipcipp]
+apk link: [klik di sini][link-cipcipp]
 
 [link-cipcipp]: https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug.apk
 [loloss]: https://blog.dicoding.com/selamat-kepada-peserta-terpilih-di-google-developers-kejar-2019
