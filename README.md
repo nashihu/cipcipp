@@ -5,7 +5,7 @@ This app gives recommendation about cheapest phone charges among many online sel
 
 The prices shown in the app are coming from scraping result using python (scraper not available in this repo)
 
-apk link: [klik di sini][link-cipcipp]
+link apk: [click here][link-cipcipp]
 
 [link-cipcipp]: https://github.com/nashihu/cipcipp/raw/master/cipcipp-debug.apk
 [loloss]: https://blog.dicoding.com/selamat-kepada-peserta-terpilih-di-google-developers-kejar-2019
